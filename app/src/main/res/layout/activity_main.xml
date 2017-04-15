@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#194d54"
+    android:hapticFeedbackEnabled="false"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context=".MainActivity">
+
+    <ViewFlipper
+        android:id="@+id/viewflipper"
+        android:layout_width="match_parent"
+        android:layout_height="423dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/imageView"
+                android:layout_centerHorizontal="true"
+                android:text="Outcollaborate.                                                                                          Get work done faster with SMB."
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView3"
+                android:layout_centerHorizontal="true"
+                android:text="Real-time workspace.                                                                                                       Manage your tasks and receive real-time updates"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignEnd="@+id/textView5"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="38dp"
+                android:src="@drawable/sign_in_2" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentStart="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/sign_in_1"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:layout_below="@+id/imageView2"
+                android:layout_centerHorizontal="true"
+                android:text="Always with you                                                                                       Stay in syns with your team and track your projects wherever you go"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+
+    </ViewFlipper>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_signUp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:background="@android:color/holo_blue_dark"
+            android:text="Sign up"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_signIn"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_alignStart="@+id/button_signUp"
+            android:layout_below="@+id/button_signUp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/white"
+            android:text="Sign in"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</LinearLayout>
