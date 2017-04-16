@@ -16,8 +16,6 @@ import android.widget.ViewFlipper;
 public class MainActivity extends Activity implements
         GestureDetector.OnGestureListener {
 
-    //this is a test message
-
     private GestureDetectorCompat mDetector;
 
     Button button_signUp, button_signIn;
