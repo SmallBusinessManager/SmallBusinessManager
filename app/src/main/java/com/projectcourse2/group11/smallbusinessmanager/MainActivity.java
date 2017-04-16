@@ -1,4 +1,5 @@
 package com.projectcourse2.group11.smallbusinessmanager;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.view.GestureDetectorCompat;
@@ -14,6 +15,8 @@ import android.widget.ViewFlipper;
 
 public class MainActivity extends Activity implements
         GestureDetector.OnGestureListener {
+
+    //this is a test message
 
     private GestureDetectorCompat mDetector;
 
