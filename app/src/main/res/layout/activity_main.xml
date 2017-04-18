@@ -24,7 +24,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/imageView"
                 android:layout_centerHorizontal="true"
-                android:text="Outcollaborate.                                                                                          Get work done faster with SMB."
+                android:text="@string/opening_body_text1"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageView3"
                 android:layout_centerHorizontal="true"
-                android:text="Real-time workspace.                                                                                                       Manage your tasks and receive real-time updates"
+                android:text="@string/opening_body_text2"
                 android:textAlignment="center"
                 android:textSize="18sp" />
 
@@ -89,7 +89,7 @@
                 android:layout_height="60dp"
                 android:layout_below="@+id/imageView2"
                 android:layout_centerHorizontal="true"
-                android:text="Always with you                                                                                       Stay in syns with your team and track your projects wherever you go"
+                android:text="@string/opening_body_text3"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </RelativeLayout>
@@ -109,7 +109,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="22dp"
             android:background="@android:color/holo_blue_dark"
-            android:text="Sign up"
+            android:text="@string/signUp_button_text"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -122,7 +122,7 @@
             android:layout_below="@+id/button_signUp"
             android:layout_marginTop="16dp"
             android:background="@android:color/white"
-            android:text="Sign in"
+            android:text="@string/signIn_button_text"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="18sp" />
     </RelativeLayout>

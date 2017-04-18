@@ -21,8 +21,8 @@ public class myViewFlipper extends ViewFlipper {
         super.dispatchDraw(canvas);
         int width = getWidth();
 
-        float margin = 2;
-        float radius = 5;
+        float margin = 8;
+        float radius = 10;
         float cx = width / 2 - ((radius + margin) * 2 * getChildCount() / 2);
         float cy = getHeight() - 15;
 
