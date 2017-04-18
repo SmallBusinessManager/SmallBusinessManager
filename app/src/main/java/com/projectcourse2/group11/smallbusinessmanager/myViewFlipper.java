@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.ViewFlipper;
 
+import static com.projectcourse2.group11.smallbusinessmanager.R.color.holo_blue_dark;
+
 public class myViewFlipper extends ViewFlipper {
     Paint paint = new Paint();
 
@@ -32,7 +34,7 @@ public class myViewFlipper extends ViewFlipper {
         {
             if (i == getDisplayedChild())
             {
-                paint.setColor(Color.BLUE);
+                paint.setColor(getResources().getColor(holo_blue_dark));
                 canvas.drawCircle(cx, cy, radius, paint);
 
             } else
