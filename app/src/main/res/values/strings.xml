@@ -1,12 +1,8 @@
 <resources>
-    <!-- Strings related to opening -->
     <string name="app_name">SBManager</string>
-    <string name="opening_page1_header">Collaborate."</string>
-    <string name="opening_page1_body">Get work done faster with SMB.</string>
-    <string name="opening_page2_header">Real-time workspace."</string>
-    <string name="opening_page2_body">Manage your tasks and receive real-time updates</string>
-    <string name="opening_page3_header">Always with you."</string>
-    <string name="opening_page3_body">Stay in syns with your team and track your projects wherever you go</string>
+    <string name="opening_body_text1">Collaborate.                                                                                          Get work done faster with SMB."</string>
+    <string name="opening_body_text2">Real-time workspace.                                                                                                       Manage your tasks and receive real-time updates</string>
+    <string name="opening_body_text3">Always with you                                                                                       Stay in syns with your team and track your projects wherever you go</string>
     <string name="signUp_button_text">Sign up</string>
     <string name="signIn_button_text">Sign in</string>
 
