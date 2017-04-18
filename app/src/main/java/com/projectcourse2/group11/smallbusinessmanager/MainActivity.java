@@ -76,22 +76,19 @@ public class MainActivity extends Activity implements
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                           float velocityY) {
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float sensitivity = 50;
 
         if((e1.getX() - e2.getX()) > sensitivity){
             viewFlipper.setInAnimation(slide_in_right);
             viewFlipper.setOutAnimation(slide_out_left);
             viewFlipper.showNext();
-            Toast.makeText(MainActivity.this,
-                    "Next", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this,"Next", Toast.LENGTH_SHORT).show();
         }else if((e2.getX() - e1.getX()) > sensitivity){
             viewFlipper.setInAnimation(slide_in_left);
             viewFlipper.setOutAnimation(slide_out_right);
             viewFlipper.showPrevious();
-            Toast.makeText(MainActivity.this,
-                    "Previous", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this,"Previous", Toast.LENGTH_SHORT).show();
         }
 
         return true;
