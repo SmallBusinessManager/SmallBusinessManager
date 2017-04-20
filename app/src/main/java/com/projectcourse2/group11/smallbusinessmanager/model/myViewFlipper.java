@@ -1,4 +1,4 @@
-package com.projectcourse2.group11.smallbusinessmanager;
+package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import android.content.Context;
 import android.graphics.Canvas;
