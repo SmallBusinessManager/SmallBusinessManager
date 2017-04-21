@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -29,7 +30,7 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDetector = new GestureDetectorCompat(this,this);
+        mDetector = new GestureDetectorCompat(this, this);
 
         button_signUp = (Button) findViewById(R.id.button_signUp);
         button_signIn = (Button) findViewById(R.id.button_signIn);
@@ -48,8 +49,7 @@ public class MainActivity extends Activity implements
         button_signUp.setOnClickListener(new OnClickListener() {
 
             @Override
-            public void onClick(View arg0) {
-                //to do
+            public void onClick(View arg0) {//to to);
             }
         });
 
@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements
 
             @Override
             public void onClick(View arg0) {
-                //to do
+                setContentView(R.layout.activity_login);
             }
         });
 
@@ -79,16 +79,21 @@ public class MainActivity extends Activity implements
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float sensitivity = 50;
 
-        if((e1.getX() - e2.getX()) > sensitivity){
-            viewFlipper.setInAnimation(slide_in_right);
-            viewFlipper.setOutAnimation(slide_out_left);
-            viewFlipper.showNext();
-            //Toast.makeText(MainActivity.this,"Next", Toast.LENGTH_SHORT).show();
-        }else if((e2.getX() - e1.getX()) > sensitivity){
-            viewFlipper.setInAnimation(slide_in_left);
-            viewFlipper.setOutAnimation(slide_out_right);
-            viewFlipper.showPrevious();
-            //Toast.makeText(MainActivity.this,"Previous", Toast.LENGTH_SHORT).show();
+        if ((e1.getX() - e2.getX()) > sensitivity) {
+            if (viewFlipper.getDisplayedChild() != 2) {
+                viewFlipper.setInAnimation(slide_in_right);
+                viewFlipper.setOutAnimation(slide_out_left);
+                viewFlipper.showNext();
+                //Toast.makeText(MainActivity.this,"Next", Toast.LENGTH_SHORT).show();
+            }
+        } else if ((e2.getX() - e1.getX()) > sensitivity) {
+            if (viewFlipper.getDisplayedChild() != 0) {
+
+                viewFlipper.setInAnimation(slide_in_left);
+                viewFlipper.setOutAnimation(slide_out_right);
+                viewFlipper.showPrevious();
+                //Toast.makeText(MainActivity.this,"Previous", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return true;
