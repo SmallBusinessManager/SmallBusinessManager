@@ -1,5 +1,6 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.view.GestureDetectorCompat;
@@ -10,8 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class MainActivity extends Activity implements
@@ -49,7 +48,7 @@ public class MainActivity extends Activity implements
         button_signUp.setOnClickListener(new OnClickListener() {
 
             @Override
-            public void onClick(View arg0) {//to to);
+            public void onClick(View arg0) {//to do);
             }
         });
 
@@ -57,7 +56,8 @@ public class MainActivity extends Activity implements
 
             @Override
             public void onClick(View arg0) {
-                setContentView(R.layout.activity_login);
+                Intent MainIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(MainIntent);
             }
         });
 

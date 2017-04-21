@@ -26,7 +26,8 @@
                 android:layout_alignBottom="@+id/textView"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="21dp"
-                android:src="@drawable/logo" />
+                android:src="@drawable/logo"
+                android:contentDescription="@string/description"/>
 
             <TextView
                 android:id="@+id/textView"
@@ -69,7 +70,8 @@
                 android:layout_alignEnd="@+id/textView4"
                 android:layout_marginBottom="26dp"
                 android:layout_marginEnd="30dp"
-                android:src="@drawable/sign_in_2" />
+                android:src="@drawable/sign_in_2"
+                android:contentDescription="@string/description"/>
 
             <TextView
                 android:id="@+id/textView4"
@@ -111,7 +113,8 @@
                 android:layout_above="@+id/textView10"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="31dp"
-                android:src="@drawable/sign_in_1" />
+                android:src="@drawable/sign_in_1"
+                android:contentDescription="@string/description"/>
 
             <TextView
                 android:id="@+id/textView9"
@@ -152,7 +155,7 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:background="@android:color/holo_blue_dark"
+            android:background="@color/colorButton"
             android:text="@string/signUp_button_text"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -169,7 +172,7 @@
             android:layout_marginTop="16dp"
             android:background="@android:color/white"
             android:text="@string/signIn_button_text"
-            android:textColor="@android:color/holo_blue_dark"
+            android:textColor="@color/colorButton"
             android:textSize="18sp" />
     </RelativeLayout>
 
