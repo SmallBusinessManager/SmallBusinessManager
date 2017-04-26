@@ -1,37 +1,41 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 public class Date {
-    private String day;
-    private String month;
-    private String year;
+    private int day;
+    private int month;
+    private int year;
 
-    public Date(String day, String month, String year) {
-        this.day = day;
-        this.month = month;
+    public Date(int day, int month, int year) {
+        if (day >= 1 && day <= 31) {
+            this.day = day;
+        }
+        if (month >= 1 && month <= 12) {
+            this.month = month;
+        }
         this.year = year;
     }
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public String getMonth() {
+    public int getMonth() {
         return month;
     }
 
-    public void setMonth(String month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(int year) {
         this.year = year;
     }
 }

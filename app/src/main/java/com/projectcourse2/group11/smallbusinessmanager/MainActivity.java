@@ -46,14 +46,14 @@ public class MainActivity extends Activity implements
                 R.anim.slide_out_left);
 
         button_signUp.setOnClickListener(new OnClickListener() {
-
             @Override
-            public void onClick(View arg0) {//to do);
+            public void onClick(View arg0) {
+                Intent intent=new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
 
         button_signIn.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
                 Intent MainIntent = new Intent(MainActivity.this, LoginActivity.class);
