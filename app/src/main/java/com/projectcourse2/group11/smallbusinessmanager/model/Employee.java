@@ -1,13 +1,17 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 public class Employee extends Person {
-    private String employmentData;
     private int contractID;
-    private String titile;
+    private String title;
+    private String employmentData;
     private String userName;
     private String password;
     private double hourCost;
     private Project assignment;
+
+    public Employee(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
+        super(SSN, firstName, lastName, phoneNumber, email, address);
+    }
 
     public void printEmploymentDate(){
         //to do
