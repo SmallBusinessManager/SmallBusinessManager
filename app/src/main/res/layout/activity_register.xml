@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="first name"
+                    android:hint="@string/firstName"
                     android:inputType="textPersonName" />
 
             </android.support.design.widget.TextInputLayout>
@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="last name"
+                    android:hint="@string/lastName"
                     android:inputType="textPersonName" />
 
             </android.support.design.widget.TextInputLayout>
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="UserName"
+                    android:hint="@string/userName"
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
@@ -75,13 +75,14 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/editText3"
+                    android:id="@+id/editText5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Date of birth"
-                    android:inputType="textPersonName" />
+                    android:hint="@string/dateOfBirth"
+                    android:inputType="date" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -94,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Gender"
+                    android:hint="@string/gender"
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
@@ -120,9 +121,8 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/password"
                     android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1" />
@@ -137,9 +137,8 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="re-enter password"
+                    android:hint="@string/re_enter_password"
                     android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1" />
@@ -148,11 +147,13 @@
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginTop="16dp"
+                android:background="@color/colorButton"
                 android:text="@string/signUp_button_text"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

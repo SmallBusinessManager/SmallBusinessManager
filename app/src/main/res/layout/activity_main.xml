@@ -154,14 +154,14 @@
             android:id="@+id/button_signUp"
             android:layout_width="300dp"
             android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@color/colorButton"
             android:text="@string/signUp_button_text"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_signIn"
