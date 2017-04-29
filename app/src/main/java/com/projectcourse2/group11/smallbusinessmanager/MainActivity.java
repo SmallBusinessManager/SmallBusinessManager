@@ -88,6 +88,9 @@ public class MainActivity extends Activity implements
                 viewFlipper.setOutAnimation(slide_out_left);
                 viewFlipper.showNext();
                 //Toast.makeText(MainActivity.this,"Next", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         } else if ((e2.getX() - e1.getX()) > sensitivity) {
             if (viewFlipper.getDisplayedChild() != 0) {

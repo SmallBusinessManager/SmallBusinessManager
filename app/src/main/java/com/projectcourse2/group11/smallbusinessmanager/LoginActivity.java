@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A login screen that offers login via email/user name and password.
@@ -66,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mEmailView.getText().toString().equals("info@sbm.com")) {
-                    Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-                    LoginActivity.this.startActivity(intent);
+                   // Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+                    // LoginActivity.this.startActivity(intent);
+                    //Toast.makeText(LoginActivity.this,"Login successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     login_error_message.setText(R.string.login_error);
                 }

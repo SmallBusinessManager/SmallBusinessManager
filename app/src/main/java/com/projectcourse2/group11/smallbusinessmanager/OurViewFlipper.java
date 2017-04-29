@@ -7,10 +7,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.ViewFlipper;
 
-public class myViewFlipper extends ViewFlipper {
+public class OurViewFlipper extends ViewFlipper {
     Paint paint = new Paint();
 
-    public myViewFlipper(Context context, AttributeSet attrs)
+    public OurViewFlipper(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
@@ -19,11 +19,10 @@ public class myViewFlipper extends ViewFlipper {
     protected void dispatchDraw(Canvas canvas)
     {
         super.dispatchDraw(canvas);
-        int width = getWidth();
 
         float margin = 8;
         float radius = 10;
-        float cx = width / 2 - ((radius + margin) * 2 * getChildCount() / 2);
+        float cx = getWidth() / 2 - ((radius + margin) * 2 * getChildCount() / 2);
         float cy = getHeight() - 15;
 
         canvas.save();

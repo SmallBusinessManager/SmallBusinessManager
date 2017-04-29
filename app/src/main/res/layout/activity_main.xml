@@ -9,7 +9,7 @@
     android:weightSum="1"
     tools:context=".MainActivity">
 
-    <com.projectcourse2.group11.smallbusinessmanager.myViewFlipper
+    <com.projectcourse2.group11.smallbusinessmanager.OurViewFlipper
         android:id="@+id/viewflipper"
         android:layout_width="match_parent"
         android:layout_height="@dimen/menubody_height">
@@ -144,7 +144,7 @@
         </RelativeLayout>
 
 
-    </com.projectcourse2.group11.smallbusinessmanager.myViewFlipper>
+    </com.projectcourse2.group11.smallbusinessmanager.OurViewFlipper>
 
     <RelativeLayout
         android:layout_width="match_parent"
