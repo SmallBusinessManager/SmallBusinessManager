@@ -4,6 +4,12 @@ public class Accountant extends Person {
     private Employee[] employees;
     private double availableMoney;
 
+    public Accountant(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address,Employee[] employees, double availableMoney) {
+        super(SSN, firstName, lastName, phoneNumber, email, address);
+        this.employees=employees;
+        this.availableMoney=availableMoney;
+    }
+
     public void listWorkers(){
         //to do
     }

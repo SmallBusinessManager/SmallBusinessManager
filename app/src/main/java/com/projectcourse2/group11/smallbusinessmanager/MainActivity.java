@@ -1,5 +1,6 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.view.GestureDetectorCompat;
@@ -7,11 +8,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class MainActivity extends Activity implements
@@ -27,6 +28,7 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -47,17 +49,18 @@ public class MainActivity extends Activity implements
                 R.anim.slide_out_left);
 
         button_signUp.setOnClickListener(new OnClickListener() {
-
             @Override
-            public void onClick(View arg0) {//to to);
+            public void onClick(View arg0) {
+                Intent intent=new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
 
         button_signIn.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
-                setContentView(R.layout.activity_login);
+                Intent MainIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(MainIntent);
             }
         });
 
@@ -85,6 +88,9 @@ public class MainActivity extends Activity implements
                 viewFlipper.setOutAnimation(slide_out_left);
                 viewFlipper.showNext();
                 //Toast.makeText(MainActivity.this,"Next", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         } else if ((e2.getX() - e1.getX()) > sensitivity) {
             if (viewFlipper.getDisplayedChild() != 0) {

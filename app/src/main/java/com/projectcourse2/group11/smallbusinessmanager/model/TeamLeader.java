@@ -5,6 +5,10 @@ public class TeamLeader extends Person {
     private Order[] orders;
     private Manager manager;
 
+    public TeamLeader(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
+        super(SSN, firstName, lastName, phoneNumber, email, address);
+    }
+
     public void viewAssignedWorkers(){
         //to do
     }

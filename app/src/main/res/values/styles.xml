@@ -8,4 +8,29 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TextInputLayout_style" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color -->
+        <item name="android:textColorHint">@color/colorButton</item>
+        <item name="android:textSize">16sp</item>
+        <!-- Label color in TRUE state and bar color -->
+        <item name="colorAccent">@color/colorButton</item>
+        <item name="colorControlNormal">@color/colorButton</item>
+        <item name="colorControlActivated">@color/colorButton</item>
+    </style>
+
+    <style name="floatLabel_style" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorButton</item>
+    </style>
+
+
 </resources>

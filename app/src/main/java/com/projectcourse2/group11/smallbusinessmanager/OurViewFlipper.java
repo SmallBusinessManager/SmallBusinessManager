@@ -1,4 +1,4 @@
-package com.projectcourse2.group11.smallbusinessmanager.model;
+package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,12 +7,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.ViewFlipper;
 
-import static com.projectcourse2.group11.smallbusinessmanager.R.color.holo_blue_dark;
-
-public class myViewFlipper extends ViewFlipper {
+public class OurViewFlipper extends ViewFlipper {
     Paint paint = new Paint();
 
-    public myViewFlipper(Context context, AttributeSet attrs)
+    public OurViewFlipper(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
@@ -21,11 +19,10 @@ public class myViewFlipper extends ViewFlipper {
     protected void dispatchDraw(Canvas canvas)
     {
         super.dispatchDraw(canvas);
-        int width = getWidth();
 
         float margin = 8;
         float radius = 10;
-        float cx = width / 2 - ((radius + margin) * 2 * getChildCount() / 2);
+        float cx = getWidth() / 2 - ((radius + margin) * 2 * getChildCount() / 2);
         float cy = getHeight() - 15;
 
         canvas.save();
@@ -34,7 +31,7 @@ public class myViewFlipper extends ViewFlipper {
         {
             if (i == getDisplayedChild())
             {
-                paint.setColor(getResources().getColor(holo_blue_dark));
+                paint.setColor(Color.BLUE);
                 canvas.drawCircle(cx, cy, radius, paint);
 
             } else

@@ -4,6 +4,10 @@ public class Manager extends Person {
     private TeamLeader teamLeader;
     private Project project;
 
+    public Manager(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
+        super(SSN, firstName, lastName, phoneNumber, email, address);
+    }
+
     public void createWorkOrders(){
         //to to
     }
