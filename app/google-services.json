@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "678385736877",
-    "firebase_url": "https://smallbusinessmanager-51d04.firebaseio.com",
-    "project_id": "smallbusinessmanager-51d04",
-    "storage_bucket": "smallbusinessmanager-51d04.appspot.com"
+    "project_number": "474864607341",
+    "firebase_url": "https://smallbusinessmanager-ddda6.firebaseio.com",
+    "project_id": "smallbusinessmanager-ddda6",
+    "storage_bucket": "smallbusinessmanager-ddda6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:678385736877:android:c4b4c7d20baad36c",
+        "mobilesdk_app_id": "1:474864607341:android:c4b4c7d20baad36c",
         "android_client_info": {
           "package_name": "com.projectcourse2.group11.smallbusinessmanager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "678385736877-kk0psl6n1ch1egm4j3vohacnk09mfdvr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.projectcourse2.group11.smallbusinessmanager",
-            "certificate_hash": "a5efac7afa729469623806dd7b8b0ee4fd736c89"
-          }
-        },
-        {
-          "client_id": "678385736877-glhhb5daarp493ov4bo51vd2d6i2m18t.apps.googleusercontent.com",
+          "client_id": "474864607341-jueolss4eb43qhn8i1e717bs2ddeqqmb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDolnH7xFvV2xRNgA_uz6Mk_T2gRuafUao"
+          "current_key": "AIzaSyCyvZlu2XxLfvshUOocFJuqhXurSyaGXuo"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "678385736877-glhhb5daarp493ov4bo51vd2d6i2m18t.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

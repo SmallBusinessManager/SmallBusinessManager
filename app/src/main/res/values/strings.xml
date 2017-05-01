@@ -18,6 +18,7 @@
     <string name="prompt_newAccount">No account yet? Create one</string>
     <string name="login_error">Invalid Email or/and password</string>
     <string name="prompt_forget"><u>Forgot?</u></string>
+    <string name="prompt_register">Already have an account? Click <u>here</u></string>
 
     <!-- Strings related to register -->
     <string name="firstName">First Name</string>
