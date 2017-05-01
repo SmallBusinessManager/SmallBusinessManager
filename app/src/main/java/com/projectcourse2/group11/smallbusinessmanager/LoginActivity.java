@@ -22,7 +22,6 @@ public class LoginActivity extends AppCompatActivity {
     //private ProgressBar progressBar;
     private TextView login_error_message;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
@@ -54,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                login_error_message.setText("");
+
             }
             @Override
             public void afterTextChanged(Editable s) {

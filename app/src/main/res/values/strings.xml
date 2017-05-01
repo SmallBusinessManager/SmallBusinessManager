@@ -18,7 +18,7 @@
     <string name="prompt_newAccount">No account yet? Create one</string>
     <string name="login_error">Invalid Email or/and password</string>
     <string name="prompt_forget"><u>Forgot?</u></string>
-    <string name="prompt_register">Already have an account? Click <u>here</u></string>
+    <string name="prompt_register">Do not have an account? Register <u>here</u></string>
 
     <!-- Strings related to register -->
     <string name="firstName">First Name</string>
@@ -29,6 +29,7 @@
     <string name="gender">Gender</string>
     <string name="password">Password</string>
     <string name="re_enter_password">Re-enter password</string>
+    <string name="prompt_login">Already have an account? Click <u>here</u></string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
