@@ -56,7 +56,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             registerUser();
         }
         if (v==tvLogin){
-            Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+            Intent intent=new Intent(RegisterActivity.this,OrderCreation.class);
             startActivity(intent);
         }
 

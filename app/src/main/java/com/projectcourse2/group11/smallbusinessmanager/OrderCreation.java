@@ -60,7 +60,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View arg0) {
                 finish();
-                Intent MainIntent = new Intent(OrderCreation.this, MainActivity.class);
+                Intent MainIntent = new Intent(OrderCreation.this, OpeningActivity.class);
                 startActivity(MainIntent);
             }});
 

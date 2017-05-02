@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/order"
+            android:text="@string/new_order"
             android:textAlignment="center"
             android:textColor="@color/colorButton"
             android:textSize="24sp" />
