@@ -11,8 +11,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.projectcourse2.group11.smallbusinessmanager.LoginActivity"
-    tools:ignore="UnusedAttribute">
+    tools:context="com.projectcourse2.group11.smallbusinessmanager.LoginActivity">
 
     <!-- Login progress -->
 
