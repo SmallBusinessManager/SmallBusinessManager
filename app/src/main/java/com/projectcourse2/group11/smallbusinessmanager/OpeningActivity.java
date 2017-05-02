@@ -15,6 +15,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ViewFlipper;
 
+/**
+ * An animated opening page
+ */
+
 public class MainActivity extends Activity implements
         GestureDetector.OnGestureListener {
 
@@ -28,7 +32,7 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
+        //setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -51,6 +55,7 @@ public class MainActivity extends Activity implements
         button_signUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                finish();
                 Intent intent=new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
@@ -59,6 +64,7 @@ public class MainActivity extends Activity implements
         button_signIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                finish();
                 Intent MainIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(MainIntent);
             }
@@ -87,8 +93,8 @@ public class MainActivity extends Activity implements
                 viewFlipper.setInAnimation(slide_in_right);
                 viewFlipper.setOutAnimation(slide_out_left);
                 viewFlipper.showNext();
-                //Toast.makeText(MainActivity.this,"Next", Toast.LENGTH_SHORT).show();
             }else {
+                finish();
                 Intent intent=new Intent(MainActivity.this,LoginActivity.class);
                 MainActivity.this.startActivity(intent);
             }
@@ -98,7 +104,6 @@ public class MainActivity extends Activity implements
                 viewFlipper.setInAnimation(slide_in_left);
                 viewFlipper.setOutAnimation(slide_out_right);
                 viewFlipper.showPrevious();
-                //Toast.makeText(MainActivity.this,"Previous", Toast.LENGTH_SHORT).show();
             }
         }
 
