@@ -8,8 +8,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -19,7 +17,7 @@ import android.widget.ViewFlipper;
  * An animated opening page
  */
 
-public class MainActivity extends Activity implements
+public class OpeningActivity extends Activity implements
         GestureDetector.OnGestureListener {
 
     private GestureDetectorCompat mDetector;
@@ -32,9 +30,8 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_opening);
 
         mDetector = new GestureDetectorCompat(this, this);
 
@@ -56,7 +53,7 @@ public class MainActivity extends Activity implements
             @Override
             public void onClick(View arg0) {
                 finish();
-                Intent intent=new Intent(MainActivity.this, RegisterActivity.class);
+                Intent intent=new Intent(OpeningActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,7 +62,7 @@ public class MainActivity extends Activity implements
             @Override
             public void onClick(View arg0) {
                 finish();
-                Intent MainIntent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent MainIntent = new Intent(OpeningActivity.this, LoginActivity.class);
                 startActivity(MainIntent);
             }
         });
@@ -95,8 +92,8 @@ public class MainActivity extends Activity implements
                 viewFlipper.showNext();
             }else {
                 finish();
-                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-                MainActivity.this.startActivity(intent);
+                Intent intent=new Intent(OpeningActivity.this,LoginActivity.class);
+                OpeningActivity.this.startActivity(intent);
             }
         } else if ((e2.getX() - e1.getX()) > sensitivity) {
             if (viewFlipper.getDisplayedChild() != 0) {
