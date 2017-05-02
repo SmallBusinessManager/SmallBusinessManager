@@ -4,13 +4,13 @@ public class Address {
     private String streetNumber;
     private String city;
     private String postalCode;
-    private String Country;
+    private String country;
 
     public Address(String streetNumber, String city, String postalCode, String country) {
         this.streetNumber = streetNumber;
         this.city = city;
         this.postalCode = postalCode;
-        Country = country;
+        this.country=country;
     }
 
     public String getStreetNumber() {
@@ -38,11 +38,11 @@ public class Address {
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String country) {
-        Country = country;
+        this.country = country;
     }
 
     public void validateInput(){

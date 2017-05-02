@@ -66,9 +66,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mEmailView.getText().toString().equals("info@sbm.com")) {
-                   // Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-                    // LoginActivity.this.startActivity(intent);
+                    finish();
+                    Intent intent = new Intent(LoginActivity.this, OrderCreation.class);
+                    startActivity(intent);
                     //Toast.makeText(LoginActivity.this,"Login successfully", Toast.LENGTH_SHORT).show();
+
                 } else {
                     login_error_message.setText(R.string.login_error);
                 }

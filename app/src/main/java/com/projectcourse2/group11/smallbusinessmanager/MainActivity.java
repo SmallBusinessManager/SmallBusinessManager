@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         //setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_opening);
 
         mDetector = new GestureDetectorCompat(this, this);
 

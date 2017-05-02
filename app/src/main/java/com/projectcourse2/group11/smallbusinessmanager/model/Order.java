@@ -7,6 +7,12 @@ public class Order {
     private Enum status;
     private Date finishDate;
     private Worker worker;
+    public Order(String description, Worker worker){
+        this.id = 1;
+        this.worker=worker;
+        this.status=Status.NOT_STARTED;
+        this.description=description;
+    }
 
     public void edit(){
         //to do
@@ -19,12 +25,16 @@ public class Order {
     public void print(){
         //to do
     }
-
-    public void markAsFinished(){
-        //to do
+    public void startOrder(Date startDate){
+        this.startDate=startDate;
+        status=Status.STARTED;
     }
 
-    public void assignWorker(){
-        //to do
+    public void markAsFinished(){
+        status=Status.FINISHED;
+    }
+
+    public void assignWorker(Worker worker){
+        this.worker=worker;
     }
 }
