@@ -1,5 +1,8 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Address {
     private String streetNumber;
     private String city;
@@ -51,5 +54,10 @@ public class Address {
 
     public void printAddress(){
         //to do
+    }
+    public void saveToFirebase(){
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smallbusinessmanager-ddda6.firebaseio.com/user");
+        ref.child("address").child("city").child(streetNumber).setValue(postalCode);
     }
 }

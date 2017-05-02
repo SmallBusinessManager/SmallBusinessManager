@@ -76,6 +76,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
         Order order = new Order(description,selectedWorker);
+        selectedWorker.getAddress().saveToFirebase();
 
     }
 }
