@@ -7,7 +7,7 @@
     android:hapticFeedbackEnabled="false"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context=".MainActivity">
+    tools:context=".OpeningActivity">
 
     <com.projectcourse2.group11.smallbusinessmanager.OurViewFlipper
         android:id="@+id/viewflipper"

@@ -39,4 +39,5 @@
     <string name="order">Order</string>
     <string name="describe_the_order_here">Describe the order here.</string>
     <string name="ok">OK</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

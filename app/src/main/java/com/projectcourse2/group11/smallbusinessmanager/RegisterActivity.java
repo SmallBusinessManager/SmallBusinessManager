@@ -33,7 +33,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -68,28 +67,22 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         String rePassword=password_again_register.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)){
-            //email is empty
             Toast.makeText(this,"Please enter email",Toast.LENGTH_SHORT).show();
             return; //stop function executing further
         }
         if (TextUtils.isEmpty(password)){
-            //password is empty
             Toast.makeText(this,"Please enter password",Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(rePassword)){
-            //rePassword is empty
             Toast.makeText(this,"Please re-enter password",Toast.LENGTH_SHORT).show();
             return;
         }
         if (!password.equals(rePassword)){
-            //password & rePassword are not same
             Toast.makeText(this,"Please enter same password",Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //if validations are ok
-        //show progressDialog
         progressDialog.setMessage("Registering...");
         progressDialog.show();
 
@@ -97,14 +90,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    //user is successfully registered
-                    //start login activity
                     Toast.makeText(RegisterActivity.this,"User registered successfully",Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
                     RegisterActivity.this.startActivity(intent);
                 }else {
-                    Toast.makeText(RegisterActivity.this,"User registered failed",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,"User registered failed",Toast.LENGTH_LONG).show();
                 }
+                progressDialog.dismiss();
             }
         });
     }
