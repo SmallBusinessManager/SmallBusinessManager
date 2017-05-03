@@ -1,6 +1,9 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public abstract class Person {
     private String SSN; // yyyymmdd-xxxx
@@ -81,6 +84,15 @@ public abstract class Person {
 
     public void printContactInfo() {
         //to do
+    }
+    public Map<String,Object> toHashMap(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("/worker/"+SSN+"/firstName/",firstName);
+        map.put("/worker/"+SSN+"/lastName/",lastName);
+        map.put("/worker/"+SSN+"/phoneNumber/",phoneNumber);
+        map.put("/worker/"+SSN+"/email/",email);
+        map.put("/worker/"+SSN+"/address/",address.getStreetNumber());
+        return map;
     }
 
 }

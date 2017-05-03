@@ -99,6 +99,8 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         Address addr = selectedWorker.getAddress();
         String key = ref.child("/address/"+addr.getStreetNumber()+"/").push().getKey();
         ref.updateChildren(addr.toHasMap());
+        ref.child("/worker/"+selectedWorker.getSSN()+"/").push().getKey();
+        ref.updateChildren(selectedWorker.toHashMap());
         System.out.println("create order terminated");
 
 

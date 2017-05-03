@@ -1,5 +1,8 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Worker extends Person {
     private TeamLeader teamLeader;
 
@@ -13,5 +16,22 @@ public class Worker extends Person {
 
     public void viewWorkingHours(){
         //to do
+    }
+    public TeamLeader getTeamLeader(){
+        return teamLeader;
+    }
+    public void assignTeamLeader(TeamLeader teamLeader){
+        this.teamLeader=teamLeader;
+    }
+
+    public Map<String, Object> toHashMap(){
+        if (teamLeader!=null) {
+            Map<String, Object> map = new HashMap<>();
+            map = super.toHashMap();
+            map.put("/worker/" + getSSN() + "/teamLeader/", teamLeader.getSSN());
+            return map;
+        } else {
+            return super.toHashMap();
+        }
     }
 }
