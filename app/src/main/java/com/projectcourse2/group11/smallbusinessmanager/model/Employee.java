@@ -7,7 +7,6 @@ public class Employee extends Person {
     private String userName;
     private String password;
     private double hourCost;
-    private Project assignment;
 
     public Employee(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
         super(SSN, firstName, lastName, phoneNumber, email, address);

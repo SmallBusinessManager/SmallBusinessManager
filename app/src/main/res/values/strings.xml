@@ -18,6 +18,8 @@
     <string name="prompt_newAccount">No account yet? Create one</string>
     <string name="prompt_forget"><u>Forgot?</u></string>
     <string name="prompt_register">Do not have an account? Register <u>here</u></string>
+    <string name="SSN">SSN</string>
+    <string name="phoneNumber">phoneNumber</string>
 
     <!-- Strings related to register -->
     <string name="firstName">First Name</string>
