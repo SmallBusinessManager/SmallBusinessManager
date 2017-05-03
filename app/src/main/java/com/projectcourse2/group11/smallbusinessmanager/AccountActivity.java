@@ -18,8 +18,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Address;
 import com.projectcourse2.group11.smallbusinessmanager.model.TestPerson;
 
@@ -28,7 +31,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
-    private TextView textViewUserEmail;
     private Button buttonLogout;
     private Button buttonSave;
     private Button buttonDeleteAccount;
@@ -63,7 +65,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         currentUser = firebaseAuth.getCurrentUser();
 
-        textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonDeleteAccount = (Button) findViewById(R.id.buttonDeleteAccount);
@@ -78,10 +79,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         etSSN = (EditText) findViewById(R.id.etSSN);
         etCity = (EditText) findViewById(R.id.etCity);
 
-        textViewUserEmail.setText(currentUser.getEmail());
         buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
         buttonDeleteAccount.setOnClickListener(this);
+
     }
 
     @Override
@@ -100,12 +101,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void saveUserInformation() {
-        /*private String SSN; // yyyymmdd-xxxx
-        private String firstName;
-        private String lastName;
-        private String phoneNumber;
-        private String email; //contains @
-        private Address address;*/
         String ssn = etSSN.getText().toString();
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
@@ -114,6 +109,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         Address address = new Address(etStreet.getText().toString(), etCity.getText().toString(), etPost.getText().toString(), etCountry.getText().toString());
 
         TestPerson testPerson = new TestPerson(ssn, firstName, lastName, phoneNumber, email, address);
+        //todo data validation
         databaseReference.child(currentUser.getUid()).setValue(testPerson);
         Toast.makeText(this, "Information saved", Toast.LENGTH_LONG).show();
     }
@@ -138,8 +134,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                             }
                         });
-
-
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

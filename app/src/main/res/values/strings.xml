@@ -41,4 +41,7 @@
     <string name="cancel">Cancel</string>
     <string name="describe_the_order_here">Describe the order here</string>
     <string name="new_order">New Order</string>
+
+    <!-- Strings related to AccountInfo -->
+    <string name="title_accountInfo">Account information</string>
 </resources>

@@ -55,6 +55,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         tvForgot=(TextView)findViewById(R.id.tvForgot);
         tvForgot.setOnClickListener(this);
+
     }
 
     private void userLogin() {
