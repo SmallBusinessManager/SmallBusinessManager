@@ -13,7 +13,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Address;
+import com.projectcourse2.group11.smallbusinessmanager.model.Date;
+import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Order;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,10 +31,10 @@ import java.util.Map;
 public class OrderCreation extends Activity implements View.OnClickListener {
     private Button buttonOK;
     private Button buttonCancel;
-    private List<Worker> workerList = new ArrayList<>();
+    private List<Person> workerList = new ArrayList<>();
     private NumberPicker workerView;
     private EditText descriptionView;
-    private Worker selectedWorker;
+    private Person selectedWorker;
     private DatabaseReference ref;
 
 
@@ -38,7 +42,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         //Hardcoded for testing purposes
         workerList.add(new Worker("197210102312","Erdogan","Tayyip","911","dick_Tator@yomama.org",new Address("street","city","12345","Country")));
-        workerList.add(new Worker("197210103232","Phat","American","911","dat_Wall@trump.org",new Address("Mystreet","Mycity","0012345","MyCountry")));
+        workerList.add(new Manager("197210103232","Phat","American","911","dat_Wall@trump.org",new Address("Mystreet","Mycity","0012345","MyCountry")));
 
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
@@ -95,12 +99,14 @@ public class OrderCreation extends Activity implements View.OnClickListener {
 //just adds the address to the firebase
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
-        Order order = new Order(description,selectedWorker);
-        Address addr = selectedWorker.getAddress();
-        String key = ref.child("/address/"+addr.getStreetNumber()+"/").push().getKey();
-        ref.updateChildren(addr.toHasMap());
-        ref.child("/worker/"+selectedWorker.getSSN()+"/").push().getKey();
-        ref.updateChildren(selectedWorker.toHashMap());
+        Order order = new Order(description,(Worker) workerList.get(0),new Project((Manager) workerList.get(1),new Date(21,12,2017),new Date(22,12,2017)));
+        ref.child("/order/").push();
+        ref.updateChildren(order.toHashMap());
+//        Address addr = selectedWorker.getAddress();
+//        String key = ref.child("/address/"+addr.getStreetNumber()+"/").push().getKey();
+//        ref.updateChildren(addr.toHasMap());
+//        ref.child("/worker/"+selectedWorker.getSSN()+"/").push().getKey();
+//        ref.updateChildren(selectedWorker.toHashMap());
         System.out.println("create order terminated");
 
 
