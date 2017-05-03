@@ -1,13 +1,18 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Address {
     private String streetNumber;
     private String city;
     private String postalCode;
     private String country;
+
 
     public Address(String streetNumber, String city, String postalCode, String country) {
         this.streetNumber = streetNumber;
@@ -55,9 +60,11 @@ public class Address {
     public void printAddress(){
         //to do
     }
-    public void saveToFirebase(){
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smallbusinessmanager-ddda6.firebaseio.com/user");
-        ref.child("address").child("city").child(streetNumber).setValue(postalCode);
+    public Map<String, Object> toHasMap(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("/address/"+streetNumber+"/city/",city);
+        map.put("/address/"+streetNumber+"/code/",postalCode);
+        map.put("/address/"+streetNumber+"/country/",country);
+        return map;
     }
 }
