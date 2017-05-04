@@ -50,33 +50,14 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         ref.child("/worker/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                    String SSN = ds.getKey();
-//                    for(DataSnapshot ds2: ds.getChildren()) {
-//                        Person
-//                    }
-//                }
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 //                    Worker worker = ds.getValue(Worker.class);
 //                    descriptionView.append(ds.getValue(Worker.class).toString());
                     workerList.add(ds.getValue(Worker.class));
                     descriptionView.append(workerList.get(0).getEmail());
 //
-//                }if (workerList.size()>1) {
-//                    workerView.setMaxValue(workerList.size() - 1);
-//                } else {
-//                    workerView.setMaxValue(workerList.size());
-//                }
-//                String[] workersNames;
-//                if (workerList.size()!=0) {
-//                    workersNames= new String[workerList.size()];
-//                    for (int i = 0; i < workerList.size(); i++) {
-//                        workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
-//                    }
-//                } else {workersNames= new String[1];
-//                    workersNames[0]="Loading";}
-//                workerView.setMinValue(0);
-//                workerView.setDisplayedValues(workersNames);
+//
                     populateList();
                 }
             }
@@ -99,19 +80,6 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         buttonCancel = (Button) findViewById(R.id.buttonCancel);
         descriptionView = (EditText) findViewById(R.id.orderDescription);
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
-//        String[] workersNames = new String[workerList.size()];
-//        if (workerList.size()!=0) {
-//            for (int i = 0; i < workerList.size(); i++) {
-//                workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
-//            }
-//        } else {workersNames[0]="Loading";}
-//        workerView.setMinValue(0);
-//        if (workerList.size() > 0) {
-//            workerView.setMaxValue(workerList.size() - 1);
-//        } else {
-//            workerView.setMaxValue(workerList.size());
-//        }
-//        workerView.setDisplayedValues(workersNames);
         populateList();
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
@@ -135,7 +103,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (selectedWorker == null) {
-                    selectedWorker = workerList.get(1);
+                    selectedWorker = workerList.get(0);
                 }
                 createOrder();
             }
@@ -171,7 +139,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             workersNames= new String[workerList.size()];
             for (int i = 0; i < workerList.size(); i++) {
                 workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
-                descriptionView.append(workersNames.toString());
+                descriptionView.append(workerList.get(0).toString());
             }
         } else {workersNames= new String[1];
             workersNames[0]="Loading";}

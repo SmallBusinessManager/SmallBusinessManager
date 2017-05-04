@@ -167,6 +167,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String firstName=dataSnapshot.getValue(String.class);
+//                buttonEdit.setText(firstName);
                 Log.d("TAG",firstName);
             }
 

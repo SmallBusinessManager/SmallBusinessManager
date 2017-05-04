@@ -36,4 +36,7 @@ public class Worker extends Person {
             return super.toHashMap();
         }
     }
+    public String toString(){
+        return getSSN()+" "+getFirstName()+" "+getLastName();
+    }
 }

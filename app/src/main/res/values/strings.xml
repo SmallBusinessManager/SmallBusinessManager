@@ -44,4 +44,8 @@
 
     <!-- Strings related to AccountInfo -->
     <string name="title_accountInfo">Account Setting</string>
+    <string name="logout">Logout</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
 </resources>

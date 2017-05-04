@@ -15,24 +15,24 @@
         android:id="@+id/buttonEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit" />
+        android:text="@string/edit" />
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="@string/save" />
 
     <Button
         android:id="@+id/buttonDeleteAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete Account" />
+        android:text="@string/delete_account" />
 
     <Button
         android:id="@+id/buttonLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout" />
+        android:text="@string/logout" />
 
 </LinearLayout>
