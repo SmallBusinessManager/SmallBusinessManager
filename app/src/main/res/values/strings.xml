@@ -43,5 +43,5 @@
     <string name="new_order">New Order</string>
 
     <!-- Strings related to AccountInfo -->
-    <string name="title_accountInfo">Account information</string>
+    <string name="title_accountInfo">Account Setting</string>
 </resources>
