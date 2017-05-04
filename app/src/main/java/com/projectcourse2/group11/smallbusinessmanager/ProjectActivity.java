@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.projectcourse2.group11.smallbusinessmanager.R;
-
 public class ProjectActivity extends AppCompatActivity {
 
     @Override
