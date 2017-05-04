@@ -9,8 +9,8 @@ public class Project {
     private Date startDate;
     private Date dueDate;
 
-    public Project(Manager manager,Date startDate,Date dueDate){
-        this.manager=manager;
+    public Project(Worker manager,Date startDate,Date dueDate){
+        this.manager=new Manager(manager.getSSN(),manager.getFirstName(),manager.getLastName(),manager.getPhoneNumber(),manager.getEmail(),manager.getAddress());
         this.dueDate=dueDate;
         this.startDate=startDate;
         //

@@ -3,9 +3,10 @@ package com.projectcourse2.group11.smallbusinessmanager.model;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Order {
-    private int id;
+    private UUID id;
     private String description;
     private Date startDate;
     private Enum status;
@@ -15,7 +16,8 @@ public class Order {
     private Project project;
     public Order(){}
     public Order(String description, Worker worker, Project project){
-        this.id = 1;
+        new UUID(0, 999999999);
+        this.id = UUID.randomUUID();
         this.worker=worker;
         this.status=Status.NOT_STARTED;
         this.description=description;
@@ -44,7 +46,7 @@ public class Order {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         finishDate= new java.util.Date(ts.getTime());
     }
-    public int getId(){
+    public UUID getId(){
         return id;
     }
 

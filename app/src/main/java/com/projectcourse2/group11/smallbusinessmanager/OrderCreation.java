@@ -36,10 +36,10 @@ import java.util.Map;
 public class OrderCreation extends Activity implements View.OnClickListener {
     private Button buttonOK;
     private Button buttonCancel;
-    private List<Person> workerList = new ArrayList<>();
+    private List<Worker> workerList = new ArrayList<>();
     private NumberPicker workerView;
     private EditText descriptionView;
-    private Person selectedWorker;
+    private Worker selectedWorker;
     private DatabaseReference ref;
 
 
@@ -52,19 +52,25 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String ssn,email,firstName,lastName,phoneNumber;
+                    email=ds.child("email").getValue(String.class);
+                    firstName=ds.child("firstName").getValue(String.class);
+                    lastName=ds.child("lastName").getValue(String.class);
+                    phoneNumber=ds.child("phoneNumber").getValue(String.class);
+                    ssn=ds.child("ssn").getValue(String.class);
+                    Address addr = ds.child("address").getValue(Address.class);
+                        Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, addr);
+                        workerList.add(w);
+                    descriptionView.append(email+"\n");
 //                    Worker worker = ds.getValue(Worker.class);
 //                    descriptionView.append(ds.getValue(Worker.class).toString());
-                    workerList.add(ds.getValue(Worker.class));
-                    descriptionView.append(workerList.get(0).getEmail());
-//
-//
-                    populateList();
                 }
+                populateList();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //
             }
         });
 //        workerList.add(new Worker("197210102312","Erdogan","Tayyip","911","dick_Tator@yomama.org",new Address("street","city","12345","Country")));
@@ -80,7 +86,6 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         buttonCancel = (Button) findViewById(R.id.buttonCancel);
         descriptionView = (EditText) findViewById(R.id.orderDescription);
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
-        populateList();
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
@@ -106,9 +111,12 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                     selectedWorker = workerList.get(0);
                 }
                 createOrder();
+                finish();
+                startActivity(new Intent(OrderCreation.this, AccountActivity.class));
             }
         });
-
+        String[] tmp = {"Loading"};
+        workerView.setDisplayedValues(tmp);
     }
 
     @Override
@@ -121,14 +129,10 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     //just adds the address to the firebase
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
-        Order order = new Order(description, (Worker) workerList.get(0), new Project((Manager) workerList.get(1), new Date(21, 12, 2017), new Date(22, 12, 2017)));
-        ref.child("/worker/" + workerList.get(0).getSSN() + "/").setValue(workerList.get(0));
-//        ref.updateChildren(order.toHashMap());
-//        Address addr = selectedWorker.getAddress();
-//        String key = ref.child("/address/"+addr.getStreetNumber()+"/").push().getKey();
-//        ref.updateChildren(addr.toHasMap());
-//        ref.child("/worker/"+selectedWorker.getSSN()+"/").push().getKey();
-//        ref.updateChildren(selectedWorker.toHashMap());
+        Order order = new Order(description, selectedWorker, new Project( workerList.get(1), new Date(21, 12, 2017), new Date(22, 12, 2017)));
+//        ref.child("/worker/" + workerList.get(1).getSSN() + "/").setValue(workerList.get(1));
+//        ref.child("/worker/" + workerList.get(0).getSSN() + "/").setValue(workerList.get(0));
+        ref.updateChildren(order.toHashMap());
         System.out.println("create order terminated");
 
 
@@ -139,16 +143,15 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             workersNames= new String[workerList.size()];
             for (int i = 0; i < workerList.size(); i++) {
                 workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
-                descriptionView.append(workerList.get(0).toString());
             }
         } else {workersNames= new String[1];
-            workersNames[0]="Loading";}
+            workersNames[0]="-----";}
+        workerView.setMinValue(0);
+        workerView.setDisplayedValues(workersNames);
         if (workerList.size()>1) {
             workerView.setMaxValue(workersNames.length-1);
         } else {
-            workerView.setMaxValue(1);
+            workerView.setMaxValue(0);
         }
-        workerView.setMinValue(0);
-       // workerView.setDisplayedValues(workersNames);
     }
 }
