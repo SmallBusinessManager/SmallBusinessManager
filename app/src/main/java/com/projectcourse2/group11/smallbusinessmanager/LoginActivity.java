@@ -55,6 +55,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         tvForgot=(TextView)findViewById(R.id.tvForgot);
         tvForgot.setOnClickListener(this);
+
     }
 
     private void userLogin() {
@@ -80,7 +81,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 progressDialog.dismiss();
                 if (task.isSuccessful()) {
                     finish();
-                    //startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,AccountActivity.class));
                 }else {
                     Toast.makeText(LoginActivity.this,"Login failed",Toast.LENGTH_LONG).show();
                 }
