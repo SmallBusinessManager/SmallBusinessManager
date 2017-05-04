@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,29 +54,29 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        buttonLogout=(Button)findViewById(R.id.buttonLogout);
+        buttonLogout = (Button) findViewById(R.id.buttonLogout);
+        buttonSave = (Button) findViewById(R.id.buttonSave);
+        buttonDeleteAccount = (Button) findViewById(R.id.buttonDeleteAccount);
+        buttonEdit = (Button) findViewById(R.id.buttonEdit);
+
+
         buttonLogout.setOnClickListener(this);
-
-        buttonSave=(Button)findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(this);
-
-        buttonDeleteAccount=(Button)findViewById(R.id.buttonDeleteAccount);
         buttonDeleteAccount.setOnClickListener(this);
+        buttonEdit.setOnClickListener(this);
 
         ll = (LinearLayout) findViewById(R.id.llMain);
         setEditTextTo(false);
 
-        buttonEdit = (Button) findViewById(R.id.buttonEdit);
-        buttonEdit.setOnClickListener(this);
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference();
-        currentUser=firebaseAuth.getCurrentUser();
-        if(currentUser==null){
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+        currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
             finish();
-            startActivity(new Intent(AccountActivity.this,LoginActivity.class));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
         }
 
         prepareListData();
@@ -142,7 +143,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         listDataHeader.add("In Company Information");
         List<String> personalInfo = new ArrayList<>();
         personalInfo.add("SSN:19910115-0000");
-        personalInfo.add("FirstName:Danfeng");
         personalInfo.add("LastName:Wang");
         personalInfo.add("Email:danfeng.trondset@gmail.com");
         personalInfo.add("Phone:0706556305");
@@ -166,9 +166,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference.child(currentUser.getUid()).child("firstName").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String firstName=dataSnapshot.getValue(String.class);
-//                buttonEdit.setText(firstName);
-                Log.d("TAG",firstName);
+                String firstName = dataSnapshot.getValue(String.class);
+                Log.d("TAG", firstName);
             }
 
             @Override
@@ -184,23 +183,23 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v==buttonEdit){
+        if (v == buttonEdit) {
             setEditTextTo(true);
         }
-        if (v==buttonLogout){
+        if (v == buttonLogout) {
             firebaseAuth.signOut();
             finish();
-            startActivity(new Intent(AccountActivity.this,LoginActivity.class));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
         }
-        if (v==buttonSave){
+        if (v == buttonSave) {
             saveUserInformation();
         }
-        if (v==buttonDeleteAccount){
+        if (v == buttonDeleteAccount) {
             deleteAccount();
         }
     }
 
-    private void setEditTextTo(boolean b){
+    private void setEditTextTo(boolean b) {
         for (View view : ll.getTouchables()) {
             if (view instanceof EditText) {
                 EditText editText = (EditText) view;
@@ -211,12 +210,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void saveUserInformation(){
-        //databaseReference.child(currentUser.getUid()).child("firstName").setValue(firstName);
+    private void saveUserInformation() {
         Toast.makeText(this, "Information saved", Toast.LENGTH_LONG).show();
     }
 
-    private void deleteAccount(){
+    private void deleteAccount() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete this account?")
                 .setCancelable(false)

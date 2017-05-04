@@ -46,6 +46,7 @@
     <string name="title_accountInfo">Account Setting</string>
     <string name="logout">Logout</string>
     <string name="delete_account">Delete Account</string>
-    <string name="edit">Edit</string>
-    <string name="save">Save</string>
+    <string name="edit">Edit information</string>
+    <string name="save">Save changes</string>
+    <string name="title_activity_project">ProjectActivity</string>
 </resources>
