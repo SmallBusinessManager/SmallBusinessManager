@@ -6,6 +6,8 @@ import java.util.Map;
 public class Worker extends Person {
     private TeamLeader teamLeader;
 
+    public Worker(){
+    }
     public Worker(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
         super(SSN, firstName, lastName, phoneNumber, email, address);
     }

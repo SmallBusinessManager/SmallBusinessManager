@@ -20,6 +20,7 @@ public class Address {
         this.postalCode = postalCode;
         this.country=country;
     }
+    public Address(){}
 
     public String getStreetNumber() {
         return streetNumber;

@@ -10,8 +10,12 @@ import android.widget.NumberPicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Address;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
@@ -19,6 +23,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +46,48 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Hardcoded for testing purposes
-        workerList.add(new Worker("197210102312","Erdogan","Tayyip","911","dick_Tator@yomama.org",new Address("street","city","12345","Country")));
-        workerList.add(new Manager("197210103232","Phat","American","911","dat_Wall@trump.org",new Address("Mystreet","Mycity","0012345","MyCountry")));
+        ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("/worker/").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                    String SSN = ds.getKey();
+//                    for(DataSnapshot ds2: ds.getChildren()) {
+//                        Person
+//                    }
+//                }
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    Worker worker = ds.getValue(Worker.class);
+//                    descriptionView.append(ds.getValue(Worker.class).toString());
+                    workerList.add(ds.getValue(Worker.class));
+                    descriptionView.append(workerList.get(0).getEmail());
+//
+//                }if (workerList.size()>1) {
+//                    workerView.setMaxValue(workerList.size() - 1);
+//                } else {
+//                    workerView.setMaxValue(workerList.size());
+//                }
+//                String[] workersNames;
+//                if (workerList.size()!=0) {
+//                    workersNames= new String[workerList.size()];
+//                    for (int i = 0; i < workerList.size(); i++) {
+//                        workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
+//                    }
+//                } else {workersNames= new String[1];
+//                    workersNames[0]="Loading";}
+//                workerView.setMinValue(0);
+//                workerView.setDisplayedValues(workersNames);
+                    populateList();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+//        workerList.add(new Worker("197210102312","Erdogan","Tayyip","911","dick_Tator@yomama.org",new Address("street","city","12345","Country")));
+//        workerList.add(new Manager("197210103232","Phat","American","911","dat_Wall@trump.org",new Address("Mystreet","Mycity","0012345","MyCountry")));
 
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
@@ -50,23 +95,30 @@ public class OrderCreation extends Activity implements View.OnClickListener {
 
         ref = FirebaseDatabase.getInstance().getReference();
 
-        buttonOK = (Button)findViewById(R.id.buttonOK);
-        buttonCancel = (Button)findViewById(R.id.buttonCancel);
+        buttonOK = (Button) findViewById(R.id.buttonOK);
+        buttonCancel = (Button) findViewById(R.id.buttonCancel);
         descriptionView = (EditText) findViewById(R.id.orderDescription);
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
-        String[] workersNames = new String[workerList.size()];
-        for(int i = 0; i<workerList.size();i++){
-            workersNames[i]=workerList.get(i).getFirstName()+" "+workerList.get(i).getLastName();
-        }
-        workerView.setMinValue(0);
-        workerView.setMaxValue(workerList.size() - 1);
-        workerView.setDisplayedValues(workersNames);
+//        String[] workersNames = new String[workerList.size()];
+//        if (workerList.size()!=0) {
+//            for (int i = 0; i < workerList.size(); i++) {
+//                workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
+//            }
+//        } else {workersNames[0]="Loading";}
+//        workerView.setMinValue(0);
+//        if (workerList.size() > 0) {
+//            workerView.setMaxValue(workerList.size() - 1);
+//        } else {
+//            workerView.setMaxValue(workerList.size());
+//        }
+//        workerView.setDisplayedValues(workersNames);
+        populateList();
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                selectedWorker=workerList.get(newVal);
+                selectedWorker = workerList.get(newVal);
             }
         };
 
@@ -77,12 +129,13 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                 finish();
                 Intent MainIntent = new Intent(OrderCreation.this, OpeningActivity.class);
                 startActivity(MainIntent);
-            }});
+            }
+        });
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedWorker==null){
-                    selectedWorker=workerList.get(1);
+                if (selectedWorker == null) {
+                    selectedWorker = workerList.get(1);
                 }
                 createOrder();
             }
@@ -96,12 +149,13 @@ public class OrderCreation extends Activity implements View.OnClickListener {
 //            createOrder();
 //        }
     }
-//just adds the address to the firebase
+
+    //just adds the address to the firebase
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
-        Order order = new Order(description,(Worker) workerList.get(0),new Project((Manager) workerList.get(1),new Date(21,12,2017),new Date(22,12,2017)));
-        ref.child("/order/").push();
-        ref.updateChildren(order.toHashMap());
+        Order order = new Order(description, (Worker) workerList.get(0), new Project((Manager) workerList.get(1), new Date(21, 12, 2017), new Date(22, 12, 2017)));
+        ref.child("/worker/" + workerList.get(0).getSSN() + "/").setValue(workerList.get(0));
+//        ref.updateChildren(order.toHashMap());
 //        Address addr = selectedWorker.getAddress();
 //        String key = ref.child("/address/"+addr.getStreetNumber()+"/").push().getKey();
 //        ref.updateChildren(addr.toHasMap());
@@ -110,5 +164,23 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         System.out.println("create order terminated");
 
 
+    }
+    private void populateList(){
+        String[] workersNames;
+        if (workerList.size()!=0) {
+            workersNames= new String[workerList.size()];
+            for (int i = 0; i < workerList.size(); i++) {
+                workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
+                descriptionView.append(workersNames.toString());
+            }
+        } else {workersNames= new String[1];
+            workersNames[0]="Loading";}
+        if (workerList.size()>1) {
+            workerView.setMaxValue(workersNames.length-1);
+        } else {
+            workerView.setMaxValue(1);
+        }
+        workerView.setMinValue(0);
+       // workerView.setDisplayedValues(workersNames);
     }
 }

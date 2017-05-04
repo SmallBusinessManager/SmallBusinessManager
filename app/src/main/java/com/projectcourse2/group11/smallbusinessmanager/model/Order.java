@@ -13,6 +13,7 @@ public class Order {
     //    private Date finishDate;
     private Worker worker;
     private Project project;
+    public Order(){}
     public Order(String description, Worker worker, Project project){
         this.id = 1;
         this.worker=worker;
@@ -42,6 +43,9 @@ public class Order {
         status=Status.FINISHED;
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         finishDate= new java.util.Date(ts.getTime());
+    }
+    public int getId(){
+        return id;
     }
 
     public void assignWorker(Worker worker){

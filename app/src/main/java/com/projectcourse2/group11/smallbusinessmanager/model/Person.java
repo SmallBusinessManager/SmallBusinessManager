@@ -13,6 +13,7 @@ public abstract class Person {
     private String email; //contains @
     private Address address;
 
+    public Person(){}
     public Person(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
         if (isSSNValid(SSN)) {
             this.SSN = SSN;
@@ -87,6 +88,7 @@ public abstract class Person {
     }
     public Map<String,Object> toHashMap(){
         Map<String, Object> map = new HashMap<>();
+        map.put("/worker/"+SSN+"/SSN/",SSN);
         map.put("/worker/"+SSN+"/firstName/",firstName);
         map.put("/worker/"+SSN+"/lastName/",lastName);
         map.put("/worker/"+SSN+"/phoneNumber/",phoneNumber);
