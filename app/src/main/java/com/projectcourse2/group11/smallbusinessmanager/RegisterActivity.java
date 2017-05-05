@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateOrderFragment;
 
 import org.w3c.dom.Text;
 
@@ -56,7 +57,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             registerUser();
         }
         if (v==tvLogin){
-            Intent intent=new Intent(RegisterActivity.this,OrderCreation.class);
+            Intent intent=new Intent(RegisterActivity.this,CreateOrderFragment.class);
             startActivity(intent);
         }
 

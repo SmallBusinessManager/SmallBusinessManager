@@ -18,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.database.Transaction;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateOrderFragment;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.MainScreenFragment;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.ProjectScreenFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, new MainScreenFragment()).commit();
     }
 
     @Override
@@ -86,14 +91,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentManager fm = getFragmentManager();
         Fragment fragment = null;
 
         if (id == R.id.nav_project) {
-             fragment = new ProjectActivity();
+            fm.beginTransaction().replace(R.id.content_frame,new ProjectScreenFragment()).commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_order) {
-            fragment = new OrderCreation();
+            fm.beginTransaction().replace(R.id.content_frame,new CreateOrderFragment()).commit();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -103,16 +109,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_account) {
             finish();
             startActivity(new Intent(MainActivity.this, AccountActivity.class));
-        } else if (id == R.id.nav_project) {
-            finish();
-            startActivity(new Intent(MainActivity.this, ProjectActivity.class));
 
         }
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.content_main,fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
