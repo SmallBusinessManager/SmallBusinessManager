@@ -12,9 +12,10 @@ public abstract class Person {
     private String phoneNumber;
     private String email; //contains @
     private Address address;
+    private Position position;
 
     public Person(){}
-    public Person(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
+    public Person(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
         if (isSSNValid(SSN)) {
             this.SSN = SSN;
         }
@@ -24,8 +25,13 @@ public abstract class Person {
         if (email.contains("@")) {
             this.email = email;
         }
-        this.address = address;
+ //       this.address = address;
     }
+    public void setPosition(Position position){
+        this.position=position;
+    }
+
+    public Position getPosition(){return position;}
 
     public String getSSN() {
         return SSN;
@@ -88,12 +94,18 @@ public abstract class Person {
     }
     public Map<String,Object> toHashMap(){
         Map<String, Object> map = new HashMap<>();
-        map.put("/worker/"+SSN+"/SSN/",SSN);
+//        map.put("/worker/"+SSN+"/SSN/",SSN);
         map.put("/worker/"+SSN+"/firstName/",firstName);
         map.put("/worker/"+SSN+"/lastName/",lastName);
         map.put("/worker/"+SSN+"/phoneNumber/",phoneNumber);
         map.put("/worker/"+SSN+"/email/",email);
-        map.put("/worker/"+SSN+"/address/",address.getStreetNumber());
+        map.put("/worker/"+SSN+"/position/",position);
+        if (address!=null) {
+            map.put("/workerAddress/" + SSN + "/city/", address.getCity());
+            map.put("/workerAddress/" + SSN + "/country/", address.getCountry());
+            map.put("/workerAddress/" + SSN + "/postalCode/", address.getPostalCode());
+            map.put("/workerAddress/" + SSN + "/street/", address.getStreetNumber());
+        }
         return map;
     }
 

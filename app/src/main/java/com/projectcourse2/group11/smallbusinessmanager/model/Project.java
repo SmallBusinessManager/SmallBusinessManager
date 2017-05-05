@@ -2,19 +2,21 @@ package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Project {
-    private int id;
+    private UUID id;
     private Manager manager;
     private Date startDate;
     private Date dueDate;
 
-    public Project(Worker manager,Date startDate,Date dueDate){
-        this.manager=new Manager(manager.getSSN(),manager.getFirstName(),manager.getLastName(),manager.getPhoneNumber(),manager.getEmail(),manager.getAddress());
+    public Project(/*Worker manager*/ Manager manager,Date startDate,Date dueDate){
+//        this.manager=new Manager(manager.getSSN(),manager.getFirstName(),manager.getLastName(),manager.getPhoneNumber(),manager.getEmail()/*,manager.getAddress()*/);
+        this.manager=manager;
         this.dueDate=dueDate;
         this.startDate=startDate;
         //
-        this.id=2;
+        this.id= UUID.randomUUID();
     }
 
     public void printInfo(){
@@ -29,7 +31,7 @@ public class Project {
         //to do
     }
 
-    public int getId(){
+    public UUID getId(){
         return this.id;
     }
 
@@ -46,6 +48,7 @@ public class Project {
     }
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
+        map.put("/project/"+id+"/id/",id);
         map.put("/project/"+id+"/manager/",manager.getSSN());
         map.put("/project/"+id+"/startDate/",startDate.toString());
         map.put("project/"+id+"/dueDate/",dueDate.toString());

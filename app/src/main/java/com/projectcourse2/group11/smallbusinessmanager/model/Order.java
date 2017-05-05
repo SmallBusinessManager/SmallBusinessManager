@@ -16,7 +16,6 @@ public class Order {
     private Project project;
     public Order(){}
     public Order(String description, Worker worker, Project project){
-        new UUID(0, 999999999);
         this.id = UUID.randomUUID();
         this.worker=worker;
         this.status=Status.NOT_STARTED;
@@ -56,15 +55,16 @@ public class Order {
 
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
-        map.put("/order/project_"+project.getId()+"/"+id+"/worker/",worker.getSSN());
-        map.put("/order/project_"+project.getId()+"/"+id+"/status/",status.name());
-        map.put("/order/project_"+project.getId()+"/"+id+"/description/",description);
+        map.put("/order/"+id+"/worker/",worker.getSSN());
+        map.put("/order/"+id+"/status/",status.name());
+        map.put("/order/"+id+"/description/",description);
         if (startDate!=null) {
-            map.put("/order/project_" + project.getId() + "/" + id + "/startDate/", startDate.toString());
+            map.put("/order/" + id + "/startDate/", startDate.toString());
         }
         if (finishDate!=null) {
-            map.put("/order/project_" + project.getId() + "/" + id + "/finishDate/", finishDate.toString());
+            map.put("/order/" + id  + "/finishDate/", finishDate.toString());
         }
+        map.put("/projectOrders/"+project.getId()+"/"+id+"/",status);
         return map;
     }
 }
