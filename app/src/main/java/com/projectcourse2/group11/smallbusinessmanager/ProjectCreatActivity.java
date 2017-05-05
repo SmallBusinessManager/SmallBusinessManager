@@ -35,7 +35,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     private static final int DIALOG_ID_START=0;
     private static final int DIALOG_ID_END=1;
 
-    private String startDate,endDate;
+    private Date startDate,endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _month=monthOfYear;
             _day=dayOfMonth;
             tvStartDate.setText(_day+"/"+_month+"/"+_year);
-            startDate=tvStartDate.getText().toString();
+            startDate=new Date(_day,_month,_year);
         }
     };
     private DatePickerDialog.OnDateSetListener datePickerListener2=new DatePickerDialog.OnDateSetListener(){
@@ -99,7 +99,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _month=monthOfYear;
             _day=dayOfMonth;
             tvEndDate.setText(_day+"/"+_month+"/"+_year);
-            endDate=tvEndDate.getText().toString();
+            endDate=new Date(_day,_month,_year);
         }
     };
 
@@ -122,12 +122,13 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         String projectName=etProjectName.getText().toString();
         String projectDescription=etProjectDescription.getText().toString();
 
-        //TestProject testProject=new TestProject(projectName,projectDescription,startDate,endDate);
+        TestProject testProject=new TestProject(projectName,projectDescription,startDate,endDate);
+        databaseReference.updateChildren(testProject.toHashMap());
         //databaseReference.child("project").child("testProject").setValue(testProject);
-        databaseReference.child("project").child("testProject").child("name").setValue(projectName);
-        databaseReference.child("project").child("testProject").child("description").setValue(projectDescription);
-        databaseReference.child("project").child("testProject").child("startDate").setValue(startDate);
-        databaseReference.child("project").child("testProject").child("endDate").setValue(endDate);
+       // databaseReference.child("project").child("testProject").child("name").setValue(projectName);
+        //databaseReference.child("project").child("testProject").child("description").setValue(projectDescription);
+        //databaseReference.child("project").child("testProject").child("startDate").setValue(startDate);
+        //databaseReference.child("project").child("testProject").child("endDate").setValue(endDate);
 
     }
 }
