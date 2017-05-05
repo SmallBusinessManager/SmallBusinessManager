@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
+import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
 import java.util.Calendar;
@@ -123,12 +124,20 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         String projectDescription=etProjectDescription.getText().toString();
 
         TestProject testProject=new TestProject(projectName,projectDescription,startDate,endDate);
+<<<<<<< HEAD
         databaseReference.updateChildren(testProject.toHashMap());
+=======
+>>>>>>> 32b6a50a5df1609ee2bc7f6c056d028cf290a219
         //databaseReference.child("project").child("testProject").setValue(testProject);
        // databaseReference.child("project").child("testProject").child("name").setValue(projectName);
         //databaseReference.child("project").child("testProject").child("description").setValue(projectDescription);
         //databaseReference.child("project").child("testProject").child("startDate").setValue(startDate);
         //databaseReference.child("project").child("testProject").child("endDate").setValue(endDate);
+
+        /**
+         * Object can be written like this because it has toHashMap() method.
+         */
+//        databaseReference.updateChildren(testProject.toHashMap());
 
     }
 }
