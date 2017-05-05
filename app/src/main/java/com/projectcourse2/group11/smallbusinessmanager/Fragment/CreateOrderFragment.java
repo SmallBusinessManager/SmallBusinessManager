@@ -63,8 +63,8 @@ public class CreateOrderFragment extends Fragment {
                     phoneNumber=ds.child("phoneNumber").getValue(String.class);
                     ssn=ds.child("ssn").getValue(String.class);
                     Address addr = ds.child("address").getValue(Address.class);
-                    Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, addr);
-                    workerList.add(w);
+                    //Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, addr);
+              //      workerList.add(w);
                     descriptionView.append(email+"\n");
 //                    Worker worker = ds.getValue(Worker.class);
 //                    descriptionView.append(ds.getValue(Worker.class).toString());
@@ -127,10 +127,10 @@ public class CreateOrderFragment extends Fragment {
     //just adds the address to the firebase
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
-        Order order = new Order(description, selectedWorker, new Project( workerList.get(1), new Date(21, 12, 2017), new Date(22, 12, 2017)));
+        //Order order = new Order(description, selectedWorker, new Project( workerList.get(1), new Date(21, 12, 2017), new Date(22, 12, 2017)));
 //        ref.child("/worker/" + workerList.get(1).getSSN() + "/").setValue(workerList.get(1));
 //        ref.child("/worker/" + workerList.get(0).getSSN() + "/").setValue(workerList.get(0));
-        ref.updateChildren(order.toHashMap());
+       // ref.updateChildren(order.toHashMap());
         System.out.println("create order terminated");
 
 

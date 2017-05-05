@@ -2,12 +2,8 @@ package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.util.HashMap;
 import java.util.Map;
-<<<<<<< HEAD
 import java.util.Random;
 import java.util.UUID;
-=======
->>>>>>> 32b6a50a5df1609ee2bc7f6c056d028cf290a219
-
 public class TestProject {
     private UUID id;
     private String name;
@@ -23,7 +19,6 @@ public class TestProject {
         this.endDate = endDate;
     }
 
-<<<<<<< HEAD
     public String getName() {
         return name;
     }
@@ -55,7 +50,7 @@ public class TestProject {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
+/*
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
         //map.put("/project/"+id+"/id/",id.toString());
@@ -63,12 +58,11 @@ public class TestProject {
         map.put("/project/"+id+"/description/",description);
         map.put("/project/"+id+"/startDate/",startDate.toString());
         map.put("/project/"+id+"/dueDate/",endDate.toString());
-=======
-    /**
+    *
      * This allow the simple object writing
      * such as:
      * databaseReference.updateChildren(testProject);
-     */
+     *
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
         map.put("/project/"+name+"/name/",name);
@@ -77,5 +71,5 @@ public class TestProject {
         map.put("project/"+name+"/endDate/",endDate);
 >>>>>>> 32b6a50a5df1609ee2bc7f6c056d028cf290a219
         return map;
-    }
+    }*/
 }

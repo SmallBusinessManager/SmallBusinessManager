@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.database.Transaction;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.AccountFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateOrderFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.MainScreenFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.ProjectScreenFragment;
@@ -96,8 +97,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_project) {
             fm.beginTransaction().replace(R.id.content_frame,new ProjectScreenFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_account) {
+            fm.beginTransaction().replace(R.id.content_frame,new AccountFragment()).commit();
         } else if (id == R.id.nav_order) {
             fm.beginTransaction().replace(R.id.content_frame,new CreateOrderFragment()).commit();
         } else if (id == R.id.nav_manage) {

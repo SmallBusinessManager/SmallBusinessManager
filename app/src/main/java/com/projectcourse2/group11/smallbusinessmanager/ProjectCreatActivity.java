@@ -123,7 +123,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         String projectName=etProjectName.getText().toString();
         String projectDescription=etProjectDescription.getText().toString();
 
-        TestProject testProject=new TestProject(projectName,projectDescription,startDate,endDate);
+        TestProject testProject=new TestProject(projectName,projectDescription,startDate,endDate);/*
 <<<<<<< HEAD
         databaseReference.updateChildren(testProject.toHashMap());
 =======
