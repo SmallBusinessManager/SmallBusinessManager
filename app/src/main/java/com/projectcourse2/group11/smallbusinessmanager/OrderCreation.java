@@ -3,7 +3,11 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -41,10 +45,10 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     private EditText descriptionView;
     private Worker selectedWorker;
     private DatabaseReference ref;
+    Fragment fragment = new Fragment();
 
+    public void oncCreate(Bundle savedInstanceState) {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
         //Hardcoded for testing purposes
         ref = FirebaseDatabase.getInstance().getReference();
         ref.child("/worker/").addValueEventListener(new ValueEventListener() {
@@ -99,7 +103,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                finish();
+                .finish();
                 Intent MainIntent = new Intent(OrderCreation.this, OpeningActivity.class);
                 startActivity(MainIntent);
             }
@@ -118,7 +122,6 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         String[] tmp = {"Loading"};
         workerView.setDisplayedValues(tmp);
     }
-
     @Override
     public void onClick(View v) {
 //        if (v==buttonOK){
@@ -154,4 +157,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             workerView.setMaxValue(0);
         }
     }
+
+
+
 }

@@ -79,7 +79,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressDialog.dismiss();
-                if (task.isSuccessful()) {
+
+                if (!task.isSuccessful()) {
                     finish();
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }else {
@@ -88,7 +89,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 progressDialog.dismiss();
             }
         });
-
     }
 
     @Override

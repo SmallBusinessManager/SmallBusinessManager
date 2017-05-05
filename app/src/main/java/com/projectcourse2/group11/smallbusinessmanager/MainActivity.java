@@ -1,9 +1,12 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,8 +17,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.Transaction;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +86,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment fragment = null;
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_project) {
+             fragment = new ProjectActivity();
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_order) {
+            fragment = new OrderCreation();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -99,13 +106,18 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_project) {
             finish();
             startActivity(new Intent(MainActivity.this, ProjectActivity.class));
-        }else if (id==R.id.nav_order){
-            finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class));
+
         }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.content_main,fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
