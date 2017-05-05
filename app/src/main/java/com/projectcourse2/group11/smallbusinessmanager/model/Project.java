@@ -51,7 +51,7 @@ public class Project {
         map.put("/project/"+id+"/id/",id);
         map.put("/project/"+id+"/manager/",manager.getSSN());
         map.put("/project/"+id+"/startDate/",startDate.toString());
-        map.put("project/"+id+"/dueDate/",dueDate.toString());
+        map.put("/project/"+id+"/dueDate/",dueDate.toString());
         return map;
     }
 }
