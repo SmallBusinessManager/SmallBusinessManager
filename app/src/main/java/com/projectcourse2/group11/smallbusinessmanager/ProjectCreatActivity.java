@@ -12,19 +12,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.projectcourse2.group11.smallbusinessmanager.model.Date;
+import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
 import java.util.Calendar;
 
 public class ProjectCreatActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private EditText etProjectName;
+    private EditText etProjectDescription;
     private TextView tvStartDate;
     private TextView tvEndDate;
 
     private int _day,_month,_year;
     private static final int DIALOG_ID_START=0;
     private static final int DIALOG_ID_END=1;
+
+    private String startDate,endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +52,11 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         _month=calendar.get(Calendar.MONTH);
         _day=calendar.get(Calendar.DAY_OF_MONTH);
 
-        tvStartDate=(TextView)findViewById(R.id.tvStartDate);
-        tvEndDate=(TextView)findViewById(R.id.tvEndDate);
+
+        etProjectName=(EditText)findViewById(R.id.etProjectTitle);
+        etProjectDescription=(EditText)findViewById(R.id.etProjectDescription);
+        tvStartDate=(TextView)findViewById(R.id.tvProjectStartDate);
+        tvEndDate=(TextView)findViewById(R.id.tvProjectEndDate);
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
     }
@@ -75,6 +89,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _month=monthOfYear;
             _day=dayOfMonth;
             tvStartDate.setText(_day+"/"+_month+"/"+_year);
+            startDate=tvStartDate.getText().toString();
         }
     };
     private DatePickerDialog.OnDateSetListener datePickerListener2=new DatePickerDialog.OnDateSetListener(){
@@ -84,6 +99,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _month=monthOfYear;
             _day=dayOfMonth;
             tvEndDate.setText(_day+"/"+_month+"/"+_year);
+            endDate=tvEndDate.getText().toString();
         }
     };
 
@@ -93,10 +109,25 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
+                saveToDatebase();
                 finish();
                 startActivity(new Intent(ProjectCreatActivity.this,ProjectActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveToDatebase(){
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+        String projectName=etProjectName.getText().toString();
+        String projectDescription=etProjectDescription.getText().toString();
+
+        //TestProject testProject=new TestProject(projectName,projectDescription,startDate,endDate);
+        //databaseReference.child("project").child("testProject").setValue(testProject);
+        databaseReference.child("project").child("testProject").child("name").setValue(projectName);
+        databaseReference.child("project").child("testProject").child("description").setValue(projectDescription);
+        databaseReference.child("project").child("testProject").child("startDate").setValue(startDate);
+        databaseReference.child("project").child("testProject").child("endDate").setValue(endDate);
+
     }
 }

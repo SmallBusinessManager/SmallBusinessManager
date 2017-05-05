@@ -21,14 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Title"
-            android:id="@+id/editText" />
+            android:id="@+id/etProjectTitle" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/etProjectDescription"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/editText"
+            android:layout_below="@+id/etProjectTitle"
             android:ems="10"
             android:hint="Description"
             android:inputType="textMultiLine" />
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/editText2"
+            android:layout_below="@+id/etProjectDescription"
             android:layout_marginStart="11dp"
             android:layout_marginTop="78dp"
             android:text="Start Date:"
@@ -57,7 +57,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvStartDate"
+            android:id="@+id/tvProjectStartDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView6"
@@ -68,7 +68,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvEndDate"
+            android:id="@+id/tvProjectEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/textView7"
