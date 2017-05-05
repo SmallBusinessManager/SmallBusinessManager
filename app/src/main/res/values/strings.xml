@@ -49,4 +49,5 @@
     <string name="edit">Edit information</string>
     <string name="save">Save changes</string>
     <string name="title_activity_project">ProjectActivity</string>
+    <string name="title_activity_project_creat">ProjectCreatActivity</string>
 </resources>

@@ -8,8 +8,9 @@ public class Worker extends Person {
 
     public Worker(){
     }
-    public Worker(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
-        super(SSN, firstName, lastName, phoneNumber, email, address);
+    public Worker(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
+        super(SSN, firstName, lastName, phoneNumber, email/*, address*/);
+        setPosition(Position.WORKER);
     }
 
     public void viewOrders(){

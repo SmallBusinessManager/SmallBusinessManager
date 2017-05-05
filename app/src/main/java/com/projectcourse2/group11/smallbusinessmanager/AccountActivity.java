@@ -163,7 +163,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         inCompanyInfo.add("Salary:0");
         inCompanyInfo.add("WorkingHour:100.5");
 
-        databaseReference.child(currentUser.getUid()).child("firstName").addValueEventListener(new ValueEventListener() {
+       /* databaseReference.child(currentUser.getUid()).child("firstName").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String firstName = dataSnapshot.getValue(String.class);
@@ -174,7 +174,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
         listDataChild.put(listDataHeader.get(0), personalInfo);
         listDataChild.put(listDataHeader.get(1), accountInfo);

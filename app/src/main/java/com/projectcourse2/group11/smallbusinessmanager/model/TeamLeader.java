@@ -6,7 +6,8 @@ public class TeamLeader extends Person {
     private Manager manager;
 
     public TeamLeader(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
-        super(SSN, firstName, lastName, phoneNumber, email, address);
+        super(SSN, firstName, lastName, phoneNumber, email/*, address*/);
+        setPosition(Position.TEAM_LEADER);
     }
 
     public void viewAssignedWorkers(){

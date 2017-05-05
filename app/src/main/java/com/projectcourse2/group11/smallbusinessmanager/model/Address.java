@@ -61,11 +61,12 @@ public class Address {
     public void printAddress(){
         //to do
     }
-    public Map<String, Object> toHasMap(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("/address/"+streetNumber+"/city/",city);
-        map.put("/address/"+streetNumber+"/code/",postalCode);
-        map.put("/address/"+streetNumber+"/country/",country);
-        return map;
-    }
+//    public Map<String, Object> toHasMap(){
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("/workerAddress/"+streetNumber+"/city/",city);
+//        map.put("/workerAddress/"+streetNumber+"/code/",postalCode);
+//        map.put("/workerAddress/"+streetNumber+"/street/",streetNumber);
+//        map.put("/workerAddress/"+streetNumber+"/country/",country);
+//        return map;
+//    }
 }
