@@ -5,23 +5,24 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
     private ListView listView;
+    private ListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +34,15 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+
+
         listView=(ListView)findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("project").child("test");
-        FirebaseListAdapter<String> mAdapter=new FirebaseListAdapter<String>(
+        mAdapter=new FirebaseListAdapter<String>(
                 this,
                 String.class,
                 android.R.layout.simple_list_item_1,

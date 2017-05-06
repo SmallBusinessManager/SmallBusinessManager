@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.projectcourse2.group11.smallbusinessmanager.ProjectCreatActivity">
+    tools:context="com.projectcourse2.group11.smallbusinessmanager.TaskCreateActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:id="@+id/etTaskTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title" />
+            android:hint="Task Title" />
 
         <EditText
             android:id="@+id/etTaskDescription"
@@ -46,7 +46,28 @@
             android:inputType="textMultiLine" />
 
         <TextView
-            android:id="@+id/tvStartDate"
+            android:id="@+id/tvProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvStartDate"
+            android:layout_marginBottom="25dp"
+            android:text="Project:"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:layout_toEndOf="@+id/tvStartDate" />
+
+        <TextView
+            android:id="@+id/tvAssignedTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvEndDate"
+            android:layout_below="@+id/tvEndDate"
+            android:layout_marginTop="25dp"
+            android:text="Assigned To:"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -58,7 +79,6 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/tvStartDate"
@@ -72,7 +92,15 @@
             android:id="@+id/tvStartDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvStartDate"
+            android:layout_alignParentEnd="true"
+            android:textAlignment="viewEnd"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/tvStartDate"
             android:textAlignment="viewEnd"
@@ -80,14 +108,13 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvProjectEndDate"
+            android:id="@+id/tvPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tvEndDate"
-            android:layout_alignBottom="@+id/tvEndDate"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/tvStartDate"
-            android:textAlignment="viewEnd"
+            android:layout_alignStart="@+id/tvAssignedTo"
+            android:layout_below="@+id/tvAssignedTo"
+            android:layout_marginTop="20dp"
+            android:text="Priority:"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
