@@ -27,6 +27,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ProjectCreatActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -113,7 +114,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
-                saveToDatebase();
+                saveToDatabase();
                 finish();
                 startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class));
                 return true;
@@ -121,7 +122,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveToDatebase() {
+    private void saveToDatabase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String projectName = etProjectName.getText().toString();
         String projectDescription = etProjectDescription.getText().toString();
@@ -129,7 +130,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         TestProject testProject = new TestProject(projectName, projectDescription, startDate, endDate);
         //get UID and store object under it
         String key = databaseReference.push().getKey();
-        databaseReference.updateChildren(testProject.toHashMap(key));
+        databaseReference.child("project").child(key).setValue(testProject);
 
 
     }

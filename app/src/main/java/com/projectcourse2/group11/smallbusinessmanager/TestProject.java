@@ -1,4 +1,4 @@
-package com.projectcourse2.group11.smallbusinessmanager.model;
+package com.projectcourse2.group11.smallbusinessmanager;
 
 import java.util.HashMap;
 import java.util.Map;
