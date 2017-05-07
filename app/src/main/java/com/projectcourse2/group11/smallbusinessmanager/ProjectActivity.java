@@ -41,7 +41,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("project");
         mAdapter=new FirebaseListAdapter<String>(
                 this,
@@ -60,7 +60,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
         listView.setAdapter(mAdapter);
-
     }
 
     @Override
