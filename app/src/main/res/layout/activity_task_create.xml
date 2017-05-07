@@ -47,76 +47,55 @@
 
         <TextView
             android:id="@+id/tvProject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tvStartDate"
-            android:layout_marginBottom="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:text="Project:"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:layout_toEndOf="@+id/tvStartDate" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tvAssignedTo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/tvEndDate"
-            android:layout_below="@+id/tvEndDate"
-            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvProject"
             android:text="Assigned To:"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tvStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/etTaskDescription"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="78dp"
+            android:layout_below="@+id/tvAssignedTo"
             android:text="Start Date:"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/tvStartDate"
-            android:layout_below="@+id/tvStartDate"
-            android:layout_marginTop="22dp"
+            android:id="@+id/tvEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:text="End Date:"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvStartDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:textAlignment="viewEnd"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvEndDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/tvStartDate"
-            android:textAlignment="viewEnd"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_below="@+id/tvStartDate"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/tvPriority"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/tvAssignedTo"
-            android:layout_below="@+id/tvAssignedTo"
-            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:text="Priority:"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_below="@+id/tvEndDate"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
