@@ -22,6 +22,7 @@
     <string name="phoneNumber">phoneNumber</string>
 
     <!-- Strings related to register -->
+    <string name="companyName">Company Name</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="userName">User Name</string>

@@ -4,11 +4,15 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.Tag;
+import android.provider.ContactsContract;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -25,7 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
+import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,39 +148,29 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         listDataHeader.add("Account Information");
         listDataHeader.add("In Company Information");
         List<String> personalInfo = new ArrayList<>();
-        personalInfo.add("SSN:19910115-0000");
-        personalInfo.add("LastName:Wang");
-        personalInfo.add("Email:danfeng.trondset@gmail.com");
-        personalInfo.add("Phone:0706556305");
-        personalInfo.add("Age:25");
-        personalInfo.add("Gender:FEMALE");
-        personalInfo.add("Address:Fältvägen 3");
-        personalInfo.add("PostCode:12345");
-        personalInfo.add("City:Kristianstad");
-        personalInfo.add("Country:Sweden");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("worker").child(user.getUid());
+
+        personalInfo.add("SSN:" + ref.child("ssn"));
+        personalInfo.add("LastName:" + ref.child(""));
+        personalInfo.add("Email:");
+        personalInfo.add("Phone:");
+        personalInfo.add("Age:");
+        personalInfo.add("Gender:");
+        personalInfo.add("Address:");
+        personalInfo.add("PostCode:");
+        personalInfo.add("City:");
+        personalInfo.add("Country:");
 
         List<String> accountInfo = new ArrayList<>();
-        accountInfo.add("UserName:Danfeng");
-        accountInfo.add("Password:******");
+        accountInfo.add("UserName:");
+        accountInfo.add("Password:");
 
         List<String> inCompanyInfo = new ArrayList<>();
-        inCompanyInfo.add("Contract ID:sbm45678");
-        inCompanyInfo.add("Title:Employee");
-        inCompanyInfo.add("Salary:0");
-        inCompanyInfo.add("WorkingHour:100.5");
-
-       /* databaseReference.child(currentUser.getUid()).child("firstName").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String firstName = dataSnapshot.getValue(String.class);
-                Log.d("TAG", firstName);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
+        inCompanyInfo.add("Contract ID:");
+        inCompanyInfo.add("Title:");
+        inCompanyInfo.add("Salary:");
+        inCompanyInfo.add("WorkingHour:");
 
         listDataChild.put(listDataHeader.get(0), personalInfo);
         listDataChild.put(listDataHeader.get(1), accountInfo);

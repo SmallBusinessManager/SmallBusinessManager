@@ -24,11 +24,43 @@
             app:hintTextAppearance="@style/floatLabel_style">
 
             <EditText
-                android:id="@+id/etUserName_register"
+                android:id="@+id/etCompanyName_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/userName"
+                android:hint="@string/companyName"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/white" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/TextInputLayout_style"
+            app:hintTextAppearance="@style/floatLabel_style">
+
+            <EditText
+                android:id="@+id/etFirstName_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/firstName"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/white" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/TextInputLayout_style"
+            app:hintTextAppearance="@style/floatLabel_style">
+
+            <EditText
+                android:id="@+id/etLastName_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/lastName"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/white" />
         </android.support.design.widget.TextInputLayout>
