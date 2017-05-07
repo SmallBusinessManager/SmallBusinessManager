@@ -14,9 +14,10 @@ public abstract class Person {
     private Address address;
     private Position position;
 
+    //TODO Test package-private.
     public Person(){}
     public Person(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
-        if (isSSNValid(SSN)) {
+        if (true) {
             this.SSN = SSN;
         }
         this.firstName = firstName;
@@ -79,6 +80,7 @@ public abstract class Person {
         this.address = address;
     }
 
+    // TODO Fix this method.
     private boolean isSSNValid(String SSN) {
         SSN = SSN.trim().replace("-", "");
         int year = Integer.parseInt(SSN.substring(0, 3));

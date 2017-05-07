@@ -63,6 +63,24 @@
                 android:hint="@string/lastName"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/white" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/TextInputLayout_style"
+            app:hintTextAppearance="@style/floatLabel_style">
+
+            <EditText
+                android:id="@+id/etSSN_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/ssn"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/white"
+                tools:text="xxxxxxxx-xxxx" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout

@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
+import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 import org.w3c.dom.Text;
@@ -29,7 +30,7 @@ import org.w3c.dom.Text;
 public class RegisterActivity extends Activity implements View.OnClickListener {
 
     private AutoCompleteTextView email_register;
-    private EditText password_register, password_again_register, etCompanyName_Register, etFirstName_Register, etLastName_Register;
+    private EditText password_register, password_again_register, etCompanyName_Register, etFirstName_Register, etLastName_Register, etSSN_Register;
     private Button registerButton;
     private TextView tvLogin;
     private ProgressDialog progressDialog;
@@ -47,6 +48,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         etCompanyName_Register = (EditText) findViewById(R.id.etCompanyName_register);
         etFirstName_Register = (EditText) findViewById(R.id.etFirstName_register);
         etLastName_Register = (EditText) findViewById(R.id.etLastName_register);
+        etSSN_Register = (EditText) findViewById(R.id.etSSN_register);
         email_register = (AutoCompleteTextView) findViewById(R.id.email_register);
         password_register = (EditText) findViewById(R.id.password_register);
         password_again_register = (EditText) findViewById(R.id.password_again_register);
@@ -73,6 +75,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         final String newCompanyName = etCompanyName_Register.getText().toString();
         final String firstName = etFirstName_Register.getText().toString();
         final String lastName = etLastName_Register.getText().toString();
+        final String ssn = etSSN_Register.getText().toString();
         final String email = email_register.getText().toString().trim();
         String password = password_register.getText().toString().trim();
         String rePassword = password_again_register.getText().toString().trim();
@@ -97,23 +100,23 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         progressDialog.setMessage("Registering...");
         progressDialog.show();
 
+        //TODO Condition 103-112
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
+        Company newCompany = new Company(newCompanyName, uid);
+        Manager owner = new Manager(ssn, firstName, lastName, null, email);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        String key = databaseReference.push().getKey();
+        databaseReference.child("company").child(key).setValue(newCompany);
+        databaseReference.child("worker").child(uid).setValue(owner);
+
         // Register New Company Account & Owner Account
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    String uid = user.getUid();
-
-                    Company newCompany = new Company(newCompanyName, uid);
-                    Worker owner = new Worker(null, firstName, lastName, null, email);
-
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    String key = databaseReference.push().getKey();
-                    databaseReference.child("company").child(key).setValue(newCompany);
-                    databaseReference.child("worker").child(uid).setValue(owner);
-
-
                     Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     RegisterActivity.this.startActivity(intent);
