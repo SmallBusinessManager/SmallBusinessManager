@@ -14,11 +14,11 @@ public class Worker extends Person {
     }
 
     public void viewOrders(){
-        //to do
+        //TODO
     }
 
     public void viewWorkingHours(){
-        //to do
+        //TODO
     }
     public TeamLeader getTeamLeader(){
         return teamLeader;
@@ -29,7 +29,7 @@ public class Worker extends Person {
 
     public Map<String, Object> toHashMap(){
         if (teamLeader!=null) {
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map;
             map = super.toHashMap();
             map.put("/worker/" + getSSN() + "/teamLeader/", teamLeader.getSSN());
             return map;
