@@ -69,8 +69,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ProjectActivity"/>
-
+                android:value=".ProjectActivity" />
         </activity>
         <activity
             android:name=".OrderCreation"
@@ -90,7 +89,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

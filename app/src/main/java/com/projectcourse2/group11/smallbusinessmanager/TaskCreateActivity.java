@@ -14,17 +14,19 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
-import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
+import com.projectcourse2.group11.smallbusinessmanager.model.Task;
 
 import java.util.Calendar;
 
-public class ProjectCreatActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private EditText etProjectName;
-    private EditText etProjectDescription;
+public class TaskCreateActivity extends AppCompatActivity implements View.OnClickListener {
+    private EditText etTaskName;
+    private EditText etTaskDescription;
     private TextView tvStartDate;
     private TextView tvEndDate;
+    private TextView tvAssignedTo;
+    private TextView tvPriority;
 
     private int _day, _month, _year;
     private static final int DIALOG_ID_START = 0;
@@ -35,7 +37,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_create);
+        setContentView(R.layout.activity_task_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -48,10 +50,12 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         _day = calendar.get(Calendar.DAY_OF_MONTH);
 
 
-        etProjectName = (EditText) findViewById(R.id.etTaskTitle);
-        etProjectDescription = (EditText) findViewById(R.id.etTaskDescription);
-        tvStartDate = (TextView) findViewById(R.id.tvProjectStartDate);
-        tvEndDate = (TextView) findViewById(R.id.tvProjectEndDate);
+        etTaskName = (EditText) findViewById(R.id.etTaskTitle);
+        etTaskDescription = (EditText) findViewById(R.id.etTaskDescription);
+        tvStartDate = (TextView) findViewById(R.id.tvStartDate);
+        tvEndDate = (TextView) findViewById(R.id.tvEndDate);
+        tvAssignedTo = (TextView) findViewById(R.id.tvAssignedTo);
+        tvPriority = (TextView) findViewById(R.id.tvPriority);
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
     }
@@ -83,7 +87,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvStartDate.setText("Start Date:                          "+_day + "/" + _month + "/" + _year);
+            tvStartDate.setText(_day + "/" + _month + "/" + _year);
             startDate = new Date(_day, _month, _year);
         }
     };
@@ -93,7 +97,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvEndDate.setText("End Date:                            "+_day + "/" + _month + "/" + _year);
+            tvEndDate.setText(_day + "/" + _month + "/" + _year);
             endDate = new Date(_day, _month, _year);
         }
     };
@@ -106,7 +110,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
                 //return true;
                 saveToDatabase();
                 finish();
-                startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class));
+                startActivity(new Intent(TaskCreateActivity.this, ProjectActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -114,13 +118,13 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
 
     private void saveToDatabase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        String projectName = etProjectName.getText().toString();
-        String projectDescription = etProjectDescription.getText().toString();
+        String tasktName = etTaskName.getText().toString();
+        String taskDescription = etTaskDescription.getText().toString();
 
-        TestProject testProject = new TestProject(projectName, projectDescription, startDate, endDate);
+        Task task = new Task(tasktName, taskDescription, startDate, endDate);
         //get UID and store object under it
         String key = databaseReference.push().getKey();
-        databaseReference.child("project").child(key).setValue(testProject);
+        databaseReference.child("project").child("task").child(key).setValue(task);
 
 
     }
