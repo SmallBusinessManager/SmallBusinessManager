@@ -1,6 +1,7 @@
 package com.projectcourse2.group11.smallbusinessmanager.Fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.AccountActivity;
-import com.projectcourse2.group11.smallbusinessmanager.OpeningActivity;
 import com.projectcourse2.group11.smallbusinessmanager.R;
 import com.projectcourse2.group11.smallbusinessmanager.model.Address;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
@@ -104,8 +103,17 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 getActivity().finish();
-                Intent MainIntent = new Intent(getActivity(), OpeningActivity.class);
-                startActivity(MainIntent);
+                Fragment newFragment = new OpeningFragment();
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.content_frame, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
+
             }
         });
         buttonOK.setOnClickListener(new View.OnClickListener() {
@@ -115,8 +123,17 @@ public class CreateOrderFragment extends Fragment {
                     selectedWorker = workerList.get(0);
                 }
                 createOrder();
-                getActivity().finish();
-                startActivity(new Intent(getActivity(), AccountActivity.class));
+                // Create new fragment and transaction
+                Fragment newFragment = new AccountFragment();
+                // consider using Java coding conventions (upper first char class names!!!)
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.content_frame, newFragment);
+                transaction.addToBackStack(null);
+
+                // Commit the transaction
+                transaction.commit();
             }
         });
         String[] tmp = {"Loading"};

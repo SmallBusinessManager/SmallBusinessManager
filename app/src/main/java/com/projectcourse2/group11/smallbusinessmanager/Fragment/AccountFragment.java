@@ -23,9 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.projectcourse2.group11.smallbusinessmanager.AccountActivity;
 import com.projectcourse2.group11.smallbusinessmanager.ExpandableListAdapter;
-import com.projectcourse2.group11.smallbusinessmanager.LoginActivity;
 import com.projectcourse2.group11.smallbusinessmanager.R;
 
 import java.util.ArrayList;
@@ -64,7 +62,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setContentView(R.layout.activity_account);
+       //// getActivity().setContentView(R.layout.activity_account);
 
         buttonLogout = (Button) getActivity().findViewById(R.id.buttonLogout);
         buttonSave = (Button) getActivity().findViewById(R.id.buttonSave);
