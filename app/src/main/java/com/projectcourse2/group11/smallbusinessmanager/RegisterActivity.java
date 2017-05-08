@@ -105,7 +105,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         String uid = user.getUid().toString();
 
         Company newCompany = new Company(newCompanyName, uid);
-        Manager owner = new Manager(ssn, firstName, lastName, null, email);
+        Manager owner = new Manager(ssn, firstName, lastName, null, email, uid);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String key = databaseReference.push().getKey();

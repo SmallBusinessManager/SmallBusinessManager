@@ -8,8 +8,8 @@ public class Employee extends Person {
     private String password;
     private double hourCost;
 
-    public Employee(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
-        super(SSN, firstName, lastName, phoneNumber, email/*, address*/);
+    public Employee(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(SSN, firstName, lastName, phoneNumber, email, UID);
     }
 
     public void printEmploymentDate(){
