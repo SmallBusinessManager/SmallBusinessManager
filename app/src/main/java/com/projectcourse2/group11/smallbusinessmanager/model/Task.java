@@ -13,16 +13,14 @@ public class Task {
     //private String PersonID;
     private Date startDate;
     private Date endDate;
-    private Priority priority;
 
-    public Task(String id, String name, String description, String project, Date startDate, Date endDate, Priority priority) {
-        this.id = id;
+    public Task(String name, String description, Date startDate, Date endDate) {
         this.name = name;
         this.description = description;
         //this.projectID = project;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.priority = priority;
+        //this.priority = priority;
     }
 
     public String getId() {
@@ -73,13 +71,13 @@ public class Task {
         this.endDate = endDate;
     }
 
-    public Priority getPriority() {
+   /* public Priority getPriority() {
         return priority;
     }
 
     public void setPriority(Priority priority) {
         this.priority = priority;
-    }
+    }*/
 
     public Map<String, Object> toHashMap(String key) {
         Map<String, Object> map = new HashMap<>();
@@ -90,7 +88,7 @@ public class Task {
         //map.put("/task/" + id + "/projectID/", projectID);
         map.put("/task/" + id + "/startDate/", startDate);
         map.put("/task/" + id + "/dueDate/", endDate);
-        map.put("/task/" + id + "/priority/", priority.toString());
+       // map.put("/task/" + id + "/priority/", priority.toString());
         return map;
     }
 }

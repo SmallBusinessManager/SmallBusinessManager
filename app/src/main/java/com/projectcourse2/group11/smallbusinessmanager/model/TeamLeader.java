@@ -5,8 +5,8 @@ public class TeamLeader extends Person {
     private Order[] orders;
     private Manager manager;
 
-    public TeamLeader(String SSN, String firstName, String lastName, String phoneNumber, String email, Address address) {
-        super(SSN, firstName, lastName, phoneNumber, email/*, address*/);
+    public TeamLeader(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(SSN, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.TEAM_LEADER);
     }
 

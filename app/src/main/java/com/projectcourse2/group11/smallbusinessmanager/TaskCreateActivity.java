@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
+import com.projectcourse2.group11.smallbusinessmanager.model.Task;
 
 import java.util.Calendar;
 
@@ -52,7 +53,7 @@ public class TaskCreateActivity extends AppCompatActivity implements View.OnClic
         etTaskName = (EditText) findViewById(R.id.etTaskTitle);
         etTaskDescription = (EditText) findViewById(R.id.etTaskDescription);
         tvStartDate = (TextView) findViewById(R.id.tvStartDate);
-        tvEndDate = (TextView) findViewById(R.id.tvProjectEndDate);
+        tvEndDate = (TextView) findViewById(R.id.tvEndDate);
         tvAssignedTo = (TextView) findViewById(R.id.tvAssignedTo);
         tvPriority = (TextView) findViewById(R.id.tvPriority);
         tvStartDate.setOnClickListener(this);
@@ -87,7 +88,7 @@ public class TaskCreateActivity extends AppCompatActivity implements View.OnClic
             _month = monthOfYear;
             _day = dayOfMonth;
             tvStartDate.setText(_day + "/" + _month + "/" + _year);
-            startDate = new com.projectcourse2.group11.smallbusinessmanager.model.Date(_day, _month, _year);
+            startDate = new Date(_day, _month, _year);
         }
     };
     private DatePickerDialog.OnDateSetListener datePickerListener2 = new DatePickerDialog.OnDateSetListener() {
@@ -97,7 +98,7 @@ public class TaskCreateActivity extends AppCompatActivity implements View.OnClic
             _month = monthOfYear;
             _day = dayOfMonth;
             tvEndDate.setText(_day + "/" + _month + "/" + _year);
-            endDate = new com.projectcourse2.group11.smallbusinessmanager.model.Date(_day, _month, _year);
+            endDate = new Date(_day, _month, _year);
         }
     };
 
@@ -120,10 +121,10 @@ public class TaskCreateActivity extends AppCompatActivity implements View.OnClic
         String tasktName = etTaskName.getText().toString();
         String taskDescription = etTaskDescription.getText().toString();
 
-        //com.projectcourse2.group11.smallbusinessmanager.model.TestProject testProject = new TestProject(projectName, projectDescription, startDate, endDate);
+        Task task = new Task(tasktName, taskDescription, startDate, endDate);
         //get UID and store object under it
         String key = databaseReference.push().getKey();
-       // databaseReference.child("project").child(key).setValue(testProject);
+        databaseReference.child("project").child("task").child(key).setValue(task);
 
 
     }

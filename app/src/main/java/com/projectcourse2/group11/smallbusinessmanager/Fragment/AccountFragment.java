@@ -1,16 +1,14 @@
-package com.projectcourse2.group11.smallbusinessmanager.Fragment;
+package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -21,26 +19,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.projectcourse2.group11.smallbusinessmanager.ExpandableListAdapter;
-import com.projectcourse2.group11.smallbusinessmanager.R;
+import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Bjarni on 05/05/2017.
- */
-
-public class AccountFragment extends Fragment implements View.OnClickListener {
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_account,container,false);
-
-    }
+public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
     private Button buttonEdit;
     private Button buttonSave;
     private Button buttonLogout;
@@ -60,14 +50,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference databaseReference;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       //// getActivity().setContentView(R.layout.activity_account);
+        setContentView(R.layout.activity_account);
 
-        buttonLogout = (Button) getActivity().findViewById(R.id.buttonLogout);
-        buttonSave = (Button) getActivity().findViewById(R.id.buttonSave);
-        buttonDeleteAccount = (Button) getActivity().findViewById(R.id.buttonDeleteAccount);
-        buttonEdit = (Button) getActivity().findViewById(R.id.buttonEdit);
+        buttonLogout = (Button) findViewById(R.id.buttonLogout);
+        buttonSave = (Button) findViewById(R.id.buttonSave);
+        buttonDeleteAccount = (Button) findViewById(R.id.buttonDeleteAccount);
+        buttonEdit = (Button) findViewById(R.id.buttonEdit);
 
 
         buttonLogout.setOnClickListener(this);
@@ -75,23 +65,23 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         buttonDeleteAccount.setOnClickListener(this);
         buttonEdit.setOnClickListener(this);
 
-        ll = (LinearLayout) getActivity().findViewById(R.id.llMain);
+        ll = (LinearLayout) findViewById(R.id.llMain);
         setEditTextTo(false);
 
-        expListView = (ExpandableListView) getActivity().findViewById(R.id.lvExp);
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         currentUser = firebaseAuth.getCurrentUser();
         if (currentUser == null) {
-            getActivity().finish();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            finish();
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
         }
 
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
 
         expListView.setAdapter(listAdapter);
 
@@ -108,7 +98,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getActivity().getApplicationContext(),
+                Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Expanded",
                         Toast.LENGTH_SHORT).show();
             }
@@ -118,7 +108,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getActivity().getApplicationContext(),
+                Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Collapsed",
                         Toast.LENGTH_SHORT).show();
 
@@ -132,7 +122,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                         int groupPosition, int childPosition, long id) {
                 // TODO Auto-generated method stub
                 Toast.makeText(
-                        getActivity().getApplicationContext(),
+                        getApplicationContext(),
                         listDataHeader.get(groupPosition)
                                 + " : "
                                 + listDataChild.get(
@@ -191,15 +181,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         listDataChild.put(listDataHeader.get(2), inCompanyInfo);
     }
 
-
+    @Override
     public void onClick(View v) {
         if (v == buttonEdit) {
             setEditTextTo(true);
         }
         if (v == buttonLogout) {
             firebaseAuth.signOut();
-            getActivity().finish();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            finish();
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
         }
         if (v == buttonSave) {
             saveUserInformation();
@@ -221,12 +211,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveUserInformation() {
-        Toast.makeText(getActivity(), "Information saved", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Information saved", Toast.LENGTH_LONG).show();
     }
 
     private void deleteAccount() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete this account?")
                 .setCancelable(false)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
@@ -239,8 +229,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                 if (task.isSuccessful()) {
                                     databaseReference.child(currentUser.getUid()).removeValue();
                                     progressDialog.dismiss();
-                                    getActivity().finish();
-                                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                                    AccountActivity.this.finish();
+                                    startActivity(new Intent(AccountActivity.this, LoginActivity.class));
                                 }
                             }
                         });
@@ -256,5 +246,4 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
 
 }
-
 

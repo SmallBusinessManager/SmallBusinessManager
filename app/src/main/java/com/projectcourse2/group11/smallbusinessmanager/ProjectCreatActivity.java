@@ -50,7 +50,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
 
         etProjectName = (EditText) findViewById(R.id.etTaskTitle);
         etProjectDescription = (EditText) findViewById(R.id.etTaskDescription);
-        tvStartDate = (TextView) findViewById(R.id.tvStartDate);
+        tvStartDate = (TextView) findViewById(R.id.tvProjectStartDate);
         tvEndDate = (TextView) findViewById(R.id.tvProjectEndDate);
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
@@ -83,7 +83,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvStartDate.setText(_day + "/" + _month + "/" + _year);
+            tvStartDate.setText("Start Date:                          "+_day + "/" + _month + "/" + _year);
             startDate = new Date(_day, _month, _year);
         }
     };
@@ -93,7 +93,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvEndDate.setText(_day + "/" + _month + "/" + _year);
+            tvEndDate.setText("End Date:                            "+_day + "/" + _month + "/" + _year);
             endDate = new Date(_day, _month, _year);
         }
     };
