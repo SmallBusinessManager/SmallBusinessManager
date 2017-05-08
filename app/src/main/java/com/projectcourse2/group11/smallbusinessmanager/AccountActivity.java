@@ -58,7 +58,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference databaseReference, ref;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String uid = user.getUid().toString();
+    private String uid = user.getUid();
     private String company;
 
     @Override
@@ -134,7 +134,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                // TODO Auto-generated method stub
                 Toast.makeText(
                         getApplicationContext(),
                         listDataHeader.get(groupPosition)
@@ -155,7 +154,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (ds.getKey().equals(uid)) {
-                        company = ds.getRef().getParent().getKey();
+                        company = "XBUVAedmKGTHl2bU4qNxGxLnaYd2";//ds.getRef().getParent().getKey();
                         break;
                     }
                 }
