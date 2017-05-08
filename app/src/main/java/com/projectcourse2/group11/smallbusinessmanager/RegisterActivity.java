@@ -23,9 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
-import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
-
-import org.w3c.dom.Text;
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
 
@@ -115,7 +112,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                     String key = databaseReference.push().getKey();
                     databaseReference.child("company").child(key).setValue(newCompany);
-                    databaseReference.child("worker").child(uid).setValue(owner);
+                    databaseReference.child("companyEmployees").child(key).child(uid).setValue(owner);
 
                     Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -126,15 +123,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 progressDialog.dismiss();
             }
         });
-    }
-
-    private void saveToDatabase(Company newCompany, Worker owner) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        databaseReference.child("company").setValue(newCompany);
-        databaseReference.child("worker").setValue(owner);
-
-
     }
 }
 
