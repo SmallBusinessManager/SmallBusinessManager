@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,17 +15,12 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Date;
-import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
-import java.util.Map;
-
-public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
+public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
     private ListView listView;
@@ -42,36 +36,41 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        String projectUID,projectName;
+        Intent intent=getIntent();
+        Bundle bundle=intent.getExtras();
+        if (bundle!=null){
+            projectUID=bundle.getString("projectUID");
+            projectName=bundle.getString("projectName");
+        }
         listView = (ListView) findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
         //// TODO: 08/05/2017 get company(wait for company register to finish)
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
-        mAdapter = new FirebaseListAdapter<TestProject>(
-                ProjectActivity.this,
-                TestProject.class,
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
+
+        //// TODO: 09/05/2017 listview of tasks
+       /* mAdapter = new FirebaseListAdapter<String>(
+                this,
+                String.class,
                 android.R.layout.simple_list_item_1,
                 ref) {
             @Override
-            protected void populateView(View v, TestProject model, int position) {
-                TextView textView = (TextView) v.findViewById(android.R.id.text1);
-                textView.setText(model.getName());
+            protected String parseSnapshot(DataSnapshot snapshot) {
+                return snapshot.child("name").getValue(String.class);
             }
-        };
-        listView.setAdapter(mAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               TestProject project=(TestProject) parent.getItemAtPosition(position);
-                Intent intent=new Intent(ProjectActivity.this,SingleProjectHomeActivity.class);
-                intent.putExtra("projectUID",project.getId());
-                intent.putExtra("projectName",project.getName());
-                startActivity(intent);
-
+            protected void populateView(View v, String model, final int position) {
+                TextView textView = (TextView) v.findViewById(android.R.id.text1);
+                textView.setText(model);
+                Log.d("TAG",model);
             }
-        });
+
+        };
+        listView.setAdapter(mAdapter);*/
+
     }
 
     @Override
@@ -81,7 +80,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
                 finish();
-                startActivity(new Intent(ProjectActivity.this, MainActivity.class));
+                startActivity(new Intent(SingleProjectHomeActivity.this, MainActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -91,7 +90,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class));
         }
     }
+
 }

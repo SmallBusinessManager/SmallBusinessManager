@@ -4,13 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestProject {
-    private String id;
-    private String name;
-    private String description;
-    private Date startDate;
-    private Date endDate;
+    public String id;
+    public String name;
+    public String description;
+    public Date startDate;
+    public Date endDate;
 
-    public TestProject(String name, String description, Date startDate, Date endDate) {
+    /*Blank default constructor essential for Firebase*/
+    public TestProject() {
+    }
+
+    public TestProject(String id, String name, String description, Date startDate, Date endDate) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
@@ -59,13 +64,18 @@ public class TestProject {
 
     public Map<String, Object> toHashMap(String key) {
         Map<String, Object> map = new HashMap<>();
-        this.id=key;
-        //map.put("/project/"+id+"/id/",id);
-        map.put("/project/" + id + "/name/", name);
-        map.put("/project/" + id + "/description/", description);
-        map.put("/project/" + id + "/startDate/", startDate);
-        map.put("/project/" + id + "/dueDate/", endDate);
+        this.id = key;
+        map.put("/companyProjects/company1/" + id + "/id/", id);
+        map.put("/companyProjects/company1/" + id + "/name/", name);
+        map.put("/companyProjects/company1/" + id + "/description/", description);
+        map.put("/companyProjects/company1/" + id + "/startDate/", startDate);
+        map.put("/companyProjects/company1/" + id + "/endDate/", endDate);
         return map;
+    }
+
+    @Override
+    public String toString() {
+        return name + description;
     }
 }
 
