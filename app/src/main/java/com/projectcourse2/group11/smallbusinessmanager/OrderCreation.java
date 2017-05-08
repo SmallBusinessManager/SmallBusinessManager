@@ -258,13 +258,13 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                 String strDate = startDateIn.getText().toString().replace('-',' ').trim();
 //                descriptionView.setText(strDate.substring(8,10)+"\n"+strDate.substring(5,7)+"\n"+strDate.substring(0,4));
                 Date sDate = new Date(Integer.parseInt(strDate.substring(8,10)),Integer.parseInt(strDate.substring(5,7)),Integer.parseInt(strDate.substring(0,4)));
-                Order order = new Order(description, selectedWorker, new Project(selectedManager, sDate, new Date(22, 12, 2017)));
+                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
                 order.startOrder(sDate);
                 ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
                 return true;
             } else {
                 Date sDate = new Date(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
-                Order order = new Order(description, selectedWorker, new Project(selectedManager, sDate, new Date(22, 12, 2017)));
+                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
                 order.startOrder(sDate);
                 ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
                 return true;
