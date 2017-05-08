@@ -23,11 +23,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
@@ -54,6 +56,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseUser currentUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    private String uid = user.getUid();
+    private String company;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,34 +153,66 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         listDataHeader.add("Personal Information");
         listDataHeader.add("Account Information");
         listDataHeader.add("In Company Information");
-        List<String> personalInfo = new ArrayList<>();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("worker").child(user.getUid());
 
-        personalInfo.add("SSN:");
-        personalInfo.add("LastName:" + ref.child(""));
-        personalInfo.add("Email:");
-        personalInfo.add("Phone:");
-        personalInfo.add("Age:");
-        personalInfo.add("Gender:");
-        personalInfo.add("Address:");
-        personalInfo.add("PostCode:");
-        personalInfo.add("City:");
-        personalInfo.add("Country:");
 
-        List<String> accountInfo = new ArrayList<>();
-        accountInfo.add("UserName:");
-        accountInfo.add("Password:");
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("companyEmployees").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        company = ds.getRef().getParent().getKey();
+                        break;
+                    }
+                }
+                ref.child("companyEmployees/" + company + "/" + uid + "/").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot ds) {
+                        List<String> personalInfo = new ArrayList<>();
+                        personalInfo.add("SSN:" + ds.child("ssn").getValue(String.class));
+                        personalInfo.add("LastName:");
+                        personalInfo.add("Email:");
+                        personalInfo.add("Phone:");
+                        personalInfo.add("Age:");
+                        personalInfo.add("Gender:");
+                        personalInfo.add("Address:");
+                        personalInfo.add("PostCode:");
+                        personalInfo.add("City:");
+                        personalInfo.add("Country:");
 
-        List<String> inCompanyInfo = new ArrayList<>();
-        inCompanyInfo.add("Contract ID:");
-        inCompanyInfo.add("Title:");
-        inCompanyInfo.add("Salary:");
-        inCompanyInfo.add("WorkingHour:");
+                        List<String> accountInfo = new ArrayList<>();
+                        accountInfo.add("UserName:");
+                        accountInfo.add("Password:");
 
-        listDataChild.put(listDataHeader.get(0), personalInfo);
-        listDataChild.put(listDataHeader.get(1), accountInfo);
-        listDataChild.put(listDataHeader.get(2), inCompanyInfo);
+                        List<String> inCompanyInfo = new ArrayList<>();
+                        inCompanyInfo.add("Contract ID:");
+                        inCompanyInfo.add("Title:");
+                        inCompanyInfo.add("Salary:");
+                        inCompanyInfo.add("WorkingHour:");
+
+                        listDataChild.put(listDataHeader.get(0), personalInfo);
+                        listDataChild.put(listDataHeader.get(1), accountInfo);
+                        listDataChild.put(listDataHeader.get(2), inCompanyInfo);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+            }
+
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     @Override

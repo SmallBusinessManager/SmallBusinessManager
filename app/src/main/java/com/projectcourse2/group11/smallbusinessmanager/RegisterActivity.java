@@ -102,7 +102,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
         //TODO Condition 103-112
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = user.getUid();
+        String uid = user.getUid().toString();
 
         Company newCompany = new Company(newCompanyName, uid);
         Manager owner = new Manager(ssn, firstName, lastName, null, email);
@@ -110,7 +110,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String key = databaseReference.push().getKey();
         databaseReference.child("company").child(key).setValue(newCompany);
-        databaseReference.child("worker").child(uid).setValue(owner);
+        databaseReference.child("companyEmployees").child(key).child(uid).setValue(owner);
 
         // Register New Company Account & Owner Account
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
