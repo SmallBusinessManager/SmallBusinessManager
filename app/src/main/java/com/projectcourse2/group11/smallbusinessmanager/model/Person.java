@@ -13,10 +13,11 @@ public abstract class Person {
     private String email; //contains @
     private Address address;
     private Position position;
+    private String UID;
 
     //TODO Test package-private.
     public Person(){}
-    public Person(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
+    public Person(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
         if (true) {
             this.SSN = SSN;
         }
@@ -26,7 +27,7 @@ public abstract class Person {
         if (email.contains("@")) {
             this.email = email;
         }
- //       this.address = address;
+        this.UID=UID;
     }
     public void setPosition(Position position){
         this.position=position;
@@ -96,17 +97,17 @@ public abstract class Person {
     }
     public Map<String,Object> toHashMap(){
         Map<String, Object> map = new HashMap<>();
-//        map.put("/worker/"+SSN+"/SSN/",SSN);
-        map.put("/worker/"+SSN+"/firstName/",firstName);
-        map.put("/worker/"+SSN+"/lastName/",lastName);
-        map.put("/worker/"+SSN+"/phoneNumber/",phoneNumber);
-        map.put("/worker/"+SSN+"/email/",email);
-        map.put("/worker/"+SSN+"/position/",position);
+        map.put(UID+"/SSN/",SSN);
+        map.put(UID+"/firstName/",firstName);
+        map.put(UID+"/lastName/",lastName);
+        map.put(UID+"/phoneNumber/",phoneNumber);
+        map.put(UID+"/email/",email);
+        map.put(UID+"/position/",position);
         if (address!=null) {
-            map.put("/workerAddress/" + SSN + "/city/", address.getCity());
-            map.put("/workerAddress/" + SSN + "/country/", address.getCountry());
-            map.put("/workerAddress/" + SSN + "/postalCode/", address.getPostalCode());
-            map.put("/workerAddress/" + SSN + "/street/", address.getStreetNumber());
+            map.put("/workerAddress/" + UID + "/city/", address.getCity());
+            map.put("/workerAddress/" + UID + "/country/", address.getCountry());
+            map.put("/workerAddress/" + UID + "/postalCode/", address.getPostalCode());
+            map.put("/workerAddress/" + UID + "/street/", address.getStreetNumber());
         }
         return map;
     }

@@ -7,8 +7,8 @@ public class Manager extends Person {
     private ArrayList<TeamLeader> teamLeaders = new ArrayList<>();
     private ArrayList<Project> projects = new ArrayList<>();
 
-    public Manager(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
-        super(SSN, firstName, lastName, phoneNumber, email/*, address*/);
+    public Manager(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(SSN, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.MANAGER);
     }
 

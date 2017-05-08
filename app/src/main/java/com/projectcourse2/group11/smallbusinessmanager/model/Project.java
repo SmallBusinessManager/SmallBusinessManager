@@ -12,6 +12,7 @@ public class Project {
     private Date startDate;
     private Date dueDate;
 
+<<<<<<< HEAD
     public Project(String id,String name, String description, String employeeID, Date startDate, Date dueDate) {
         this.id=id;
         this.name = name;
@@ -19,6 +20,14 @@ public class Project {
         this.employeeID = employeeID;
         this.startDate = startDate;
         this.dueDate = dueDate;
+=======
+    public Project(/*Worker manager*/ Manager manager,Date startDate,Date dueDate){
+//        this.manager=new Manager(manager.getSSN(),manager.getFirstName(),manager.getLastName(),manager.getPhoneNumber(),manager.getEmail()/*,manager.getAddress()*/);
+        this.manager=manager;
+        this.dueDate=dueDate;
+        this.startDate=startDate;
+        this.id= UUID.randomUUID();
+>>>>>>> cea81a8530c3359bc5b323abac01784f976d9e3d
     }
 
     public String getId() {
