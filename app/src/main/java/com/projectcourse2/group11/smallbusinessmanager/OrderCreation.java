@@ -1,12 +1,14 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,126 +55,70 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     private DatabaseReference ref;
     private String company;
     private String UID;
+    private ProgressDialog progressDialog;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         //Reading all worker from database and sorting by position
         ref = FirebaseDatabase.getInstance().getReference();
-        ref.child("/companyEmployees/").addChildEventListener(new ChildEventListener() {
+
+        ref.child("/companyEmployees/").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                     if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                         company = ds.getRef().getParent().getKey();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot d:ds.getChildren()) {
+                        if (d.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            company = d.getRef().getParent().getKey();
+                            break;
+                        }
+                    }
+                    if (company!=null){
+                        dataSnapshot=ds;
                         break;
                     }
                 }
-                ref =FirebaseDatabase.getInstance().getReference();
-                ref.child("/companyEmployees/"+company+"/").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        managerList = new ArrayList<>();
-                        workerList = new ArrayList<>();
-                        try {
-                            String ssn, email, firstName, lastName, phoneNumber;
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                UID = ds.getKey();
-                                email = ds.child("email").getValue(String.class);
-                                firstName = ds.child("firstName").getValue(String.class);
-                                lastName = ds.child("lastName").getValue(String.class);
-                                phoneNumber = ds.child("phoneNumber").getValue(String.class);
-                                Position pos = ds.child("position").getValue(Position.class);
-                                ssn = ds.child("SSN").getValue(String.class);
+                managerList = new ArrayList<>();
+                workerList = new ArrayList<>();
+                try
+                {
+                    String ssn, email, firstName, lastName, phoneNumber;
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        UID = ds.getKey();
+                        email = ds.child("email").getValue(String.class);
+                        firstName = ds.child("firstName").getValue(String.class);
+                        lastName = ds.child("lastName").getValue(String.class);
+                        phoneNumber = ds.child("phoneNumber").getValue(String.class);
+                        Position pos = ds.child("position").getValue(Position.class);
+                        ssn = ds.child("SSN").getValue(String.class);
 
-                                //separating managers and workers
-                                if (pos.equals(Position.WORKER)) {
-                                    Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
-                                    workerList.add(w);
-                                } else if (pos.equals(Position.MANAGER)) {
-                                    Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
-                                    managerList.add(man);
-                                }
-                            }
-                            populateList();
-                            selectedManager=managerList.get(0);
-                            selectedWorker=workerList.get(0);
-                        }catch (Exception e){
-                            String[] err = {e.getMessage()};
-                            workerView.setDisplayedValues(err);
+                        //separating managers and workers
+                        if (pos.equals(Position.WORKER)) {
+                            Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
+                            workerList.add(w);
+                        } else if (pos.equals(Position.MANAGER)) {
+                            Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
+                            managerList.add(man);
                         }
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        String[] err = {"Error while loading"};
-                        workerView.setDisplayedValues(err);
-                    }
-                });
-
-
+                    populateList();
+                    selectedManager = managerList.get(0);
+                    selectedWorker = workerList.get(0);
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(OrderCreation.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                String[] err = {"Error while loading company."};
-                workerView.setDisplayedValues(err);
-            }
-        });
-//        ref =FirebaseDatabase.getInstance().getReference();
-//        ref.child("/companyEmployees/"+company+"/").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                try {
-//                    String ssn, email, firstName, lastName, phoneNumber;
-//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                        UID = ds.getKey();
-//                        email = ds.child("email").getValue(String.class);
-//                        firstName = ds.child("firstName").getValue(String.class);
-//                        lastName = ds.child("lastName").getValue(String.class);
-//                        phoneNumber = ds.child("phoneNumber").getValue(String.class);
-//                        Position pos = ds.child("position").getValue(Position.class);
-//                        ssn = ds.child("SSN").getValue(String.class);
-//
-//                        //separating managers and workers
-//                        if (pos.equals(Position.WORKER)) {
-//                            Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
-//                            workerList.add(w);
-//                        } else if (pos.equals(Position.MANAGER)) {
-//                            Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
-//                            managerList.add(man);
-//                        }
-//                    }
-//                    populateList();
-//                }catch (Exception e){
-//                    String[] err = {UID};
-//                    workerView.setDisplayedValues(err);
-//                    System.out.println(UID);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                String[] err = {"Error while loading"};
-//                workerView.setDisplayedValues(err);
-//            }
-//        });
-
+                }
+            });
 
 
         //preparing UI
@@ -222,12 +168,17 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 if (selectedWorker == null) {
                     selectedWorker = workerList.get(0);
+                }
+                if (selectedManager==null){
+                    selectedManager=managerList.get(0);
                 }
                 if (createOrder()) {
                     finish();
                     startActivity(new Intent(OrderCreation.this, AccountActivity.class));
+                    progressDialog.dismiss();
                 }
             }
         });
@@ -256,7 +207,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         try {
             if (!(startDateIn.getText().toString().trim().equalsIgnoreCase(""))) {
                 String strDate = startDateIn.getText().toString().replace('-',' ').trim();
-//                descriptionView.setText(strDate.substring(8,10)+"\n"+strDate.substring(5,7)+"\n"+strDate.substring(0,4));
+                descriptionView.setText(strDate.substring(8,10)+"\n"+strDate.substring(5,7)+"\n"+strDate.substring(0,4));
                 Date sDate = new Date(Integer.parseInt(strDate.substring(8,10)),Integer.parseInt(strDate.substring(5,7)),Integer.parseInt(strDate.substring(0,4)));
                 Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
                 order.startOrder(sDate);
@@ -270,9 +221,8 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                 return true;
             }
         } catch (Exception e){
-     //       descriptionView.setText(e.getMessage());
+            Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
-            //showErrorMessage();
         }
 
     }
