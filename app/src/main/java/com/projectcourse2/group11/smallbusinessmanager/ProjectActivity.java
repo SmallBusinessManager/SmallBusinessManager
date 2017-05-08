@@ -8,16 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
-
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,14 +35,11 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-
-
         listView=(ListView)findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("project");
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
         mAdapter=new FirebaseListAdapter<String>(
                 this,
                 String.class,
@@ -55,11 +52,18 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected void populateView(View v, String model, int position) {
                 TextView textView=(TextView)v.findViewById(android.R.id.text1);
-                Log.d("haha",model);
                 textView.setText(model);
             }
         };
         listView.setAdapter(mAdapter);
+
+       /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem=listView.getItemAtPosition(position).toString();
+               Toast.makeText(ProjectActivity.this,selectedItem,Toast.LENGTH_SHORT).show();
+            }
+        });*/
     }
 
     @Override

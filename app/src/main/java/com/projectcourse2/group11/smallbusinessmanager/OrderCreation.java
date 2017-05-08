@@ -27,7 +27,9 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.Status;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +42,14 @@ import java.util.Map;
 public class OrderCreation extends Activity implements View.OnClickListener {
     private Button buttonOK;
     private Button buttonCancel;
-    private List<Worker> workerList = new ArrayList<>();
-    private List<Manager> managerList = new ArrayList<>();
+    private List<Worker> workerList;
+    private List<Manager>  managerList;
     private NumberPicker workerView;
+    private NumberPicker managerView;
     private EditText descriptionView;
     private Worker selectedWorker;
+    private Manager selectedManager;
+    private EditText startDateIn;
     private DatabaseReference ref;
     private String company;
     private String UID;
@@ -67,6 +72,8 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                 ref.child("/companyEmployees/"+company+"/").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        managerList = new ArrayList<>();
+                        workerList = new ArrayList<>();
                         try {
                             String ssn, email, firstName, lastName, phoneNumber;
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -88,10 +95,11 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                                 }
                             }
                             populateList();
+                            selectedManager=managerList.get(0);
+                            selectedWorker=workerList.get(0);
                         }catch (Exception e){
-                            String[] err = {UID};
+                            String[] err = {e.getMessage()};
                             workerView.setDisplayedValues(err);
-                            System.out.println(UID);
                         }
                     }
 
@@ -180,6 +188,10 @@ public class OrderCreation extends Activity implements View.OnClickListener {
         descriptionView = (EditText) findViewById(R.id.orderDescription);
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        managerView= (NumberPicker) findViewById(R.id.managerPicker);
+        managerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        startDateIn = (EditText) findViewById(R.id.startDateIn);
+
 
         //Number picker with worker names instead of numbers
         NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
@@ -189,7 +201,15 @@ public class OrderCreation extends Activity implements View.OnClickListener {
             }
         };
 
+        final NumberPicker.OnValueChangeListener managerListener = new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                selectedManager = managerList.get(newVal);
+            }
+        };
+
         workerView.setOnValueChangedListener(myValChangedListener);
+        managerView.setOnValueChangedListener(managerListener);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -205,15 +225,17 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                 if (selectedWorker == null) {
                     selectedWorker = workerList.get(0);
                 }
-                createOrder();
-                finish();
-                startActivity(new Intent(OrderCreation.this, AccountActivity.class));
+                if (createOrder()) {
+                    finish();
+                    startActivity(new Intent(OrderCreation.this, AccountActivity.class));
+                }
             }
         });
 
         //it takes time to load and populate number picker, lets just say its loading
         String[] tmp = {"Loading"};
         workerView.setDisplayedValues(tmp);
+        managerView.setDisplayedValues(tmp);
     }
 
     @Override
@@ -226,12 +248,33 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     /**
      *  This part right here is for writing to the database
      *  Some values are dummy values
+     *  Returns TRUE if success and false if exception is thrown
      */
-    private void createOrder() {
+    private boolean createOrder() {
         String description = descriptionView.getText().toString().trim();
         ref = FirebaseDatabase.getInstance().getReference();
-        Order order = new Order(description, selectedWorker, new Project( managerList.get(0), new Date(21, 12, 2017), new Date(22, 12, 2017)));
-        ref.child("/companyWorkOrders/"+company+"/").updateChildren(order.toHashMap());
+        try {
+            if (!(startDateIn.getText().toString().trim().equalsIgnoreCase(""))) {
+                String strDate = startDateIn.getText().toString().replace('-',' ').trim();
+//                descriptionView.setText(strDate.substring(8,10)+"\n"+strDate.substring(5,7)+"\n"+strDate.substring(0,4));
+                Date sDate = new Date(Integer.parseInt(strDate.substring(8,10)),Integer.parseInt(strDate.substring(5,7)),Integer.parseInt(strDate.substring(0,4)));
+                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
+                order.startOrder(sDate);
+                ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
+                return true;
+            } else {
+                Date sDate = new Date(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
+                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
+                order.startOrder(sDate);
+                ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
+                return true;
+            }
+        } catch (Exception e){
+     //       descriptionView.setText(e.getMessage());
+            return false;
+            //showErrorMessage();
+        }
+
     }
 
     /**
@@ -241,6 +284,22 @@ public class OrderCreation extends Activity implements View.OnClickListener {
      *  and passes the string array to number picker
      */
     private void populateList(){
+        String[] managerNames;
+        if (managerList.size()!=0) {
+            managerNames= new String[managerList.size()];
+            for (int i = 0; i < workerList.size(); i++) {
+                managerNames[i] = managerList.get(i).getFirstName() + " " + managerList.get(i).getLastName();
+            }
+        } else {managerNames= new String[1];
+            managerNames[0]="---";}
+        managerView.setMinValue(0);
+        managerView.setDisplayedValues(managerNames);
+        if (managerList.size()>1) {
+            managerView.setMaxValue(managerNames.length-1);
+        } else {
+            managerView.setMaxValue(0);
+        }
+
         String[] workersNames;
         if (workerList.size()!=0) {
             workersNames= new String[workerList.size()];
