@@ -12,22 +12,13 @@ public class Project {
     private Date startDate;
     private Date dueDate;
 
-<<<<<<< HEAD
-    public Project(String id,String name, String description, String employeeID, Date startDate, Date dueDate) {
-        this.id=id;
+    public Project(String id, String name, String description, String employeeID, Date startDate, Date dueDate) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.employeeID = employeeID;
         this.startDate = startDate;
         this.dueDate = dueDate;
-=======
-    public Project(/*Worker manager*/ Manager manager,Date startDate,Date dueDate){
-//        this.manager=new Manager(manager.getSSN(),manager.getFirstName(),manager.getLastName(),manager.getPhoneNumber(),manager.getEmail()/*,manager.getAddress()*/);
-        this.manager=manager;
-        this.dueDate=dueDate;
-        this.startDate=startDate;
-        this.id= UUID.randomUUID();
->>>>>>> cea81a8530c3359bc5b323abac01784f976d9e3d
     }
 
     public String getId() {
@@ -78,15 +69,15 @@ public class Project {
         this.dueDate = dueDate;
     }
 
-    public Map<String,Object> toHashMap(String key){
-        Map<String,Object> map = new HashMap<>();
-        this.id=key;
-        map.put("/companyProjects/"+id+"/id/",getId());
-        map.put("/companyProjects/"+id+"/name/",getName());
-        map.put("/companyProjects/"+id+"/description/",getDescription());
-        map.put("/companyProjects/"+id+"/employeeID/",getEmployeeID());
-        map.put("/companyProjects/"+id+"/startDate/",getStartDate());
-        map.put("/companyProjects/"+id+"/dueDate/",getDueDate());
+    public Map<String, Object> toHashMap(String key) {
+        Map<String, Object> map = new HashMap<>();
+        this.id = key;
+        map.put("/companyProjects/" + id + "/id/", getId());
+        map.put("/companyProjects/" + id + "/name/", getName());
+        map.put("/companyProjects/" + id + "/description/", getDescription());
+        map.put("/companyProjects/" + id + "/employeeID/", getEmployeeID());
+        map.put("/companyProjects/" + id + "/startDate/", getStartDate());
+        map.put("/companyProjects/" + id + "/dueDate/", getDueDate());
         return map;
     }
 }
