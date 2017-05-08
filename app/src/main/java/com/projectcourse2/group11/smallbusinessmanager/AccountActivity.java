@@ -151,7 +151,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("worker").child(user.getUid());
 
-        personalInfo.add("SSN:" + ref.child("ssn"));
+        personalInfo.add("SSN:");
         personalInfo.add("LastName:" + ref.child(""));
         personalInfo.add("Email:");
         personalInfo.add("Phone:");
