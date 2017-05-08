@@ -37,6 +37,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    // TODO Change to FirebaseSimpleLogin Object if we have time to ensure authentication
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
