@@ -55,16 +55,16 @@ public class Order {
 
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
-        map.put("/order/"+id+"/worker/",worker.getSSN());
-        map.put("/order/"+id+"/status/",status.name());
-        map.put("/order/"+id+"/description/",description);
+        map.put(id+"/worker/",worker.getSSN());
+        map.put(id+"/status/",status.name());
+        map.put(id+"/description/",description);
         if (startDate!=null) {
-            map.put("/order/" + id + "/startDate/", startDate.toString());
+            map.put(id + "/startDate/", startDate.toString());
         }
         if (finishDate!=null) {
-            map.put("/order/" + id  + "/finishDate/", finishDate.toString());
+            map.put(id  + "/finishDate/", finishDate.toString());
         }
-        map.put("/projectOrders/"+project.getId()+"/"+id+"/",status);
+      //  map.put("/projectOrders/"+project.getId()+"/"+id+"/",status);
         return map;
     }
 }

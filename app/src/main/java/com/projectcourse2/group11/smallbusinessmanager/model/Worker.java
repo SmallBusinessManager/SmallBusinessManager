@@ -8,8 +8,8 @@ public class Worker extends Person {
 
     public Worker(){
     }
-    public Worker(String SSN, String firstName, String lastName, String phoneNumber, String email/*, Address address*/) {
-        super(SSN, firstName, lastName, phoneNumber, email/*, address*/);
+    public Worker(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(SSN, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.WORKER);
     }
 
@@ -31,7 +31,7 @@ public class Worker extends Person {
         if (teamLeader!=null) {
             Map<String, Object> map;
             map = super.toHashMap();
-            map.put("/worker/" + getSSN() + "/teamLeader/", teamLeader.getSSN());
+            map.put(getSSN() + "/teamLeader/", teamLeader.getSSN());
             return map;
         } else {
             return super.toHashMap();

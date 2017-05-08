@@ -46,54 +46,133 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     private EditText descriptionView;
     private Worker selectedWorker;
     private DatabaseReference ref;
+    private String company;
+    private String UID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Reading all worker from database and sorting by position
         ref = FirebaseDatabase.getInstance().getReference();
-        ref.child("/worker/").addValueEventListener(new ValueEventListener() {
+        ref.child("/companyEmployees/").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String ssn,email,firstName,lastName,phoneNumber;
-                    email=ds.child("email").getValue(String.class);
-                    firstName=ds.child("firstName").getValue(String.class);
-                    lastName=ds.child("lastName").getValue(String.class);
-                    phoneNumber=ds.child("phoneNumber").getValue(String.class);
-                    Position pos = ds.child("position").getValue(Position.class);
-                    ssn=ds.getKey();
-
-                    //separating managers and workers
-                    if (pos.equals(Position.WORKER)) {
-                        Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email);
-                        workerList.add(w);
-                    }else if (pos.equals(Position.MANAGER)){
-                        Manager man = new Manager(ssn,firstName,lastName,phoneNumber,email);
-                        managerList.add(man);
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                     if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                         company = ds.getRef().getParent().getKey();
+                        break;
                     }
                 }
-                populateList();
+                ref =FirebaseDatabase.getInstance().getReference();
+                ref.child("/companyEmployees/"+company+"/").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            String ssn, email, firstName, lastName, phoneNumber;
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                UID = ds.getKey();
+                                email = ds.child("email").getValue(String.class);
+                                firstName = ds.child("firstName").getValue(String.class);
+                                lastName = ds.child("lastName").getValue(String.class);
+                                phoneNumber = ds.child("phoneNumber").getValue(String.class);
+                                Position pos = ds.child("position").getValue(Position.class);
+                                ssn = ds.child("SSN").getValue(String.class);
+
+                                //separating managers and workers
+                                if (pos.equals(Position.WORKER)) {
+                                    Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
+                                    workerList.add(w);
+                                } else if (pos.equals(Position.MANAGER)) {
+                                    Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
+                                    managerList.add(man);
+                                }
+                            }
+                            populateList();
+                        }catch (Exception e){
+                            String[] err = {UID};
+                            workerView.setDisplayedValues(err);
+                            System.out.println(UID);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        String[] err = {"Error while loading"};
+                        workerView.setDisplayedValues(err);
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                String[] err = {"Error while loading"};
+                String[] err = {"Error while loading company."};
                 workerView.setDisplayedValues(err);
             }
         });
-//        workerList.add(new Worker("197210102312","Erdogan","Tayyip","911","dick_Tator@yomama.org"));
-//        workerList.get(0).setAddress(new Address("street","city","12345","Country"));
-//        managerList.add(new Manager("197210103232","Phat","American","911","dat_Wall@trump.org"));
-//        managerList.get(0).setAddress(new Address("Mystreet","Mycity","0012345","MyCountry"));
+//        ref =FirebaseDatabase.getInstance().getReference();
+//        ref.child("/companyEmployees/"+company+"/").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                try {
+//                    String ssn, email, firstName, lastName, phoneNumber;
+//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        UID = ds.getKey();
+//                        email = ds.child("email").getValue(String.class);
+//                        firstName = ds.child("firstName").getValue(String.class);
+//                        lastName = ds.child("lastName").getValue(String.class);
+//                        phoneNumber = ds.child("phoneNumber").getValue(String.class);
+//                        Position pos = ds.child("position").getValue(Position.class);
+//                        ssn = ds.child("SSN").getValue(String.class);
+//
+//                        //separating managers and workers
+//                        if (pos.equals(Position.WORKER)) {
+//                            Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
+//                            workerList.add(w);
+//                        } else if (pos.equals(Position.MANAGER)) {
+//                            Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
+//                            managerList.add(man);
+//                        }
+//                    }
+//                    populateList();
+//                }catch (Exception e){
+//                    String[] err = {UID};
+//                    workerView.setDisplayedValues(err);
+//                    System.out.println(UID);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                String[] err = {"Error while loading"};
+//                workerView.setDisplayedValues(err);
+//            }
+//        });
+
+
 
         //preparing UI
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_order);
 
-        //Get new refence to the databse, the previuous was in /workers/
+        //Get new reference to the database, the previous was in /workers/
         ref = FirebaseDatabase.getInstance().getReference();
 
         buttonOK = (Button) findViewById(R.id.buttonOK);
@@ -146,16 +225,13 @@ public class OrderCreation extends Activity implements View.OnClickListener {
 
     /**
      *  This part right here is for writing to the database
-     *  Some lines are commented out but it was used to add dummy values/objects to the database
+     *  Some values are dummy values
      */
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
-//        Order order = new Order(description, selectedWorker, new Project( managerList.get(0), new Date(21, 12, 2017), new Date(22, 12, 2017)));
-//        ref.child("/worker/" + workerList.get(1).getSSN() + "/").setValue(workerList.get(1));
-//        ref.child("/worker/" + workerList.get(0).getSSN() + "/").setValue(workerList.get(0));
-//        ref.updateChildren(workerList.get(0).toHashMap());
-//        ref.updateChildren(managerList.get(0).toHashMap());
-//        ref.updateChildren(order.toHashMap());
+        ref = FirebaseDatabase.getInstance().getReference();
+        Order order = new Order(description, selectedWorker, new Project( managerList.get(0), new Date(21, 12, 2017), new Date(22, 12, 2017)));
+        ref.child("/companyWorkOrders/"+company+"/").updateChildren(order.toHashMap());
     }
 
     /**
@@ -172,7 +248,7 @@ public class OrderCreation extends Activity implements View.OnClickListener {
                 workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
             }
         } else {workersNames= new String[1];
-            workersNames[0]="-----";}
+            workersNames[0]="---";}
         workerView.setMinValue(0);
         workerView.setDisplayedValues(workersNames);
         if (workerList.size()>1) {

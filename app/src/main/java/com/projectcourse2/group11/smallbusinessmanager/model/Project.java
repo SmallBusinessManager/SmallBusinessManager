@@ -15,7 +15,7 @@ public class Project {
         this.manager=manager;
         this.dueDate=dueDate;
         this.startDate=startDate;
-        //this.id= UUID.randomUUID();
+        this.id= UUID.randomUUID();
     }
 
     public void printInfo(){
