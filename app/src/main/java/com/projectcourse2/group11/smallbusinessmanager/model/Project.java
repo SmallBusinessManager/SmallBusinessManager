@@ -5,52 +5,80 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Project {
-    private UUID id;
-    private Manager manager;
+    private String id;
+    private String name;
+    private String description;
+    private String employeeID;
     private Date startDate;
     private Date dueDate;
 
-    public Project(/*Worker manager*/ Manager manager,Date startDate,Date dueDate){
-//        this.manager=new Manager(manager.getSSN(),manager.getFirstName(),manager.getLastName(),manager.getPhoneNumber(),manager.getEmail()/*,manager.getAddress()*/);
-        this.manager=manager;
-        this.dueDate=dueDate;
-        this.startDate=startDate;
-        this.id= UUID.randomUUID();
+    public Project(String id, String name, String description, String employeeID, Date startDate, Date dueDate) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.employeeID = employeeID;
+        this.startDate = startDate;
+        this.dueDate = dueDate;
     }
 
-    public void printInfo(){
-        //to do
+    public String getId() {
+        return id;
     }
 
-    public void showAllOrders(){
-        //to do
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void addExpenses(){
-        //to do
+    public String getName() {
+        return name;
     }
 
-    public UUID getId(){
-        return this.id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Manager getManager(){
-        return this.manager;
+    public String getDescription() {
+        return description;
     }
 
-    public void addPayment(){
-        //to do
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void getPayment(){
-        //to do
+    public String getEmployeeID() {
+        return employeeID;
     }
-    public Map<String,Object> toHashMap(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("/project/"+id+"/id/",id);
-        map.put("/project/"+id+"/manager/",manager.getSSN());
-        map.put("/project/"+id+"/startDate/",startDate.toString());
-        map.put("/project/"+id+"/dueDate/",dueDate.toString());
+
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Map<String, Object> toHashMap(String key) {
+        Map<String, Object> map = new HashMap<>();
+        this.id = key;
+        map.put("/companyProjects/" + id + "/id/", getId());
+        map.put("/companyProjects/" + id + "/name/", getName());
+        map.put("/companyProjects/" + id + "/description/", getDescription());
+        map.put("/companyProjects/" + id + "/employeeID/", getEmployeeID());
+        map.put("/companyProjects/" + id + "/startDate/", getStartDate());
+        map.put("/companyProjects/" + id + "/dueDate/", getDueDate());
         return map;
     }
 }
+

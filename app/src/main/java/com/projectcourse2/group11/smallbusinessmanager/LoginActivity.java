@@ -34,6 +34,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private TextView tvRegister;
     private Button mEmailSignInButton;
     private TextView tvForgot;
+
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
 
