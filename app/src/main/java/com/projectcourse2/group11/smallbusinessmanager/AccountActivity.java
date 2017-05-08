@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 import java.lang.reflect.Field;
@@ -47,7 +48,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private LinearLayout ll;
     private ProgressDialog progressDialog;
 
-    private ExpandableListAdapter listAdapter;
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
@@ -55,10 +55,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, ref;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String uid = user.getUid();
+    private String uid = user.getUid().toString();
     private String company;
 
     @Override
@@ -81,6 +81,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         setEditTextTo(false);
 
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -93,7 +95,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
 
         expListView.setAdapter(listAdapter);
 
@@ -147,29 +149,25 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void prepareListData() {
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
-
-        listDataHeader.add("Personal Information");
-        listDataHeader.add("Account Information");
-        listDataHeader.add("In Company Information");
-
-
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        ref.child("companyEmployees").addChildEventListener(new ChildEventListener() {
+        ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("/companyEmployees/").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getKey().equals(uid)) {
                         company = ds.getRef().getParent().getKey();
                         break;
                     }
                 }
-                ref.child("companyEmployees/" + company + "/" + uid + "/").addValueEventListener(new ValueEventListener() {
+                ref.child("/companyEmployees/" + company + "/").addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot ds) {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        listDataHeader.add("Personal Information");
+                        listDataHeader.add("Account Information");
+                        listDataHeader.add("In Company Information");
+
                         List<String> personalInfo = new ArrayList<>();
-                        personalInfo.add("SSN:" + ds.child("ssn").getValue(String.class));
+                        personalInfo.add("SSN:");
                         personalInfo.add("LastName:");
                         personalInfo.add("Email:");
                         personalInfo.add("Phone:");
@@ -196,22 +194,27 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
                 });
             }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            }
         });
     }
 
