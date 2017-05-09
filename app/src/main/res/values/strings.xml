@@ -53,4 +53,8 @@
     <string name="title_activity_project">ProjectActivity</string>
     <string name="title_activity_project_creat">ProjectCreatActivity</string>
     <string name="title_activity_task_create">TaskCreateActivity</string>
+
+    <!-- Strings related to AccountInfo -->
+    <string name="listWorkers">List Workers</string>
+
 </resources>

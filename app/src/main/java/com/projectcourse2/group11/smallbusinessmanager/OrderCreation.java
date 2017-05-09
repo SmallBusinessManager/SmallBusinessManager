@@ -230,8 +230,8 @@ public class OrderCreation extends Activity implements View.OnClickListener {
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();
         ref = FirebaseDatabase.getInstance().getReference();
-        Order order = new Order(description, selectedWorker, new Project( managerList.get(0), new Date(21, 12, 2017), new Date(22, 12, 2017)));
-        ref.child("/companyWorkOrders/"+company+"/").updateChildren(order.toHashMap());
+        //Order order = new Order(description, selectedWorker, new Project( managerList.get(0), new Date(21, 12, 2017), new Date(22, 12, 2017)));
+        //ref.child("/companyWorkOrders/"+company+"/").updateChildren(order.toHashMap());
     }
 
     /**
