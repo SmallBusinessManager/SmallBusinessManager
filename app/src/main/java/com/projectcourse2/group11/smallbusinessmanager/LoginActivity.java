@@ -96,7 +96,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v == tvRegister) {
             finish();
-            startActivity(new Intent(LoginActivity.this, AccountantActivity.class));
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         }
         if (v == mEmailSignInButton) {
             userLogin();
