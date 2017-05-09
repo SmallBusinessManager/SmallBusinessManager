@@ -53,4 +53,7 @@
     <string name="title_activity_project">ProjectActivity</string>
     <string name="title_activity_project_creat">ProjectCreatActivity</string>
     <string name="title_activity_task_create">TaskCreateActivity</string>
+    <string name="managers">Managers</string>
+    <string name="start_date">Start date</string>
+    <string name="worker">Worker</string>
 </resources>

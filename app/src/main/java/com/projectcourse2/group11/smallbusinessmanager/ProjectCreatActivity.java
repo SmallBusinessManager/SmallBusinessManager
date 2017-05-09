@@ -47,7 +47,6 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         _month = calendar.get(Calendar.MONTH);
         _day = calendar.get(Calendar.DAY_OF_MONTH);
 
-
         etProjectName = (EditText) findViewById(R.id.etTaskTitle);
         etProjectDescription = (EditText) findViewById(R.id.etTaskDescription);
         tvStartDate = (TextView) findViewById(R.id.tvProjectStartDate);
@@ -113,15 +112,15 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void saveToDatabase() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
         String projectName = etProjectName.getText().toString();
         String projectDescription = etProjectDescription.getText().toString();
 
-        TestProject testProject = new TestProject(projectName, projectDescription, startDate, endDate);
         //get UID and store object under it
         String key = databaseReference.push().getKey();
-        databaseReference.child("project").child(key).setValue(testProject);
+        TestProject testProject = new TestProject(key,projectName, projectDescription, startDate, endDate);
 
-
+        //todo get company
+        databaseReference.child(key).setValue(testProject);
     }
 }
