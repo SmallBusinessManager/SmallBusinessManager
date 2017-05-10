@@ -5,26 +5,20 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Date;
-import com.projectcourse2.group11.smallbusinessmanager.model.Project;
+
 import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
-import java.util.Map;
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,7 +30,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -46,12 +40,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
+
         //// TODO: 08/05/2017 get company(wait for company register to finish)
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
         mAdapter = new FirebaseListAdapter<TestProject>(
                 ProjectActivity.this,
                 TestProject.class,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_single_choice,
                 ref) {
             @Override
             protected void populateView(View v, TestProject model, int position) {
@@ -59,18 +54,45 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 textView.setText(model.getName());
             }
         };
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               TestProject project=(TestProject) parent.getItemAtPosition(position);
-                Intent intent=new Intent(ProjectActivity.this,SingleProjectHomeActivity.class);
-                intent.putExtra("UID",project.getId());
-                intent.putExtra("name",project.getName());
-                startActivity(intent);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final TestProject project = (TestProject) parent.getItemAtPosition(position);
+
+                toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.nav_delete_project) {
+                            FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
+                            ref.child(project.getId()).removeValue();
+                        }
+                        return true;
+                    }
+                });
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TestProject project = (TestProject) parent.getItemAtPosition(position);
+                Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class);
+                intent.putExtra("projectUID", project.getId());
+                intent.putExtra("name", project.getName());
+                startActivity(intent);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_project_home, menu);
+        return true;
     }
 
     @Override

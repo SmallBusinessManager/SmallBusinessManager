@@ -6,8 +6,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -23,10 +27,11 @@ import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
-    private ListView listView;
-    private ListAdapter mAdapter;
+    //private ListView listView;
+    // private ListAdapter mAdapter;
 
     private String projectUID;
+    private DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,21 +47,20 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            projectUID = bundle.getString("UID");
+            projectUID = bundle.getString("projectUID");
             String projectName = bundle.getString("name");
-            this.setTitle(projectName+" Home");
+            this.setTitle(projectName);
         }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-        listView = (ListView) findViewById(R.id.listView);
-
 
         //// TODO: 08/05/2017 get company(wait for company register to finish)
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("projectOrders").child(projectUID);
+        ref = FirebaseDatabase.getInstance().getReference();
 /*
         //// TODO: 09/05/2017 listview of tasks
+         //listView = (ListView) findViewById(R.id.listView);
         mAdapter = new FirebaseListAdapter<String>(
                 this,
                 String.class,
@@ -80,16 +84,21 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_single_project, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //NavUtils.navigateUpFromSameTask(this);
-                //return true;
+
                 finish();
                 startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class));
-                return true;
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

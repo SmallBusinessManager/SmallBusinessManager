@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_search_task"
+        android:icon="@drawable/ic_search_white_36dp"
+        android:title="Delete Task"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/nav_edit_project"
+        android:icon="@drawable/ic_mode_edit_white_36dp"
+        android:title="Delete Project"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/nav_reorder_task"
+        android:icon="@drawable/ic_reorder_white_36dp"
+        android:title="Reorder Task"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/nav_delete_project"
+        android:icon="@drawable/ic_delete_forever_white_36dp"
+        android:title="Delete Project"
+        app:showAsAction="ifRoom"/>
+</menu>
