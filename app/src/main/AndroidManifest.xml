@@ -76,6 +76,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ProjectActivity" />
         </activity>
+        <activity android:name=".SingleProjectHomeActivity"
+            android:parentActivityName=".ProjectActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProjectActivity" />
+        </activity>
         <activity
             android:name=".OrderCreation"
             android:theme="@style/AppTheme.NoActionBar">
@@ -94,6 +106,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

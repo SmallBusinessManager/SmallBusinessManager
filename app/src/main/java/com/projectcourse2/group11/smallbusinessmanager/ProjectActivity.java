@@ -66,10 +66,9 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                TestProject project=(TestProject) parent.getItemAtPosition(position);
                 Intent intent=new Intent(ProjectActivity.this,SingleProjectHomeActivity.class);
-                intent.putExtra("projectUID",project.getId());
-                intent.putExtra("projectName",project.getName());
+                intent.putExtra("UID",project.getId());
+                intent.putExtra("name",project.getName());
                 startActivity(intent);
-
             }
         });
     }

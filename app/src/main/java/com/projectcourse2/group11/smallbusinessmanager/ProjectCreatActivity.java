@@ -122,5 +122,9 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
 
         //todo get company
         databaseReference.child(key).setValue(testProject);
+
+        //write project key to projectOrders
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("projectOrders");
+        ref.child(key).setValue("tobe overwritten");
     }
 }

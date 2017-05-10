@@ -26,6 +26,8 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private ListView listView;
     private ListAdapter mAdapter;
 
+    private String projectUID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,22 +38,26 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        String projectUID,projectName;
-        Intent intent=getIntent();
-        Bundle bundle=intent.getExtras();
-        if (bundle!=null){
-            projectUID=bundle.getString("projectUID");
-            projectName=bundle.getString("projectName");
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            projectUID = bundle.getString("UID");
+            String projectName = bundle.getString("name");
+            this.setTitle(projectName+" Home");
         }
-        listView = (ListView) findViewById(R.id.listView);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-        //// TODO: 08/05/2017 get company(wait for company register to finish)
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
+        listView = (ListView) findViewById(R.id.listView);
 
+
+        //// TODO: 08/05/2017 get company(wait for company register to finish)
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("projectOrders").child(projectUID);
+/*
         //// TODO: 09/05/2017 listview of tasks
-       /* mAdapter = new FirebaseListAdapter<String>(
+        mAdapter = new FirebaseListAdapter<String>(
                 this,
                 String.class,
                 android.R.layout.simple_list_item_1,
@@ -80,7 +86,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
                 finish();
-                startActivity(new Intent(SingleProjectHomeActivity.this, MainActivity.class));
+                startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
