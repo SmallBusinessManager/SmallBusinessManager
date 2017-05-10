@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,8 +7,13 @@
     android:hapticFeedbackEnabled="false"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context=".OpeningActivity">
-
+    tools:context=".MainActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp"
+        android:id="@+id/opening_frame">
     <com.projectcourse2.group11.smallbusinessmanager.OurViewFlipper
         android:id="@+id/viewflipper"
         android:layout_width="match_parent"
@@ -154,26 +159,26 @@
             android:id="@+id/button_signUp"
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
             android:background="@color/colorButton"
             android:text="@string/signUp_button_text"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="33dp" />
 
         <Button
             android:id="@+id/button_signIn"
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:layout_alignStart="@+id/button_signUp"
-            android:layout_below="@+id/button_signUp"
-            android:layout_marginTop="16dp"
             android:background="@android:color/white"
             android:text="@string/signIn_button_text"
             android:textColor="@color/colorButton"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/button_signUp"
+            android:layout_marginBottom="101dp" />
     </RelativeLayout>
-
-</LinearLayout>
+</FrameLayout>
+</RelativeLayout>

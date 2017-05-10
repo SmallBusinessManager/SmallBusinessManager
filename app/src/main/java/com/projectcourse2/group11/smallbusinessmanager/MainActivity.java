@@ -1,4 +1,4 @@
-package com.projectcourse2.group11.smallbusinessmanager.Fragment;
+package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.database.Transaction;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.AccountFragment;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateOrderFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.ProjectScreenFragment;
 import com.projectcourse2.group11.smallbusinessmanager.R;
 
@@ -28,11 +30,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_home);
+        setContentView(R.layout.content_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+       /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
       fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
 
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
