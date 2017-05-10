@@ -3,7 +3,6 @@ package com.projectcourse2.group11.smallbusinessmanager.Fragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,20 +40,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v==registerButton){
-            registerUser();
-        }
-        if (v==tvLogin){
-            Fragment newFragment = new CreateOrderFragment();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-
-    }
 
     @Nullable
     @Override
@@ -69,9 +53,24 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         password_again_register = (EditText) getActivity().findViewById(R.id.password_again_register);
         registerButton = (Button) view.findViewById(R.id.register_button);
         tvLogin = (TextView) view.findViewById(R.id.tvLogin);
-        tvLogin.setOnClickListener(this);
 
-        return inflater.inflate(R.layout.activity_register, container, false);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                registerUser();
+            }
+        });
+        tvLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Fragment newFragment = new LoginFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.opening_frame, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        return view;
     }
 
     private void registerUser(){
@@ -104,7 +103,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     Toast.makeText(getActivity(),"User registered successfully",Toast.LENGTH_SHORT).show();
-                    Fragment newFragment = new StartActivityFragment();
+                    Fragment newFragment = new LoginFragment();
                     // consider using Java coding conventions (upper first char class names!!!)
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     // Replace whatever is in the fragment_container view with this fragment,
@@ -123,5 +122,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     public void setOnClickListener(View.OnClickListener listener){
         registerButton.setOnClickListener(listener);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

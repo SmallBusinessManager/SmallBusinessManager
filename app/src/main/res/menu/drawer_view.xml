@@ -1,0 +1,63 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Project"
+            android:id="@+id/project_home">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Create Project"
+                        android:id="@+id/create_project"/>
+
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Project something" />
+                </group>
+            </menu>
+        </item>
+        <item android:title="Order"
+           >
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Main"
+                        android:id="@+id/order_home"/>
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Create Order"
+                        android:id="@+id/create_order"/>
+
+                </group>
+            </menu>
+        </item>
+        <item android:title="Account"
+            >
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Main"
+                        android:id="@+id/account_home"
+                        />
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="account something" />
+                </group>
+            </menu>
+        </item>
+        <item android:title="Home">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Home" />
+                    <item
+                        android:icon="@drawable/ic_menu_slideshow"
+                        android:title="Home something" />
+                </group>
+            </menu>
+        </item>
+    </group>
+</menu>

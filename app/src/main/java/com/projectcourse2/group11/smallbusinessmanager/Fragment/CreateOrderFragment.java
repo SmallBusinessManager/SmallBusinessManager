@@ -32,11 +32,6 @@ import java.util.zip.Inflater;
  */
 
 public class CreateOrderFragment extends Fragment {
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.new_order, container, false);
-    }
     private Button buttonOK;
     private Button buttonCancel;
     private List<Worker> workerList = new ArrayList<>();
@@ -44,10 +39,11 @@ public class CreateOrderFragment extends Fragment {
     private EditText descriptionView;
     private Worker selectedWorker;
     private DatabaseReference ref;
- //   android.support.v4.app.Fragment fragment = new android.support.v4.app.Fragment();
-
-    public void oncCreate(Bundle savedInstanceState) {
-
+    //   android.support.v4.app.Fragment fragment = new android.support.v4.app.Fragment();
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.new_order,null);
         //Hardcoded for testing purposes
         ref = FirebaseDatabase.getInstance().getReference();
         ref.child("/worker/").addValueEventListener(new ValueEventListener() {
@@ -63,7 +59,7 @@ public class CreateOrderFragment extends Fragment {
                     ssn=ds.child("ssn").getValue(String.class);
                     Address addr = ds.child("address").getValue(Address.class);
                     //Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, addr);
-              //      workerList.add(w);
+                    //      workerList.add(w);
                     descriptionView.append(email+"\n");
 //                    Worker worker = ds.getValue(Worker.class);
 //                    descriptionView.append(ds.getValue(Worker.class).toString());
@@ -81,14 +77,13 @@ public class CreateOrderFragment extends Fragment {
 
         getActivity().setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        getActivity().setContentView(R.layout.new_order);
 
         ref = FirebaseDatabase.getInstance().getReference();
 
-        buttonOK = (Button) getActivity().findViewById(R.id.buttonOK);
-        buttonCancel = (Button) getActivity().findViewById(R.id.buttonCancel);
-        descriptionView = (EditText) getActivity().findViewById(R.id.orderDescription);
-        workerView = (NumberPicker) getActivity().findViewById(R.id.workerPicker);
+        buttonOK = (Button) view.findViewById(R.id.buttonOK);
+        buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
+        descriptionView = (EditText) view.findViewById(R.id.orderDescription);
+        workerView = (NumberPicker) view.findViewById(R.id.workerPicker);
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
@@ -120,27 +115,27 @@ public class CreateOrderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (selectedWorker == null) {
-                    selectedWorker = workerList.get(0);
+                    try {
+                        selectedWorker = workerList.get(0);
+                    }catch (ArrayIndexOutOfBoundsException e){
+
+                    }
                 }
                 createOrder();
-                // Create new fragment and transaction
                 Fragment newFragment = new AccountFragment();
-                // consider using Java coding conventions (upper first char class names!!!)
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                // Replace whatever is in the fragment_container view with this fragment,
-                // and add the transaction to the back stack
                 transaction.replace(R.id.content_frame, newFragment);
                 transaction.addToBackStack(null);
-
-                // Commit the transaction
                 transaction.commit();
             }
         });
         String[] tmp = {"Loading"};
         workerView.setDisplayedValues(tmp);
+
+
+
+        return view;
     }
-
-
     //just adds the address to the firebase
     private void createOrder() {
         String description = descriptionView.getText().toString().trim();

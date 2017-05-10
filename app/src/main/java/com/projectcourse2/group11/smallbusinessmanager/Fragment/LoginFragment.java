@@ -76,20 +76,26 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         mEmailView = (AutoCompleteTextView) view.findViewById(R.id.email);
         mPasswordView = (EditText) view.findViewById(R.id.password);
         mEmailSignInButton = (Button) view.findViewById(R.id.button_signIn);
+
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
                 String email = mEmailView.getText().toString().trim();
                 String password = mPasswordView.getText().toString().trim();
-                userLogin(email, password);
+                ((OpeningActivity)getActivity()).userLogin();
+
             }
 
         });
-
         tvForgot = (TextView) view.findViewById(R.id.tvForgot);
         tvForgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Fragment newFragment = new RegisterFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.opening_frame, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -102,35 +108,4 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
         return view;
     }
-
-    public void userLogin(String email, String password) {
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getActivity(), "Please enter email", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getActivity(), "Please enter password", Toast.LENGTH_LONG).show();
-            return;
-        }
-        FirebaseAuth firebaseAuth;
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("TAG", "signInWithEmail:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            getActivity().finish();
-                            startActivity(new Intent(getActivity(), MainActivity.class));
-                        }
-                        if (!task.isSuccessful()) {
-                            Log.w("TAG", "signInWithEmail", task.getException());
-                            Toast.makeText(getActivity(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-
     }
-}

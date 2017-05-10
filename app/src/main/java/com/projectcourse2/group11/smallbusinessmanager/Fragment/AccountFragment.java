@@ -59,17 +59,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_account,container,false);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        buttonLogout = (Button) getActivity().findViewById(R.id.buttonLogout);
-        buttonSave = (Button) getActivity().findViewById(R.id.buttonSave);
-        buttonDeleteAccount = (Button) getActivity().findViewById(R.id.buttonDeleteAccount);
-        buttonEdit = (Button) getActivity().findViewById(R.id.buttonEdit);
+        View view = inflater.inflate(R.layout.activity_account, container, false);
+        buttonLogout = (Button) view.findViewById(R.id.buttonLogout);
+        buttonSave = (Button) view.findViewById(R.id.buttonSave);
+        buttonDeleteAccount = (Button) view.findViewById(R.id.buttonDeleteAccount);
+        buttonEdit = (Button)  view.findViewById(R.id.buttonEdit);
 
 
         buttonLogout.setOnClickListener(this);
@@ -97,7 +91,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+        listAdapter = new ExpandableListAdapter(view.getContext(), listDataHeader, listDataChild);
 
         expListView.setAdapter(listAdapter);
 
@@ -148,6 +142,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
+        return view;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
     }
 
     private void prepareListData() {

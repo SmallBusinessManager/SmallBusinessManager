@@ -31,9 +31,6 @@ public class ProjectScreenFragment extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listView=(ListView)getActivity().findViewById(R.id.listView);
-        fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(this);
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("project").child("test");
@@ -48,8 +45,6 @@ public class ProjectScreenFragment extends Fragment implements View.OnClickListe
                 textView.setText(model);
             }
         };
-        listView.setAdapter(mAdapter);
-
     }
 
     @Override
