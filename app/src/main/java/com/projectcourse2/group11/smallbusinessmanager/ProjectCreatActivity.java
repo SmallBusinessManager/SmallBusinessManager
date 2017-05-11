@@ -66,7 +66,6 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             projectUID = bundle.getString("projectUID");
             final String projectName = bundle.getString("projectName");
             this.setTitle("Edit "+projectName);
-            Log.d("hehe",projectName);
 
             FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1").child(projectUID).addValueEventListener(new ValueEventListener() {
                 @Override

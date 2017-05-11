@@ -1,5 +1,6 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private FloatingActionButton fab;
     private ListView listView;
     private ListAdapter mAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading projects");
+        progressDialog.show();
         listView = (ListView) findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-
 
         //// TODO: 08/05/2017 get company(wait for company register to finish)
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
@@ -57,10 +62,11 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
 
+        progressDialog.dismiss();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new DoubleClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+            protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
                 final TestProject project = (TestProject) parent.getItemAtPosition(position);
 
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -74,17 +80,14 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
             }
-        });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
                 TestProject project = (TestProject) parent.getItemAtPosition(position);
                 Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class);
                 intent.putExtra("projectUID", project.getId());
                 intent.putExtra("name", project.getName());
                 startActivity(intent);
-                return false;
             }
         });
     }
