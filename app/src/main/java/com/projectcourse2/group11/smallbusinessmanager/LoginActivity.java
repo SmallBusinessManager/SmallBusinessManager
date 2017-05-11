@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
@@ -77,19 +78,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         progressDialog.setMessage("Login...");
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                progressDialog.dismiss();
-                if (task.isSuccessful()) {
-                    finish();
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                }else {
-                    Toast.makeText(LoginActivity.this,"Login failed",Toast.LENGTH_LONG).show();
-                }
-                progressDialog.dismiss();
-            }
-        });
 
     }
 

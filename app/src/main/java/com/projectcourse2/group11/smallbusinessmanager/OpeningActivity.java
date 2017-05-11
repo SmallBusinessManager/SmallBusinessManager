@@ -42,12 +42,11 @@ import java.util.concurrent.Executor;
 
 public class OpeningActivity extends Activity implements
         GestureDetector.OnGestureListener {
+    FirebaseAuth firebaseAuth;
     private GestureDetectorCompat mDetector;
     private ProgressDialog progressDialog;
     Button button_signUp, button_signIn;
     ViewFlipper viewFlipper;
-    private FirebaseAuth firebaseAuth;
-
     Animation slide_in_left, slide_out_right;
     Animation slide_in_right, slide_out_left;
 
@@ -56,11 +55,10 @@ public class OpeningActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opening);
         mDetector = new GestureDetectorCompat(this, this);
-        firebaseAuth.getInstance();
-
         button_signUp = (Button) findViewById(R.id.button_signUp);
         button_signIn = (Button) findViewById(R.id.button_signIn);
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
+        FirebaseAuth.getInstance();
 
         slide_in_left = AnimationUtils.loadAnimation(this,
                 R.anim.slide_in_left);
@@ -155,33 +153,4 @@ public class OpeningActivity extends Activity implements
         return false;
     }
 
-    public void userLogin() {
-        View view = getLayoutInflater().inflate(R.layout.activity_login,null);
-        String email =  view.findViewById(R.id.email).toString();
-        String password = view.findViewById(R.id.password).toString();
-
-
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_LONG).show();
-            return;
-        }
-            startActivity(new Intent(OpeningActivity.this,MainActivity.class));
-
-        }/*firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(OpeningActivity.this,MainActivity.class));
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(OpeningActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
-    }
+}

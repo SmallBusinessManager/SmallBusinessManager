@@ -48,9 +48,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         progressDialog = new ProgressDialog(getActivity());
         View view = inflater.inflate(R.layout.activity_register, container, false);
 
-        email_register = (AutoCompleteTextView) getActivity().findViewById(R.id.email_register);
-        password_register = (EditText) getActivity().findViewById(R.id.password_register);
-        password_again_register = (EditText) getActivity().findViewById(R.id.password_again_register);
+        email_register = (AutoCompleteTextView) view.findViewById(R.id.email_register);
+        password_register = (EditText) view.findViewById(R.id.password_register);
+        password_again_register = (EditText) view.findViewById(R.id.password_again_register);
         registerButton = (Button) view.findViewById(R.id.register_button);
         tvLogin = (TextView) view.findViewById(R.id.tvLogin);
 
@@ -94,36 +94,26 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(),"Please enter same password",Toast.LENGTH_SHORT).show();
             return;
         }
-
         progressDialog.setMessage("Registering...");
         progressDialog.show();
-
         firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     Toast.makeText(getActivity(),"User registered successfully",Toast.LENGTH_SHORT).show();
                     Fragment newFragment = new LoginFragment();
-                    // consider using Java coding conventions (upper first char class names!!!)
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    // Replace whatever is in the fragment_container view with this fragment,
-                    // and add the transaction to the back stack
-                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.replace(R.id.opening_frame, newFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
-
                 }else {
                     Toast.makeText(getActivity(),"registered failed",Toast.LENGTH_LONG).show();
                 }
                 progressDialog.dismiss();
             }
         });
-    }
 
-    public void setOnClickListener(View.OnClickListener listener){
-        registerButton.setOnClickListener(listener);
     }
-
     @Override
     public void onClick(View v) {
 

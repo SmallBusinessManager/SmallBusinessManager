@@ -122,7 +122,7 @@ public class CreateOrderFragment extends Fragment {
                     }
                 }
                 createOrder();
-                Fragment newFragment = new AccountFragment();
+                Fragment newFragment = new CreateOrderFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.content_frame, newFragment);
                 transaction.addToBackStack(null);

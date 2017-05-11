@@ -22,6 +22,7 @@ import android.widget.ListView;
 
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.AccountFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateOrderFragment;
+import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateTaskFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.MainScreenFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.ProjectCreateFragment;
 import com.projectcourse2.group11.smallbusinessmanager.Fragment.ProjectScreenFragment;
@@ -103,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.account_home:
                 fm.beginTransaction().replace(R.id.content_frame,new AccountFragment()).commit();
+                break;
+            case R.id.create_task:
+                fm.beginTransaction().replace(R.id.content_frame,new CreateTaskFragment()).commit();
                 break;
             default:
         }

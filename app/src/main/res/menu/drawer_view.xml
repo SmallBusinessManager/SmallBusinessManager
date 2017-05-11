@@ -12,7 +12,8 @@
 
                     <item
                         android:icon="@drawable/ic_menu_slideshow"
-                        android:title="Project something" />
+                        android:title="Create Task"
+                        android:id="@+id/create_task"/>
                 </group>
             </menu>
         </item>
