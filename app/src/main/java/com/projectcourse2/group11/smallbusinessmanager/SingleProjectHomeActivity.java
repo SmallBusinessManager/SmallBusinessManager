@@ -31,6 +31,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     // private ListAdapter mAdapter;
 
     private String projectUID;
+    private String projectName;
     private DatabaseReference ref;
 
     @Override
@@ -48,7 +49,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             projectUID = bundle.getString("projectUID");
-            String projectName = bundle.getString("name");
+            projectName = bundle.getString("name");
             this.setTitle(projectName);
         }
 
@@ -97,6 +98,12 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 finish();
                 startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class));
                 break;
+            case R.id.nav_edit_project:
+                Intent intent=new Intent(SingleProjectHomeActivity.this,ProjectCreatActivity.class);
+                intent.putExtra("projectUID",projectUID);
+                intent.putExtra("projectName",projectName);
+                finish();
+                startActivity(intent);
         }
         return true;
     }

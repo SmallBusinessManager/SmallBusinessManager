@@ -6,14 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
@@ -31,6 +35,8 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     private static final int DIALOG_ID_END = 1;
 
     private Date startDate, endDate;
+    private String projectUID;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,30 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         tvEndDate = (TextView) findViewById(R.id.tvProjectEndDate);
         tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
+
+        Intent intent = getIntent();
+        bundle = intent.getExtras();
+        if (bundle != null) {
+            projectUID = bundle.getString("projectUID");
+            final String projectName = bundle.getString("projectName");
+            this.setTitle("Edit "+projectName);
+            Log.d("hehe",projectName);
+
+            FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1").child(projectUID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    TestProject project=dataSnapshot.getValue(TestProject.class);
+                    etProjectName.setText(project.getName());
+                    etProjectDescription.setText(project.getDescription());
+                    tvStartDate.setText("Start Date:                          "+project.getStartDate().toString());
+                    tvEndDate.setText("End Date:                            "+project.getEndDate().toString());
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -103,7 +133,11 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
-                saveToDatabase();
+                if (bundle!=null){
+                    saveEditProject();
+                }else {
+                    saveToDatabase();
+                }
                 finish();
                 startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class));
                 return true;
@@ -126,5 +160,12 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         //write project key to projectOrders
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("projectOrders");
         ref.child(key).setValue("tobe overwritten");
+    }
+    private void saveEditProject(){
+        String projectName = etProjectName.getText().toString();
+        String projectDescription = etProjectDescription.getText().toString();
+        TestProject testProject = new TestProject(projectUID,projectName, projectDescription, startDate, endDate);
+
+        FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1").child(projectUID).setValue(testProject);
     }
 }
