@@ -33,6 +33,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private String projectUID;
     private String projectName;
     private DatabaseReference ref;
+    private String companyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,11 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
         //// TODO: 08/05/2017 get company(wait for company register to finish)
         ref = FirebaseDatabase.getInstance().getReference();
+
+        /**
+         * Getting company ID
+         */
+        companyID=getIntent().getStringExtra("COMPANY_ID");
 /*
         //// TODO: 09/05/2017 listview of tasks
          //listView = (ListView) findViewById(R.id.listView);
@@ -96,12 +102,13 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             case android.R.id.home:
 
                 finish();
-                startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class));
+                startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID",companyID));
                 break;
             case R.id.nav_edit_project:
                 Intent intent=new Intent(SingleProjectHomeActivity.this,ProjectCreatActivity.class);
                 intent.putExtra("projectUID",projectUID);
                 intent.putExtra("projectName",projectName);
+                intent.putExtra("COMPANY_ID",companyID);
                 finish();
                 startActivity(intent);
         }
@@ -112,7 +119,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID));
         }
     }
 

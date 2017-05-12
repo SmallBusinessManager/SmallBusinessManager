@@ -27,6 +27,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private ListView listView;
     private ListAdapter mAdapter;
     private ProgressDialog progressDialog;
+    private String companyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,10 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
+        companyID=getIntent().getStringExtra("COMPANY_ID");
+
         //// TODO: 08/05/2017 get company(wait for company register to finish)
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
         mAdapter = new FirebaseListAdapter<TestProject>(
                 ProjectActivity.this,
                 TestProject.class,
@@ -87,6 +90,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class);
                 intent.putExtra("projectUID", project.getId());
                 intent.putExtra("name", project.getName());
+                intent.putExtra("COMPANY_ID",companyID);
                 startActivity(intent);
             }
         });
@@ -105,7 +109,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
                 finish();
-                startActivity(new Intent(ProjectActivity.this, MainActivity.class));
+                startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("COMPANY_ID",companyID));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -115,7 +119,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class));
+            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class).putExtra("COMPANY_ID",companyID));
         }
     }
 }

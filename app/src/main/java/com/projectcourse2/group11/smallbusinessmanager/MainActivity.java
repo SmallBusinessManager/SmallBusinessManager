@@ -19,6 +19,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private String companyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        companyID= getIntent().getStringExtra("COMPANY_ID");
     }
 
     @Override
@@ -101,10 +103,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, AccountActivity.class));
         } else if (id == R.id.nav_project) {
             finish();
-            startActivity(new Intent(MainActivity.this,ProjectActivity.class));
+            startActivity(new Intent(MainActivity.this,ProjectActivity.class).putExtra("COMPANY_ID" ,companyID));
         }else if (id==R.id.nav_order){
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class));
+            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

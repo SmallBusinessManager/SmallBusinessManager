@@ -47,6 +47,7 @@ public class OrderCreation extends Activity  {
     private String company;
     private String UID;
     private ProgressDialog progressDialog;
+    private Project projectObject;
 
 
 
@@ -55,6 +56,7 @@ public class OrderCreation extends Activity  {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
+        company = getIntent().getStringExtra("COMPANY_ID");
         //Reading all worker from database and sorting by position
         ref = FirebaseDatabase.getInstance().getReference();
         /**
@@ -63,18 +65,18 @@ public class OrderCreation extends Activity  {
         final ValueEventListener listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    for (DataSnapshot d:ds.getChildren()) {
-                        if (d.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                            company = d.getRef().getParent().getKey();
-                            break;
-                        }
-                    }
-                    if (company!=null){
-                        dataSnapshot=ds;
-                        break;
-                    }
-                }
+//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    for (DataSnapshot d:ds.getChildren()) {
+//                        if (d.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+//                            company = d.getRef().getParent().getKey();
+//                            break;
+//                        }
+//                    }
+//                    if (company!=null){
+//                        dataSnapshot=ds;
+//                        break;
+//                    }
+//                }
                     managerList = new ArrayList<>();
                     workerList = new ArrayList<>();
                     try {
@@ -113,7 +115,7 @@ public class OrderCreation extends Activity  {
                 }
             };
 
-        ref.child("/companyEmployees/").addValueEventListener(listener);
+        ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
 
 
 
@@ -157,7 +159,8 @@ public class OrderCreation extends Activity  {
             @Override
             public void onClick(View arg0) {
                 finish();
-                Intent MainIntent = new Intent(OrderCreation.this, OpeningActivity.class);
+                ref.child("/companyEmployees/").removeEventListener(listener);
+                Intent MainIntent = new Intent(OrderCreation.this, MainActivity.class).putExtra("COMPANY_ID",company);
                 startActivity(MainIntent);
             }
         });
@@ -175,7 +178,7 @@ public class OrderCreation extends Activity  {
                 if (createOrder()) {
                     finish();
                     ref.child("/companyEmployees/").removeEventListener(listener);
-                    startActivity(new Intent(OrderCreation.this, AccountActivity.class));
+                    startActivity(new Intent(OrderCreation.this, MainActivity.class).putExtra("COMPANY_ID",company));
                     progressDialog.dismiss();
                 }
             }
