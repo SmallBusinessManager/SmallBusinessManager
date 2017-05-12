@@ -47,7 +47,7 @@ public class OrderCreation extends Activity  {
     private String company;
     private String UID;
     private ProgressDialog progressDialog;
-    private Project projectObject;
+    private String projectID;
 
 
 
@@ -57,6 +57,7 @@ public class OrderCreation extends Activity  {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         company = getIntent().getStringExtra("COMPANY_ID");
+        projectID=getIntent().getStringExtra("projectUID");
         //Reading all worker from database and sorting by position
         ref = FirebaseDatabase.getInstance().getReference();
         /**
@@ -203,13 +204,13 @@ public class OrderCreation extends Activity  {
                 String strDate = startDateIn.getText().toString().replace('-',' ').trim();
                 descriptionView.setText(strDate.substring(8,10)+"\n"+strDate.substring(5,7)+"\n"+strDate.substring(0,4));
                 Date sDate = new Date(Integer.parseInt(strDate.substring(8,10)),Integer.parseInt(strDate.substring(5,7)),Integer.parseInt(strDate.substring(0,4)));
-                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
+                Order order = new Order(description, selectedWorker, projectID);
                 order.startOrder(sDate);
                 ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
                 return true;
             } else {
                 Date sDate = new Date(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
-                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
+                Order order = new Order(description, selectedWorker, projectID);
                 order.startOrder(sDate);
                 ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
                 return true;

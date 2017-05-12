@@ -1,5 +1,6 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -22,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
 public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,16 +37,24 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private String projectName;
     private DatabaseReference ref;
     private String companyID;
+    private ListAdapter mAdapter;
+    private ListView listView;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading projects");
+        progressDialog.show();
+
+        listView = (ListView) findViewById(R.id.listView);
 
 
         Intent intent = getIntent();
@@ -51,6 +62,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         if (bundle != null) {
             projectUID = bundle.getString("projectUID");
             projectName = bundle.getString("name");
+            companyID = getIntent().getStringExtra("COMPANY_ID");
             this.setTitle(projectName);
         }
 
@@ -61,10 +73,6 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         //// TODO: 08/05/2017 get company(wait for company register to finish)
         ref = FirebaseDatabase.getInstance().getReference();
 
-        /**
-         * Getting company ID
-         */
-        companyID=getIntent().getStringExtra("COMPANY_ID");
 /*
         //// TODO: 09/05/2017 listview of tasks
          //listView = (ListView) findViewById(R.id.listView);
@@ -87,8 +95,58 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
         };
         listView.setAdapter(mAdapter);*/
+        /**
+         * There is no filtering, it creates a row for each order in the database even if its not displayed
+         */
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID);
+        mAdapter = new FirebaseListAdapter<Order>(
+                SingleProjectHomeActivity.this,
+                Order.class,
+                android.R.layout.simple_list_item_single_choice,
+                ref) {
+            @Override
+            protected void populateView(View v, Order model, int position) {
+                if(model.getProjectID().equals(projectUID)) {
+                    TextView textView = (TextView) v.findViewById(android.R.id.text1);
+                    textView.setText(model.getDescription());
+                } else {
 
-    }
+                }
+            }
+        };
+
+        progressDialog.dismiss();
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(new DoubleClickListener() {
+            @Override
+            protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
+                final Order order = (Order) parent.getItemAtPosition(position);
+
+                toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.nav_delete_project) {
+                            FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(order.getId()).removeValue();
+                            ref.child(order.getId()).removeValue();
+                        }
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
+                Order order = (Order) parent.getItemAtPosition(position);
+                Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
+                intent.putExtra("ORDER_ID", order.getId());
+                intent.putExtra("DESCRIPTION", order.getDescription());
+                intent.putExtra("COMPANY_ID", companyID);
+                startActivity(intent);
+            }
+        });
+        }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,7 +177,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("projectUID",projectUID));
         }
     }
 

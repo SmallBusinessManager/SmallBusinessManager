@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,ProjectActivity.class).putExtra("COMPANY_ID" ,companyID));
         }else if (id==R.id.nav_order){
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID));
+            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("projectUID","TO BE OVERWRITTEN"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
