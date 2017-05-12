@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -27,6 +28,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
@@ -40,6 +46,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private ListAdapter mAdapter;
     private ListView listView;
     private ProgressDialog progressDialog;
+    private HashMap<String, Order> orderList = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading projects");
+        progressDialog.setMessage("Loading orders");
         progressDialog.show();
 
         listView = (ListView) findViewById(R.id.listView);
@@ -95,9 +102,33 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
         };
         listView.setAdapter(mAdapter);*/
+
+        ValueEventListener listener  = new ValueEventListener(){
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    if (ds.child("projectID").getValue(String.class).equals(projectUID)){
+                        orderList.put(ds.child("description").getValue(String.class),ds.getValue(Order.class));
+                    }
+                }
+                ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(SingleProjectHomeActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
+                progressDialog.dismiss();
+                listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                listView.setAdapter(myAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
+            }
+        };
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("companyWorkOrders").child(companyID).addValueEventListener(listener);
         /**
+         * @deprecated  !!!No longer needed
          * There is no filtering, it creates a row for each order in the database even if its not displayed
-         */
+
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID);
         mAdapter = new FirebaseListAdapter<Order>(
                 SingleProjectHomeActivity.this,
@@ -118,10 +149,12 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog.dismiss();
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
+        */
         listView.setOnItemClickListener(new DoubleClickListener() {
             @Override
             protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
-                final Order order = (Order) parent.getItemAtPosition(position);
+                final Order order = orderList.get(parent.getItemAtPosition(position));
+//                Toast.makeText(SingleProjectHomeActivity.this, order.getDescription(), Toast.LENGTH_LONG).show();
 
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
@@ -137,7 +170,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
-                Order order = (Order) parent.getItemAtPosition(position);
+                Order order = orderList.get(parent.getItemAtPosition(position));
                 Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
                 intent.putExtra("ORDER_ID", order.getId());
                 intent.putExtra("DESCRIPTION", order.getDescription());
