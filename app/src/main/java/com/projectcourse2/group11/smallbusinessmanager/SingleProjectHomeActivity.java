@@ -46,7 +46,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private ListAdapter mAdapter;
     private ListView listView;
     private ProgressDialog progressDialog;
-    private HashMap<String, Order> orderList = new HashMap<>();
+    private HashMap<String, String> orderList = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     if (ds.child("projectID").getValue(String.class).equals(projectUID)){
-                        orderList.put(ds.child("description").getValue(String.class),ds.getValue(Order.class));
+                        orderList.put(ds.child("description").getValue(String.class),ds.getKey());
                     }
                 }
                 ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(SingleProjectHomeActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
@@ -151,17 +151,17 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         listView.setAdapter(mAdapter);
         */
         listView.setOnItemClickListener(new DoubleClickListener() {
+            String selectedOrderId;
             @Override
             protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
-                final Order order = orderList.get(parent.getItemAtPosition(position));
-//                Toast.makeText(SingleProjectHomeActivity.this, order.getDescription(), Toast.LENGTH_LONG).show();
+                selectedOrderId = orderList.get(parent.getItemAtPosition(position));
 
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.nav_delete_project) {
-                            FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(order.getId()).removeValue();
-                            ref.child(order.getId()).removeValue();
+                            FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(selectedOrderId).removeValue();
+                            ref.child(selectedOrderId).removeValue();
                         }
                         return true;
                     }
@@ -170,11 +170,11 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
-                Order order = orderList.get(parent.getItemAtPosition(position));
+                String selectedOrderId = orderList.get(parent.getItemAtPosition(position));
                 Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
-                intent.putExtra("ORDER_ID", order.getId());
-                intent.putExtra("DESCRIPTION", order.getDescription());
+                intent.putExtra("ORDER_ID", selectedOrderId);
                 intent.putExtra("COMPANY_ID", companyID);
+                intent.putExtra("projectUID",projectUID);
                 startActivity(intent);
             }
         });

@@ -35,8 +35,15 @@ public class Order {
     public void print(){
         //to do
     }
+    public void setID(String id){
+        this.id= UUID.fromString(id);
+    }
     public String getProjectID(){
         return projectID;
+    }
+
+    public String getWorkerSSN() {
+        return worker.getSSN();
     }
 
     public  String getDescription(){

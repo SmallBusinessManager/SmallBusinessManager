@@ -36,18 +36,14 @@ public class OrderCreation extends Activity  {
     private Button buttonOK;
     private Button buttonCancel;
     private List<Worker> workerList;
-    private List<Manager>  managerList;
     private NumberPicker workerView;
-    private NumberPicker managerView;
     private EditText descriptionView;
     private Worker selectedWorker;
-    private Manager selectedManager;
     private EditText startDateIn;
     private DatabaseReference ref;
-    private String company;
-    private String UID;
+    private String company,UID,projectID,orderID,workerSSN,description;
     private ProgressDialog progressDialog;
-    private String projectID;
+    private ValueEventListener listener,orderListener;
 
 
 
@@ -58,29 +54,47 @@ public class OrderCreation extends Activity  {
         progressDialog.show();
         company = getIntent().getStringExtra("COMPANY_ID");
         projectID=getIntent().getStringExtra("projectUID");
-        //Reading all worker from database and sorting by position
+
+
+        //Reading workOrder from databse
+
         ref = FirebaseDatabase.getInstance().getReference();
+        orderListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                    if (ds.getKey().equals(orderID)) {
+                        description =ds.child("description").getValue(String.class);
+                        workerSSN = ds.child("worker").getValue(String.class);
+                        descriptionView.setText(description);
+                        Toast.makeText(OrderCreation.this,workerSSN,Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+                workerList = new ArrayList<>();
+                    addListener();
+                } catch (Exception e) {
+                    Toast.makeText(OrderCreation.this, "order listener", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(OrderCreation.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        };
+
         /**
          * Defining the listener
          */
-        final ValueEventListener listener = new ValueEventListener() {
+
+        listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    for (DataSnapshot d:ds.getChildren()) {
-//                        if (d.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-//                            company = d.getRef().getParent().getKey();
-//                            break;
-//                        }
-//                    }
-//                    if (company!=null){
-//                        dataSnapshot=ds;
-//                        break;
-//                    }
-//                }
-                    managerList = new ArrayList<>();
                     workerList = new ArrayList<>();
-                    try {
+ //                   try {
                         String ssn, email, firstName, lastName, phoneNumber;
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             UID = ds.getKey();
@@ -91,22 +105,22 @@ public class OrderCreation extends Activity  {
                             Position pos = ds.child("position").getValue(Position.class);
                             ssn = ds.child("SSN").getValue(String.class);
 
-                            //separating managers and workers
+
                             if (pos.equals(Position.WORKER)) {
                                 Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
+                                if (workerSSN.equals(ssn)){
+                                    selectedWorker = w;
+                                }
                                 workerList.add(w);
-                            } else if (pos.equals(Position.MANAGER)) {
-                                Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
-                                managerList.add(man);
                             }
                         }
                         populateList();
-                        selectedManager = managerList.get(0);
                         selectedWorker = workerList.get(0);
                         progressDialog.dismiss();
-                    } catch (Exception e) {
-                        Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+
+//                    } catch (Exception e) {
+//                        Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
                 }
 
                 @Override
@@ -115,8 +129,14 @@ public class OrderCreation extends Activity  {
 
                 }
             };
-
-        ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
+        if (getIntent().hasExtra("ORDER_ID")){
+            orderID=getIntent().getStringExtra("ORDER_ID");
+            Toast.makeText(OrderCreation.this, orderID, Toast.LENGTH_SHORT).show();
+            ref.child("companyWorkOrders").child(company).addValueEventListener(orderListener);
+        }else {
+            workerSSN="";
+            ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
+        }
 
 
 
@@ -134,8 +154,6 @@ public class OrderCreation extends Activity  {
         descriptionView = (EditText) findViewById(R.id.orderDescription);
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        managerView= (NumberPicker) findViewById(R.id.managerPicker);
-        managerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         startDateIn = (EditText) findViewById(R.id.startDateIn);
 
 
@@ -147,15 +165,7 @@ public class OrderCreation extends Activity  {
             }
         };
 
-        final NumberPicker.OnValueChangeListener managerListener = new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                selectedManager = managerList.get(newVal);
-            }
-        };
-
         workerView.setOnValueChangedListener(myValChangedListener);
-        managerView.setOnValueChangedListener(managerListener);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -173,9 +183,7 @@ public class OrderCreation extends Activity  {
                 if (selectedWorker == null) {
                     selectedWorker = workerList.get(0);
                 }
-                if (selectedManager==null){
-                    selectedManager=managerList.get(0);
-                }
+
                 if (createOrder()) {
                     finish();
                     ref.child("/companyEmployees/").removeEventListener(listener);
@@ -188,7 +196,6 @@ public class OrderCreation extends Activity  {
         //it takes time to load and populate number picker, lets just say its loading
         String[] tmp = {"Loading"};
         workerView.setDisplayedValues(tmp);
-        managerView.setDisplayedValues(tmp);
     }
 
     /**
@@ -229,22 +236,6 @@ public class OrderCreation extends Activity  {
      *  and passes the string array to number picker
      */
     private void populateList(){
-        String[] managerNames;
-        if (managerList.size()!=0) {
-            managerNames= new String[managerList.size()];
-            for (int i = 0; i < workerList.size(); i++) {
-                managerNames[i] = managerList.get(i).getFirstName() + " " + managerList.get(i).getLastName();
-            }
-        } else {managerNames= new String[1];
-            managerNames[0]="---";}
-        managerView.setMinValue(0);
-        managerView.setDisplayedValues(managerNames);
-        if (managerList.size()>1) {
-            managerView.setMaxValue(managerNames.length-1);
-        } else {
-            managerView.setMaxValue(0);
-        }
-
         String[] workersNames;
         if (workerList.size()!=0) {
             workersNames= new String[workerList.size()];
@@ -260,6 +251,11 @@ public class OrderCreation extends Activity  {
         } else {
             workerView.setMaxValue(0);
         }
+    }
+
+    private void addListener(){
+        ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
+        ref.removeEventListener(orderListener);
     }
 
 }
