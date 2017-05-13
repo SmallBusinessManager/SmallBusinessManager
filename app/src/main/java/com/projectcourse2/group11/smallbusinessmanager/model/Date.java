@@ -5,6 +5,7 @@ public class Date {
     private int month;
     private int year;
 
+    public Date(){}
     public Date(int day, int month, int year) {
         if (day >= 1 && day <= 31) {
             this.day = day;
