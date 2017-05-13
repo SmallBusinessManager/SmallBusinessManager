@@ -63,10 +63,10 @@ public class AccountantActivity extends AppCompatActivity  {
                 this,
                 String.class,
                 android.R.layout.simple_list_item_1,
-                ref) {
+                ref2) {
             @Override
-            protected String parseSnapshot(DataSnapshot snapshot) {
-                return snapshot.;
+            protected String parseSnapshot(DataSnapshot snapshot1) {
+                return snapshot1.child("name").getValue(String.class);
             }
             @Override
             protected void populateView(View v, String model, int position) {
