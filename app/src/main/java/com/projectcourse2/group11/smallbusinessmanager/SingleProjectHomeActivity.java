@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Order;
-import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +47,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private ListView listView;
     private ProgressDialog progressDialog;
     private HashMap<String, String> orderList = new HashMap<>();
+    private Person user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             projectUID = bundle.getString("projectUID");
             projectName = bundle.getString("name");
             companyID = getIntent().getStringExtra("COMPANY_ID");
+            user = (Person)bundle.getSerializable("USER");
             this.setTitle(projectName);
         }
 
@@ -175,6 +177,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 intent.putExtra("ORDER_ID", selectedOrderId);
                 intent.putExtra("COMPANY_ID", companyID);
                 intent.putExtra("projectUID",projectUID);
+                intent.putExtra("USER",user);
                 startActivity(intent);
             }
         });
@@ -193,7 +196,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             case android.R.id.home:
 
                 finish();
-                startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID",companyID));
+                startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
                 break;
             case R.id.nav_edit_project:
                 Intent intent=new Intent(SingleProjectHomeActivity.this,ProjectCreatActivity.class);
@@ -210,7 +213,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("projectUID",projectUID));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("projectUID",projectUID).putExtra("USER",user));
         }
     }
 

@@ -19,7 +19,8 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,7 +30,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private ListAdapter mAdapter;
     private ProgressDialog progressDialog;
     private String companyID;
-
+    private Person user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        user = (Person) getIntent().getSerializableExtra("USER");
 
 
         progressDialog = new ProgressDialog(this);
@@ -52,13 +54,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
         //// TODO: 08/05/2017 get company(wait for company register to finish)
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
-        mAdapter = new FirebaseListAdapter<TestProject>(
+        mAdapter = new FirebaseListAdapter<Project>(
                 ProjectActivity.this,
-                TestProject.class,
+                Project.class,
                 android.R.layout.simple_list_item_single_choice,
                 ref) {
             @Override
-            protected void populateView(View v, TestProject model, int position) {
+            protected void populateView(View v, Project model, int position) {
                 TextView textView = (TextView) v.findViewById(android.R.id.text1);
                 textView.setText(model.getName());
             }
@@ -71,7 +73,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         listView.setOnItemClickListener(new DoubleClickListener() {
             @Override
             protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
-                final TestProject project = (TestProject) parent.getItemAtPosition(position);
+                final Project project = (Project) parent.getItemAtPosition(position);
 
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
@@ -87,11 +89,12 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
-                TestProject project = (TestProject) parent.getItemAtPosition(position);
+                Project project = (Project) parent.getItemAtPosition(position);
                 Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class);
                 intent.putExtra("projectUID", project.getId());
                 intent.putExtra("name", project.getName());
                 intent.putExtra("COMPANY_ID",companyID);
+                intent.putExtra("USER",user);
                 startActivity(intent);
             }
         });
@@ -110,7 +113,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
                 finish();
-                startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("COMPANY_ID",companyID));
+                startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -120,7 +123,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class).putExtra("COMPANY_ID",companyID));
+            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
         }
     }
 }

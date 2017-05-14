@@ -29,6 +29,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Accountant;
+import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
+import com.projectcourse2.group11.smallbusinessmanager.model.TeamLeader;
+import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 /**
  * A login screen that offers login via email and password.
@@ -95,9 +100,32 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 for (DataSnapshot d : ds.getChildren()) {
                                     if (d.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                         company = d.getRef().getParent().getKey();
-                                        Toast.makeText(LoginActivity.this,"Welcome!" , Toast.LENGTH_LONG).show();
+                                        Position pos = d.child("position").getValue(Position.class);
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        switch (pos){
+                                            case ACCOUNTANT:
+                                                Accountant accountant = d.getValue(Accountant.class);
+                                                intent.putExtra("USER",accountant);
+                                                break;
+                                            case MANAGER:
+                                                Manager manager = d.getValue(Manager.class);
+                                                intent.putExtra("USER",manager);
+                                                break;
+                                            case TEAM_LEADER:
+                                                TeamLeader tl = d.getValue(TeamLeader.class);
+                                                intent.putExtra("USER",tl);
+                                                break;
+                                            case WORKER:
+                                                Worker worker = d.getValue(Worker.class);
+                                                intent.putExtra("USER",worker);
+                                                break;
+                                            default:
+                                                Toast.makeText(LoginActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
+
                                         intent.putExtra("COMPANY_ID", company);
+//                                        intent.putExtra("POSITION",pos.toString());
                                         finish();
                                         startActivity(intent);
                                         progressDialog.dismiss();
