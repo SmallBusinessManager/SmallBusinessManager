@@ -1,5 +1,7 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.util.ArrayList;
+
 public class Accountant extends Person {
     private Employee[] employees;
     private double availableMoney;
@@ -11,17 +13,18 @@ public class Accountant extends Person {
         this.availableMoney=availableMoney;
     }
 
-    public void listWorkers(){
-        //to do
+    public Employee[] getEmployees() {
+        return employees;
     }
+
     public void viewExpenses(){
         //to do
     }
     public void viewIncome(){
         //to do
     }
-    public void approvePayment(){
-        //to do
+    public void approvePayment(Expenses expense){
+        expense.setApporoved();
     }
     public void reviewContract(){
         //to do

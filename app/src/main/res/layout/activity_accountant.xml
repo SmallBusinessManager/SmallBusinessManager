@@ -26,10 +26,10 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="view projects"
         android:layout_below="@+id/listView"
-        android:layout_toStartOf="@+id/listView" />
+        android:layout_marginTop="16dp"
+        android:layout_toStartOf="@+id/listView"
+        android:text="@string/viewProjects" />
 
     <ListView
         android:id="@+id/listView2"
@@ -37,5 +37,41 @@
         android:layout_height="150dp"
         android:layout_alignStart="@+id/listView"
         android:layout_alignTop="@+id/button2" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/viewExpenses"
+        android:layout_below="@+id/listView2"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:id="@+id/listView3"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignStart="@+id/listView2"
+        android:layout_below="@+id/listView2"
+        android:clickable="false" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listView3"
+        android:layout_toEndOf="@+id/button3"
+        android:ems="10"
+        android:hint="Expense Name"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/button2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/editText"
+        android:text="@string/approveExpense" />
 
 </RelativeLayout>

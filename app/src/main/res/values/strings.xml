@@ -56,6 +56,9 @@
 
     <!-- Strings related to AccountInfo -->
     <string name="listWorkers">List Workers</string>
+    <string name="viewProjects">View Projects</string>
+    <string name="viewExpenses">View Expenses</string>
+    <string name="approveExpense">Approve Expenses</string>
 
     <string name="managers">Managers</string>
     <string name="start_date">Start date</string>
