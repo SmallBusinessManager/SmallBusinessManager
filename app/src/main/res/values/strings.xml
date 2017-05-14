@@ -59,6 +59,7 @@
     <string name="viewProjects">View Projects</string>
     <string name="viewExpenses">View Expenses</string>
     <string name="approveExpense">Approve Expenses</string>
+    <string name="viewIncome">View Income</string>
 
     <string name="managers">Managers</string>
     <string name="start_date">Start date</string>
