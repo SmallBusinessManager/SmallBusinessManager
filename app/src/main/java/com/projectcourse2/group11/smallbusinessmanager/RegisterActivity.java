@@ -1,8 +1,6 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.projectcourse2.group11.smallbusinessmanager.Fragment.CreateOrderFragment;
-import com.projectcourse2.group11.smallbusinessmanager.Fragment.MainScreenFragment;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 
@@ -66,11 +62,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             registerUser();
         }
         if (v == tvLogin) {
-            Fragment newFragment = new CreateOrderFragment();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
 
     }
@@ -132,3 +125,4 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         });
     }
 }
+
