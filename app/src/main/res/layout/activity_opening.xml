@@ -26,8 +26,8 @@
                 android:layout_alignBottom="@+id/textViewUserEmail"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="21dp"
-                android:src="@drawable/logo"
-                android:contentDescription="@string/description"/>
+                android:contentDescription="@string/description"
+                android:src="@drawable/logo" />
 
             <TextView
                 android:id="@+id/textViewUserEmail"
@@ -70,8 +70,8 @@
                 android:layout_alignEnd="@+id/textView4"
                 android:layout_marginBottom="26dp"
                 android:layout_marginEnd="30dp"
-                android:src="@drawable/sign_in_2"
-                android:contentDescription="@string/description"/>
+                android:contentDescription="@string/description"
+                android:src="@drawable/sign_in_2" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -113,8 +113,8 @@
                 android:layout_above="@+id/textView10"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="31dp"
-                android:src="@drawable/sign_in_1"
-                android:contentDescription="@string/description"/>
+                android:contentDescription="@string/description"
+                android:src="@drawable/sign_in_1" />
 
             <TextView
                 android:id="@+id/textView9"
