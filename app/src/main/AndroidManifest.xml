@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.ACCOUNT_MANAGER" />
+    <!--    <uses-permission android:name="android.permission.ACCOUNT_MANAGER" />  -->
 
 
     <application
@@ -107,8 +107,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AccountantActivity"></activity>
-
+        <activity
+            android:name=".AccountantActivity"
+            android:label="Accountant"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
 
     </application>
