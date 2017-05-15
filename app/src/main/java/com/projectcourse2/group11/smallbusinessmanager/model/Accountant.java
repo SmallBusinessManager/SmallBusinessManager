@@ -6,6 +6,7 @@ public class Accountant extends Person {
     private Employee[] employees;
     private double availableMoney;
 
+    public Accountant(){}
     public Accountant(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID ,Employee[] employees, double availableMoney) {
         super(SSN, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.ACCOUNTANT);

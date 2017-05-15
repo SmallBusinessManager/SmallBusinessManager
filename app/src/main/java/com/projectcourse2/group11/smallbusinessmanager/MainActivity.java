@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity
 
 
 
+        } else if (user.getPosition().equals(Position.ACCOUNTANT)){
+            startActivity(new Intent(MainActivity.this,AccountantActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
         } else {
             /**
              *  if logged in user is not a worker or a team leader
