@@ -127,12 +127,12 @@ public class MainActivity extends AppCompatActivity
                 protected void populateView(View v, Project model, int position) {
                     TextView textView = (TextView) v.findViewById(android.R.id.text1);
                     textView.setText(model.getName());
+                    progressDialog.dismiss();
                 }
             };
             listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             listView.setAdapter(mAdapter);
 
-            progressDialog.dismiss();
 
             listView.setOnItemClickListener(new DoubleClickListener() {
                 @Override
@@ -155,8 +155,7 @@ public class MainActivity extends AppCompatActivity
                 protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
                     Project project = (Project) parent.getItemAtPosition(position);
                     Intent intent = new Intent(MainActivity.this, SingleProjectHomeActivity.class);
-                    intent.putExtra("projectUID", project.getId());
-                    intent.putExtra("name", project.getName());
+                    intent.putExtra("PROJECT",project);
                     intent.putExtra("COMPANY_ID",companyID);
                     intent.putExtra("USER",user);
                     startActivity(intent);

@@ -1,16 +1,18 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Project {
+public class Project implements Serializable{
     private String id;
     private String name;
     private String description;
     private String employeeID;
     private Date startDate;
     private Date dueDate;
+
     public Project(){}
 
 
@@ -46,6 +48,7 @@ public class Project {
         return id;
     }
 
+    public void setId(String id){this.id=id;}
 
     public String getName() {
         return name;
@@ -87,7 +90,7 @@ public class Project {
         this.dueDate = dueDate;
     }
 
-    public Map<String, Object> toHashMap(String key) {
+    public Map<String, Object> toHashMap() {
         Map<String, Object> map = new HashMap<>();
         map.put(id + "/id/", getId());
         map.put(id + "/name/", getName());
