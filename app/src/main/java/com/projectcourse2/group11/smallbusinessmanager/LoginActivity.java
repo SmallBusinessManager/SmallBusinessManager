@@ -2,20 +2,26 @@ package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,15 +51,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Button mEmailSignInButton;
     private TextView tvForgot;
     private String company;
-
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private boolean saveLogin;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private CheckBox saveLoginCheckBox;
+    private String  email,password;
     // TODO Change to FirebaseSimpleLogin Object if we have time to ensure authentication
+    SharedPreferences preferences ;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        saveLoginCheckBox = (CheckBox) findViewById(R.id.saveLoginCheckBox);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -68,12 +82,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         tvForgot = (TextView) findViewById(R.id.tvForgot);
         tvForgot.setOnClickListener(this);
-
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
+        saveLogin = preferences.getBoolean("saveLogin", false);
+        if (saveLogin = true) {
+            String name = preferences.getString("username", "");
+            String pass = preferences.getString("password", "");
+            mEmailView.setText(name);
+            mPasswordView.setText(pass);
+            saveLoginCheckBox.setChecked(true);
+        }
     }
 
+
     private void userLogin() {
-        String email = mEmailView.getText().toString().trim();
-        String password = mPasswordView.getText().toString().trim();
+
+        email = mEmailView.getText().toString().trim();
+        password = mPasswordView.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Please enter email", Toast.LENGTH_LONG).show();
@@ -159,6 +184,18 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         }
         if (v == mEmailSignInButton) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
+            if (saveLoginCheckBox.isChecked()) {
+                editor.putBoolean("saveLogin", true);
+                editor.putString("username",mEmailView.getText().toString() );
+                editor.putString("password", mPasswordView.getText().toString());
+                editor.apply();
+            } else {
+                Log.d("Removing all Evidence",loginPreferences.getString("username",""));
+                editor.clear();
+                editor.apply();
+            }
             userLogin();
         }
         if (v == tvForgot) {
