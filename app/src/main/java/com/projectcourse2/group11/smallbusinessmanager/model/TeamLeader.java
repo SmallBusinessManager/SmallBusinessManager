@@ -1,8 +1,10 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.util.ArrayList;
+
 public class TeamLeader extends Person {
-    private Worker[] workers;
-    private Order[] orders;
+    private ArrayList<Worker> workers = new ArrayList<>();
+    private ArrayList<Order> orders = new ArrayList<>();
     private Manager manager;
 
     public TeamLeader(){}
@@ -11,16 +13,16 @@ public class TeamLeader extends Person {
         setPosition(Position.TEAM_LEADER);
     }
 
-    public void viewAssignedWorkers(){
-        //to do
+    public ArrayList viewAssignedWorkers(){
+        return workers;
     }
 
-    public void viewAssignedOrders(){
-        //to do
+    public ArrayList viewAssignedOrders(){
+        return orders;
     }
 
-    public void placeOrder(){
-        //to do
+    public void placeOrder(Order order){
+        orders.add(order);
     }
 
     public void addExpense(){

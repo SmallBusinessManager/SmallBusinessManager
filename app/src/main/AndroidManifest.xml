@@ -104,6 +104,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".AccountantActivity"></activity>
+
+
+
     </application>
 
 </manifest>

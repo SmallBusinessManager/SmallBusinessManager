@@ -221,6 +221,7 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
     private boolean createOrder() {
         String description = descriptionView.getText().toString().trim();
         ref = FirebaseDatabase.getInstance().getReference();
+
         try {
             if (!(tvStartDateIn.getText().toString().trim().equalsIgnoreCase(""))) {
                 Order order = new Order(description, selectedWorker, projectID);
@@ -238,7 +239,6 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
             Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
         }
-
     }
 
     /**
