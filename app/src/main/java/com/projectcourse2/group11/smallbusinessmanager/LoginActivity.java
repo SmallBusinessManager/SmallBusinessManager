@@ -85,7 +85,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
         saveLogin = preferences.getBoolean("saveLogin", false);
-        if (saveLogin = true) {
+        if (saveLogin ) {
             String name = preferences.getString("username", "");
             String pass = preferences.getString("password", "");
             mEmailView.setText(name);
@@ -192,7 +192,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 editor.putString("password", mPasswordView.getText().toString());
                 editor.apply();
             } else {
-                Log.d("Removing all Evidence",loginPreferences.getString("username",""));
                 editor.clear();
                 editor.apply();
             }
