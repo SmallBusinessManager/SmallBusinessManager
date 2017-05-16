@@ -1,19 +1,28 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Project {
-    private UUID id;
+public class Project implements Serializable{
+    private String id;
     private String name;
     private String description;
     private String employeeID;
     private Date startDate;
     private Date dueDate;
 
+    public Project(){}
+
+
+    /**
+     * @param name name of the project
+     * @param employeeID employee who can see the project
+     */
+
     public Project(String name, String description, String employeeID, Date startDate, Date dueDate) {
-        this.id = UUID.randomUUID();
+        this.id = String.valueOf(UUID.randomUUID());
         this.name = name;
         this.description = description;
         this.employeeID = employeeID;
@@ -21,10 +30,25 @@ public class Project {
         this.dueDate = dueDate;
     }
 
-    public UUID getId() {
+    /**
+     * @param id To edit the read project
+     * @param name name of the project
+     * @param employeeID employee who can see the project
+     */
+    public Project(String id,String name, String description, String employeeID, Date startDate, Date dueDate) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.employeeID = employeeID;
+        this.startDate = startDate;
+        this.dueDate = dueDate;
+    }
+
+    public String getId() {
         return id;
     }
 
+    public void setId(String id){this.id=id;}
 
     public String getName() {
         return name;
@@ -66,12 +90,12 @@ public class Project {
         this.dueDate = dueDate;
     }
 
-    public Map<String, Object> toHashMap(String key) {
+    public Map<String, Object> toHashMap() {
         Map<String, Object> map = new HashMap<>();
         map.put(id + "/id/", getId());
         map.put(id + "/name/", getName());
         map.put(id+ "/description/", getDescription());
-        map.put(id + "/employeeID/", getEmployeeID());
+        map.put(id + "/manager/", getEmployeeID());
         map.put(id + "/startDate/", getStartDate());
         map.put(id + "/dueDate/", getDueDate());
         return map;

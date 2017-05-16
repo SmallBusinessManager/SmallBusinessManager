@@ -33,7 +33,7 @@
             android:id="@+id/etTaskTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title" />
+            android:hint="@string/title" />
 
         <EditText
             android:id="@+id/etTaskDescription"
@@ -42,7 +42,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/etTaskTitle"
             android:ems="10"
-            android:hint="Description"
+            android:hint="@string/ProjectDescription"
             android:inputType="textMultiLine" />
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_below="@+id/etTaskDescription"
             android:layout_marginStart="11dp"
             android:layout_marginTop="78dp"
-            android:text="Start Date:"
+            android:text="@string/start_date"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
@@ -62,7 +62,7 @@
             android:id="@+id/tvProjectEndDate"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:text="End Date:"
+            android:text="@string/end_date"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             android:layout_below="@+id/tvProjectStartDate"
@@ -70,5 +70,14 @@
             android:layout_alignStart="@+id/tvProjectStartDate" />
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="101dp"
+        android:text="@string/saveProject" />
 
 </RelativeLayout>

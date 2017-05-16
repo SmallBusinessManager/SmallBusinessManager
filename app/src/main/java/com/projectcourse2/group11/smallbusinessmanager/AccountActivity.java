@@ -24,6 +24,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +50,13 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private String uid = user.getUid();
-    private String company;
+    private String companyID;
+
+    /**
+     *  person is an person object that was read during loggin.
+     *  It is called user everywhere else in the code
+     */
+    private Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +85,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         currentUser = firebaseAuth.getCurrentUser();
+        companyID=getIntent().getStringExtra("COMPANY_ID");
+        person = (Person)getIntent().getSerializableExtra("USER");
         if (currentUser == null) {
             finish();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("USER",person));
         }
 
         prepareListData();
@@ -142,13 +151,13 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         ref.child("/companyEmployees/").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (ds.getKey().equals(uid)) {
-                        company = "XBUVAedmKGTHl2bU4qNxGxLnaYd2";//ds.getRef().getParent().getKey();
-                        break;
-                    }
-                }
-                ref.child("/companyEmployees/" + company + "/").addValueEventListener(new ValueEventListener() {
+//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    if (ds.getKey().equals(uid)) {
+//                        company = "XBUVAedmKGTHl2bU4qNxGxLnaYd2";//ds.getRef().getParent().getKey();
+//                        break;
+//                    }
+//                }
+                ref.child("/companyEmployees/" + companyID + "/").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         listDataHeader.add("Personal Information");
@@ -215,7 +224,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         if (v == buttonLogout) {
             firebaseAuth.signOut();
             finish();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",person));
         }
         if (v == buttonSave) {
             saveUserInformation();
@@ -256,7 +265,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                     databaseReference.child(currentUser.getUid()).removeValue();
                                     progressDialog.dismiss();
                                     AccountActivity.this.finish();
-                                    startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+                                    startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",person));
                                 }
                             }
                         });

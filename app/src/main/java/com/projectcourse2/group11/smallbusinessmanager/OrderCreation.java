@@ -1,13 +1,17 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Order;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
@@ -32,21 +37,22 @@ import java.util.List;
  * Creating the order, writing it to the fireBase and reading workers from it.
  */
 
-public class OrderCreation extends Activity  {
+public class OrderCreation extends Activity  implements View.OnClickListener{
     private Button buttonOK;
     private Button buttonCancel;
     private List<Worker> workerList;
-    private List<Manager>  managerList;
     private NumberPicker workerView;
-    private NumberPicker managerView;
     private EditText descriptionView;
     private Worker selectedWorker;
-    private Manager selectedManager;
-    private EditText startDateIn;
+    private TextView tvStartDateIn;
     private DatabaseReference ref;
-    private String company;
-    private String UID;
+    private String company,UID,projectID,orderID,workerSSN,description;
     private ProgressDialog progressDialog;
+    private ValueEventListener listener,orderListener;
+    private Person user;
+    private int _day, _month, _year;
+    private Date startDate;
+    private static final int DIALOG_ID_START = 0;
 
 
 
@@ -55,27 +61,48 @@ public class OrderCreation extends Activity  {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        //Reading all worker from database and sorting by position
+        company = getIntent().getStringExtra("COMPANY_ID");
+        projectID=getIntent().getStringExtra("projectUID");
+        user = (Person) getIntent().getSerializableExtra("USER");
+
+
+
+        //Reading workOrder from database
+
         ref = FirebaseDatabase.getInstance().getReference();
-        /**
-         * Defining the listener
-         */
-        final ValueEventListener listener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    for (DataSnapshot d:ds.getChildren()) {
-                        if (d.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                            company = d.getRef().getParent().getKey();
-                            break;
-                        }
-                    }
-                    if (company!=null){
-                        dataSnapshot=ds;
+        orderListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                    if (ds.getKey().equals(orderID)) {
+                        description =ds.child("description").getValue(String.class);
+                        workerSSN = ds.child("worker").getValue(String.class);
+                        descriptionView.setText(description);
                         break;
                     }
                 }
-                    managerList = new ArrayList<>();
+                workerList = new ArrayList<>();
+                    addListener();
+                } catch (Exception e) {
+                    Toast.makeText(OrderCreation.this, "order listener", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(OrderCreation.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        };
+
+        /**
+         * Defining the listener
+         */
+
+        listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
                     workerList = new ArrayList<>();
                     try {
                         String ssn, email, firstName, lastName, phoneNumber;
@@ -88,19 +115,19 @@ public class OrderCreation extends Activity  {
                             Position pos = ds.child("position").getValue(Position.class);
                             ssn = ds.child("SSN").getValue(String.class);
 
-                            //separating managers and workers
+
                             if (pos.equals(Position.WORKER)) {
                                 Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
+                                if (workerSSN.equals(ssn)){
+                                    selectedWorker = w;
+                                }
                                 workerList.add(w);
-                            } else if (pos.equals(Position.MANAGER)) {
-                                Manager man = new Manager(ssn, firstName, lastName, phoneNumber, email, UID);
-                                managerList.add(man);
                             }
                         }
                         populateList();
-                        selectedManager = managerList.get(0);
                         selectedWorker = workerList.get(0);
                         progressDialog.dismiss();
+
                     } catch (Exception e) {
                         Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -112,8 +139,13 @@ public class OrderCreation extends Activity  {
 
                 }
             };
-
-        ref.child("/companyEmployees/").addValueEventListener(listener);
+        if (getIntent().hasExtra("ORDER_ID")){
+            orderID=getIntent().getStringExtra("ORDER_ID");
+            ref.child("companyWorkOrders").child(company).addValueEventListener(orderListener);
+        }else {
+            workerSSN="";
+            ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
+        }
 
 
 
@@ -131,9 +163,8 @@ public class OrderCreation extends Activity  {
         descriptionView = (EditText) findViewById(R.id.orderDescription);
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        managerView= (NumberPicker) findViewById(R.id.managerPicker);
-        managerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        startDateIn = (EditText) findViewById(R.id.startDateIn);
+        tvStartDateIn = (TextView) findViewById(R.id.startDateIn);
+        tvStartDateIn.setOnClickListener(this);
 
 
         //Number picker with worker names instead of numbers
@@ -144,20 +175,13 @@ public class OrderCreation extends Activity  {
             }
         };
 
-        final NumberPicker.OnValueChangeListener managerListener = new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                selectedManager = managerList.get(newVal);
-            }
-        };
-
         workerView.setOnValueChangedListener(myValChangedListener);
-        managerView.setOnValueChangedListener(managerListener);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 finish();
-                Intent MainIntent = new Intent(OrderCreation.this, OpeningActivity.class);
+                ref.child("/companyEmployees/").removeEventListener(listener);
+                Intent MainIntent = new Intent(OrderCreation.this, MainActivity.class).putExtra("COMPANY_ID",company).putExtra("USER",user);
                 startActivity(MainIntent);
             }
         });
@@ -169,13 +193,11 @@ public class OrderCreation extends Activity  {
                 if (selectedWorker == null) {
                     selectedWorker = workerList.get(0);
                 }
-                if (selectedManager==null){
-                    selectedManager=managerList.get(0);
-                }
+
                 if (createOrder()) {
                     finish();
                     ref.child("/companyEmployees/").removeEventListener(listener);
-                    startActivity(new Intent(OrderCreation.this, AccountActivity.class));
+                    startActivity(new Intent(OrderCreation.this, MainActivity.class).putExtra("COMPANY_ID",company).putExtra("USER",user));
                     progressDialog.dismiss();
                 }
             }
@@ -183,8 +205,12 @@ public class OrderCreation extends Activity  {
 
         //it takes time to load and populate number picker, lets just say its loading
         String[] tmp = {"Loading"};
+
         workerView.setDisplayedValues(tmp);
-        managerView.setDisplayedValues(tmp);
+        Calendar calendar = Calendar.getInstance();
+        _year = calendar.get(Calendar.YEAR);
+        _month = calendar.get(Calendar.MONTH);
+        _day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
     /**
@@ -195,18 +221,16 @@ public class OrderCreation extends Activity  {
     private boolean createOrder() {
         String description = descriptionView.getText().toString().trim();
         ref = FirebaseDatabase.getInstance().getReference();
+
         try {
-            if (!(startDateIn.getText().toString().trim().equalsIgnoreCase(""))) {
-                String strDate = startDateIn.getText().toString().replace('-',' ').trim();
-                descriptionView.setText(strDate.substring(8,10)+"\n"+strDate.substring(5,7)+"\n"+strDate.substring(0,4));
-                Date sDate = new Date(Integer.parseInt(strDate.substring(8,10)),Integer.parseInt(strDate.substring(5,7)),Integer.parseInt(strDate.substring(0,4)));
-                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
-                order.startOrder(sDate);
+            if (!(tvStartDateIn.getText().toString().trim().equalsIgnoreCase(""))) {
+                Order order = new Order(description, selectedWorker, projectID);
+                order.startOrder(startDate);
                 ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
                 return true;
             } else {
                 Date sDate = new Date(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
-                Order order = new Order(description, selectedWorker, new Project("Project Unicorn" ,"Test Project",selectedManager.getSSN(), sDate, new Date(22, 12, 2017)));
+                Order order = new Order(description, selectedWorker, projectID);
                 order.startOrder(sDate);
                 ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
                 return true;
@@ -215,7 +239,6 @@ public class OrderCreation extends Activity  {
             Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
         }
-
     }
 
     /**
@@ -225,22 +248,6 @@ public class OrderCreation extends Activity  {
      *  and passes the string array to number picker
      */
     private void populateList(){
-        String[] managerNames;
-        if (managerList.size()!=0) {
-            managerNames= new String[managerList.size()];
-            for (int i = 0; i < workerList.size(); i++) {
-                managerNames[i] = managerList.get(i).getFirstName() + " " + managerList.get(i).getLastName();
-            }
-        } else {managerNames= new String[1];
-            managerNames[0]="---";}
-        managerView.setMinValue(0);
-        managerView.setDisplayedValues(managerNames);
-        if (managerList.size()>1) {
-            managerView.setMaxValue(managerNames.length-1);
-        } else {
-            managerView.setMaxValue(0);
-        }
-
         String[] workersNames;
         if (workerList.size()!=0) {
             workersNames= new String[workerList.size()];
@@ -253,9 +260,40 @@ public class OrderCreation extends Activity  {
         workerView.setDisplayedValues(workersNames);
         if (workerList.size()>1) {
             workerView.setMaxValue(workersNames.length-1);
+            workerView.setValue(workerList.indexOf(selectedWorker));
         } else {
             workerView.setMaxValue(0);
         }
     }
+
+    private void addListener(){
+        ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
+        ref.removeEventListener(orderListener);
+    }
+    private DatePickerDialog.OnDateSetListener datePickerListener1 = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            _year = year;
+            _month = monthOfYear;
+            _day = dayOfMonth;
+            tvStartDateIn.setText("Start Date:                          "+_day + "/" + _month + "/" + _year);
+            startDate = new Date(_day, _month, _year);
+        }
+    };
+    @Override
+    public void onClick(View v) {
+        if (v == tvStartDateIn) {
+            showDialog(DIALOG_ID_START);
+        }
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if (id == DIALOG_ID_START) {
+            return new DatePickerDialog(this, datePickerListener1, _year, _month, _day);
+        }
+        return null;
+    }
+
 
 }

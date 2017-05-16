@@ -12,20 +12,20 @@ public class Employee extends Person {
         super(SSN, firstName, lastName, phoneNumber, email, UID);
     }
 
-    public void printEmploymentDate(){
-        //to do
+    public String printEmploymentDate(){
+        return employmentData;
     }
 
-    public void printContractID(){
-        //to do
+    public int printContractID(){
+        return contractID;
     }
 
-    public void printTitle(){
-        //to do
+    public String printTitle(){
+        return title;
     }
 
-    public void calculateSalary(){
-        //to do
+    public double calculateSalary(){
+        return (hourCost*8)*30;
     }
 
     public void viewAllInfo(){
