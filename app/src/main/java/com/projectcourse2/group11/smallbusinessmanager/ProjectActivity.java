@@ -22,10 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
-import java.io.Serializable;
-import java.io.StringReader;
-
-
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
@@ -72,13 +68,12 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
 
-
+        progressDialog.dismiss();
 
         listView.setOnItemClickListener(new DoubleClickListener() {
             @Override
             protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
                 final Project project = (Project) parent.getItemAtPosition(position);
-                Toast.makeText(ProjectActivity.this, project.getId(), Toast.LENGTH_SHORT).show();
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -117,13 +112,26 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //NavUtils.navigateUpFromSameTask(this);
-                //return true;
                 finish();
                 startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
-                return true;
+                break;
+            case R.id.nav_reorder_project:
+                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
+                FirebaseListAdapter mnAdapter = new FirebaseListAdapter<Project>(
+                        ProjectActivity.this,
+                        Project.class,
+                        android.R.layout.simple_list_item_single_choice,
+                        ref.orderByChild("name")) {
+                    @Override
+                    protected void populateView(View v, Project model, int position) {
+                        TextView textView = (TextView) v.findViewById(android.R.id.text1);
+                        textView.setText(model.getName());
+                    }
+                };
+                listView.setAdapter(mnAdapter);
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

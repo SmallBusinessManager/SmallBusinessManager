@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +71,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        /*final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }*/
 
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonSave = (Button) findViewById(R.id.buttonSave);
@@ -281,6 +288,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
