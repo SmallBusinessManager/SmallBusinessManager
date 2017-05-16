@@ -67,16 +67,12 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         listView = (ListView) findViewById(R.id.listView);
 
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
             project=(Project) getIntent().getSerializableExtra("PROJECT");
             projectUID = project.getId();
             projectName = project.getName();
             companyID = getIntent().getStringExtra("COMPANY_ID");
-            user = (Person)bundle.getSerializable("USER");
+            user = (Person)getIntent().getSerializableExtra("USER");
             this.setTitle(projectName);
-        }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
@@ -158,7 +154,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         listView.setOnItemClickListener(new DoubleClickListener() {
             String selectedOrderId;
             @Override
-            protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
+            protected void onSingleClick(final AdapterView<?> parent, View v, int position, long id) {
                 selectedOrderId = orderList.get(parent.getItemAtPosition(position));
 
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -167,6 +163,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                         if (item.getItemId() == R.id.nav_delete_project) {
                             FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(selectedOrderId).removeValue();
                             ref.child(selectedOrderId).removeValue();
+                            parent.refreshDrawableState();
                         }
                         return true;
                     }
@@ -179,7 +176,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
                 intent.putExtra("ORDER_ID", selectedOrderId);
                 intent.putExtra("COMPANY_ID", companyID);
-                intent.putExtra("projectUID",projectUID);
+                intent.putExtra("PROJECT",project);
                 intent.putExtra("USER",user);
                 startActivity(intent);
             }
@@ -220,7 +217,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user).putExtra("PROJECT",project));
         }
     }
 

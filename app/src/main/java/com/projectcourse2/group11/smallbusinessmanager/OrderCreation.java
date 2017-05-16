@@ -53,6 +53,7 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
     private int _day, _month, _year;
     private Date startDate;
     private static final int DIALOG_ID_START = 0;
+    private Project project;
 
 
 
@@ -62,7 +63,8 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         company = getIntent().getStringExtra("COMPANY_ID");
-        projectID=getIntent().getStringExtra("projectUID");
+        project=(Project)getIntent().getSerializableExtra("PROJECT");
+        projectID=project.getId();
         user = (Person) getIntent().getSerializableExtra("USER");
 
 
@@ -85,7 +87,7 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
                 workerList = new ArrayList<>();
                     addListener();
                 } catch (Exception e) {
-                    Toast.makeText(OrderCreation.this, "order listener", Toast.LENGTH_LONG).show();
+                    Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -276,8 +278,9 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvStartDateIn.setText("Start Date:                          "+_day + "/" + _month + "/" + _year);
             startDate = new Date(_day, _month, _year);
+            tvStartDateIn.setText("Start Date:"+startDate.toString());
+
         }
     };
     @Override
