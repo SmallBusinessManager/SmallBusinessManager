@@ -99,14 +99,13 @@
             android:hint="Employee "
             android:inputType="textPersonName"
             android:layout_alignBottom="@+id/button5"
-            android:layout_alignStart="@+id/editText"
-            android:layout_marginStart="13dp"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/editText" />
 
         <ListView
             android:id="@+id/listView5"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:layout_alignStart="@+id/editText2"
             android:layout_below="@+id/editText2" />
 

@@ -28,6 +28,7 @@ public class AccountantActivity extends AppCompatActivity {
     private ListView listView;
     private ListView listView2;
     private ListView listView3;
+    private ListView listView5;
     private EditText editText;
     private EditText editText2;
     private ListAdapter mAdapter;
@@ -42,15 +43,16 @@ public class AccountantActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         listView2 = (ListView) findViewById(R.id.listView2);
         listView3 = (ListView) findViewById(R.id.listView3);
+        listView5 = (ListView) findViewById(R.id.listView5);
 
         button = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
         button4 = (Button) findViewById(R.id.button4);
-
+        button5 = (Button) findViewById(R.id.button5);
 
         editText = (EditText) findViewById(R.id.editText);
-
+        editText2 = (EditText) findViewById(R.id.editText2);
 
         // list workers
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyEmployees").child("company1");
@@ -140,23 +142,34 @@ public class AccountantActivity extends AppCompatActivity {
                 ref3.child(editTextString).child("approved").setValue(true);
             }
         });
-        final DatabaseReference ref4 = FirebaseDatabase.getInstance().getReference().child("employeeSalary");
-        mAdapter4 = new FirebaseListAdapter<String>(
-                this,
-                String.class,
-                android.R.layout.simple_list_item_1,
-                ref4) {
-            @Override
-            protected String parseSnapshot(DataSnapshot snapshot) {
-                return snapshot.child("description").getValue(String.class) + " " + snapshot.child("amount").getValue(Float.class);
-            }
 
-            @Override
-            protected void populateView(View v, String model, int position) {
-                TextView textView = (TextView) v.findViewById(android.R.id.text1);
-                textView.setText(model);
-            }
-        };
 
+
+
+        /*
+        button5.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final String editTextString = editText2.getText().toString();
+                final DatabaseReference ref4 = FirebaseDatabase.getInstance().getReference().child("companyEmployee").child(editTextString);
+                ListAdapter mAdapter4 = new FirebaseListAdapter<String>(
+                        AccountantActivity.this,
+                        String.class,
+                        android.R.layout.simple_list_item_1,
+                        ref4) {
+                    @Override
+                    protected String parseSnapshot(DataSnapshot snapshot) {
+                        return snapshot.child("firstName").getValue(String.class);
+                    }
+
+                    @Override
+                    protected void populateView(View v, String model, int position) {
+                        TextView textView = (TextView) v.findViewById(android.R.id.text1);
+                        textView.setText(model);
+                    }
+                };
+                listView5.setAdapter(mAdapter4);
+            }
+        });
+        */
     }
 }
