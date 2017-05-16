@@ -4,10 +4,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Address {
+public class Address implements Serializable{
     private String streetNumber;
     private String city;
     private String postalCode;
