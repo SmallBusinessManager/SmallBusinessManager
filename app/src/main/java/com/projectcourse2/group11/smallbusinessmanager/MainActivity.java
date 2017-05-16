@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity
             listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             listView.setAdapter(mAdapter);
 
+            progressDialog.dismiss();
 
             listView.setOnItemClickListener(new DoubleClickListener() {
                 @Override

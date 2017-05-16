@@ -72,7 +72,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
 
-
+        progressDialog.dismiss();
 
         listView.setOnItemClickListener(new DoubleClickListener() {
             @Override
