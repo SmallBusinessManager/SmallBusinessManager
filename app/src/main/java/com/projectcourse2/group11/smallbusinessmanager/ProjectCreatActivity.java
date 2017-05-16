@@ -51,6 +51,12 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_project_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         saveBtn = (Button) findViewById(R.id.saveButton);
+
+        startDate= new Date(Calendar.getInstance().DAY_OF_MONTH,Calendar.getInstance().MONTH,Calendar.getInstance().YEAR);
+        endDate= new Date(Calendar.getInstance().DAY_OF_MONTH,Calendar.getInstance().MONTH,Calendar.getInstance().YEAR);
+
+
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -83,9 +89,9 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Project project=dataSnapshot.getValue(Project.class);
                     project.setStartDate(dataSnapshot.child("startDate").getValue(Date.class));
                     project.setDueDate(dataSnapshot.child("dueDate").getValue(Date.class));
+                    project.setManager(dataSnapshot.child("manager").getValue(String.class));
 
                     etProjectName.setText(project.getName());
                     etProjectDescription.setText(project.getDescription());
