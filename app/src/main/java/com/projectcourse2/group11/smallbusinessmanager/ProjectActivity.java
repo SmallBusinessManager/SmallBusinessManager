@@ -92,6 +92,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class).putExtra("PROJECT",project);
                 intent.putExtra("COMPANY_ID",companyID);
                 intent.putExtra("USER",user);
+                finish();
                 startActivity(intent);
             }
         });

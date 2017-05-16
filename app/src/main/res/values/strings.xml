@@ -69,4 +69,7 @@
     <string name="saveProject">Save</string>
     <string name="title">Title</string>
 
+    <string name="Start">Start</string>
+    <string name="Mark_as_finished">Mark as Finished</string>
+
 </resources>

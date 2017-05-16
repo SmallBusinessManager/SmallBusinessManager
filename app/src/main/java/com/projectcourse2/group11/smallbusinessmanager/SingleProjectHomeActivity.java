@@ -178,6 +178,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 intent.putExtra("COMPANY_ID", companyID);
                 intent.putExtra("PROJECT",project);
                 intent.putExtra("USER",user);
+                finish();
                 startActivity(intent);
             }
         });

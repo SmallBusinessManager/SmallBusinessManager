@@ -26,6 +26,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
+import com.projectcourse2.group11.smallbusinessmanager.model.Status;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 import java.util.ArrayList;
@@ -63,9 +64,15 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         company = getIntent().getStringExtra("COMPANY_ID");
+        if (getIntent().getSerializableExtra("PROJECT")!=null){
         project=(Project)getIntent().getSerializableExtra("PROJECT");
         projectID=project.getId();
+        }else {
+            projectID=getIntent().getStringExtra("PROJECT_ID");
+        }
+
         user = (Person) getIntent().getSerializableExtra("USER");
+
 
 
 
@@ -75,17 +82,29 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         orderListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Status status=null;
                 try {
                 for(DataSnapshot ds:dataSnapshot.getChildren()) {
                     if (ds.getKey().equals(orderID)) {
                         description =ds.child("description").getValue(String.class);
-                        workerSSN = ds.child("worker").getValue(String.class);
+                        workerSSN = ds.child("workerSSN").getValue(String.class);
                         descriptionView.setText(description);
+                        tvStartDateIn.setText("Start Date:"+ds.child("startDate").getValue(String.class));
+                        status= ds.child("status").getValue(Status.class);
+
                         break;
                     }
                 }
                 workerList = new ArrayList<>();
                     addListener();
+                    if (user.getPosition().equals(Position.WORKER)){
+                        descriptionView.setEnabled(false);
+                        if (status.equals(Status.NOT_STARTED)){
+                            buttonOK.setText(R.string.Start);
+                        }else if (status.equals(Status.STARTED)){
+                            buttonOK.setText(R.string.Mark_as_finished);
+                        }
+                    }
                 } catch (Exception e) {
                     Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -213,6 +232,7 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         _year = calendar.get(Calendar.YEAR);
         _month = calendar.get(Calendar.MONTH);
         _day = calendar.get(Calendar.DAY_OF_MONTH);
+
     }
 
     /**
@@ -223,20 +243,25 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
     private boolean createOrder() {
         String description = descriptionView.getText().toString().trim();
         ref = FirebaseDatabase.getInstance().getReference();
+        Order order;
 
         try {
-            if (!(tvStartDateIn.getText().toString().trim().equalsIgnoreCase(""))) {
-                Order order = new Order(description, selectedWorker, projectID);
-                order.startOrder(startDate);
-                ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
-                return true;
-            } else {
-                Date sDate = new Date(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
-                Order order = new Order(description, selectedWorker, projectID);
-                order.startOrder(sDate);
-                ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
-                return true;
+            if (orderID!=null) {
+                order = new Order(orderID,description, selectedWorker, projectID);
+            }else {
+                order = new Order(description,selectedWorker,projectID);
             }
+            if (buttonOK.getText().equals("Start")) {
+                order.startOrder();
+            } else if (buttonOK.getText().equals("Mark as Finished")) {
+                order.markAsFinished();
+            }
+//                if(orderID!=null) {
+//                    ref.child("companyWorkOrders").child(company).child(orderID).setValue(order);
+//                }else {
+                    ref.child("/companyWorkOrders/" + company + "/").updateChildren(order.toHashMap());
+//                }
+                return true;
         } catch (Exception e){
             Toast.makeText(OrderCreation.this, e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
