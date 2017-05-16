@@ -78,6 +78,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
                 final Project project = (Project) parent.getItemAtPosition(position);
+                Toast.makeText(ProjectActivity.this, project.getId(), Toast.LENGTH_SHORT).show();
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
