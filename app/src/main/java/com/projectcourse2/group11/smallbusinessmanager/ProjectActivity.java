@@ -107,6 +107,11 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         getMenuInflater().inflate(R.menu.toolbar_project_home, menu);
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(ProjectActivity.this, MainActivity.class));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

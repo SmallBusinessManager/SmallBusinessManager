@@ -36,6 +36,13 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private Button buttonLogout;
     private Button buttonDeleteAccount;
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(AccountActivity.this, MainActivity.class));
+
+    }
+
     private LinearLayout ll;
     private ProgressDialog progressDialog;
 

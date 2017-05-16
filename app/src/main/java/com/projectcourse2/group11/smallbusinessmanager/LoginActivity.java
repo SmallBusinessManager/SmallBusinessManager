@@ -94,6 +94,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(LoginActivity.this, OpeningActivity.class));
+    }
 
     private void userLogin() {
 

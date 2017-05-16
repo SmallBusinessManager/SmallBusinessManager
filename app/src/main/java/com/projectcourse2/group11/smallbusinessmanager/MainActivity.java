@@ -5,9 +5,11 @@ import android.app.ProgressDialog;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -77,8 +79,11 @@ public class MainActivity extends AppCompatActivity
         companyID= getIntent().getStringExtra("COMPANY_ID");
         user=(Person)getIntent().getSerializableExtra("USER");
         listView = (ListView) findViewById(R.id.MainListView);
-        Toast.makeText(MainActivity.this,user.getPosition().toString(),Toast.LENGTH_SHORT);
-
+        try {
+            Toast.makeText(MainActivity.this, user.getPosition().toString(), Toast.LENGTH_SHORT);
+        }catch (NullPointerException e){
+            Log.d("user.getPosition", "is giving nullpointer");
+        }
 
         /**
          * If the logged in user is a worker or a team leader
@@ -166,17 +171,27 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-
+    private Boolean exit = false;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
+        } if (exit) {
+            finish(); // finish activity
         } else {
-            super.onBackPressed();
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

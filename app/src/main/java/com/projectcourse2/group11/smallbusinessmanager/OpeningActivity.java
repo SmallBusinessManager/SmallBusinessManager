@@ -3,6 +3,7 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 /**
@@ -73,6 +75,25 @@ public class OpeningActivity extends Activity implements
     public boolean onTouchEvent(MotionEvent event) {
         this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+    private Boolean exit = false;
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 
     @Override

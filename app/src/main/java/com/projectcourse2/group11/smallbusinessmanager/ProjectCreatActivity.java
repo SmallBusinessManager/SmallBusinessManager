@@ -166,7 +166,11 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         }
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class));
+    }
     private void saveToDatabase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company);
         String projectName = etProjectName.getText().toString();
