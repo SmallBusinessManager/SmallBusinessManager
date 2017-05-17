@@ -32,10 +32,10 @@
         android:layout_weight="0.39" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/emailHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Small Business Manager"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 
 </LinearLayout>

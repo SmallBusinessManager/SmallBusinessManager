@@ -1,6 +1,7 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -10,18 +11,30 @@ public class Order {
     private String description;
     private Date startDate;
     private Enum status;
-    private java.util.Date finishDate;
-    //    private Date finishDate;
+    private Date finishDate;
     private Worker worker;
     private String projectID;
+
     public Order(){}
-    public Order(String description, Worker worker, String projectID){
-        this.id = UUID.randomUUID();
+
+    public Order(String id,String description, Worker worker, String projectID){
+        this.id=UUID.fromString(id);
         this.worker=worker;
         this.status=Status.NOT_STARTED;
         this.description=description;
         this.projectID=projectID;
         this.finishDate=null;
+        this.status=Status.NOT_STARTED;
+    }
+
+    public Order(String description, Worker worker, String projectID){
+        this.id=UUID.randomUUID();
+        this.worker=worker;
+        this.status=Status.NOT_STARTED;
+        this.description=description;
+        this.projectID=projectID;
+        this.finishDate=null;
+        this.status=Status.NOT_STARTED;
     }
 
     public void edit(){
@@ -49,15 +62,14 @@ public class Order {
     public  String getDescription(){
         return description;
     }
-    public void startOrder(Date startDate){
-        this.startDate=startDate;
+    public void startOrder(){
+        this.startDate= new Date(Calendar.getInstance().DAY_OF_MONTH,Calendar.getInstance().MONTH,Calendar.getInstance().YEAR);
         status=Status.STARTED;
     }
 
     public void markAsFinished(){
-        status=Status.FINISHED;
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
-        finishDate= new java.util.Date(ts.getTime());
+        this.finishDate= new Date(Calendar.getInstance().DAY_OF_MONTH,Calendar.getInstance().MONTH,Calendar.getInstance().YEAR);
+        this.status=Status.FINISHED;
     }
     public String getId(){
         return String.valueOf(id);
@@ -69,8 +81,8 @@ public class Order {
 
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
-        map.put(id+"/worker/",worker.getSSN());
-        map.put(id+"/status/",status.name());
+        map.put(id+"/workerSSN/",worker.getSSN());
+        map.put(id+"/status/",status);
         map.put(id+"/description/",description);
         map.put(id+"/projectID/",projectID);
         if (startDate!=null) {

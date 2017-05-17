@@ -63,11 +63,14 @@
 
     <string name="managers">Managers</string>
     <string name="start_date">Start Date</string>
-    <string name="worker">Worker</string>
+    <string name="worker">Worker:</string>
     <string name="ProjectDescription">Description</string>
     <string name="end_date">End Date:</string>
     <string name="saveProject">Save</string>
     <string name="title">Title</string>
     <string name="Message">Title</string>
+
+    <string name="Start">Start</string>
+    <string name="Mark_as_finished">Mark as Finished</string>
 
 </resources>

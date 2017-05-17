@@ -2,91 +2,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#EEEEEE"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.projectcourse2.group11.smallbusinessmanager.OrderCreation"
     android:weightSum="1">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/new_order"
-            android:textAlignment="center"
-            android:textColor="@color/colorButton"
-            android:textSize="24sp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarOrder"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="137dp">
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
         <EditText
             android:id="@+id/orderDescription"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_height="100dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:ems="10"
+            android:backgroundTint="@color/colorButton"
             android:hint="@string/describe_the_order_here"
             android:inputType="textMultiLine"
             android:textColor="@color/colorButton" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="175dp"
+            android:text="@string/worker"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/workerPicker" />
+
+        <NumberPicker
+            android:id="@+id/workerPicker"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/orderDescription" />
+
+        <TextView
+            android:id="@+id/startDateIn"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Start Date:"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_above="@+id/buttonOK"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="30dp" />
+
+        <Button
+            android:id="@+id/buttonOK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttonCancel"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="11dp"
+            android:background="@color/colorButton"
+            android:text="@string/ok"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/colorButton"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/worker"
-        android:textSize="18sp" />
-
-    <NumberPicker
-        android:id="@+id/workerPicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp" />
-
-    <TextView
-        android:id="@+id/startDateIn"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/etTaskDescription"
-        android:layout_marginStart="11dp"
-        android:layout_weight="0.26"
-        android:text="Start Date:"
-        android:textAlignment="viewStart"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/buttonOK"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ok" />
-
-    <Button
-        android:id="@+id/buttonCancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel" />
 
 </LinearLayout>

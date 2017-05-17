@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
     private HashMap<String, String> orderList = new HashMap<>();
     private Person user;
+    private TextView emailHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,23 +77,24 @@ public class MainActivity extends AppCompatActivity
         companyID= getIntent().getStringExtra("COMPANY_ID");
         user=(Person)getIntent().getSerializableExtra("USER");
         listView = (ListView) findViewById(R.id.MainListView);
-        try {
-            Toast.makeText(MainActivity.this, user.getPosition().toString(), Toast.LENGTH_SHORT);
-        }catch (NullPointerException e){
-            Log.d("user.getPosition", "is giving nullpointer");
-        }
+
+        View headerView = navigationView.getHeaderView(0);
+        emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
+        emailHeader.setText(user.getEmail());
 
         /**
          * If the logged in user is a worker or a team leader
          * load all the work orders that this worker has connected to it.
          */
         if (user.getPosition().equals(Position.WORKER)||user.getPosition().equals(Position.TEAM_LEADER)){
+            final ArrayList<String> projectIDs = new ArrayList<>();
             ValueEventListener listener  = new ValueEventListener(){
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot ds:dataSnapshot.getChildren()){
-                        if (ds.child("worker").getValue(String.class).equals(user.getSSN())){
+                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSSN())){
                             orderList.put(ds.child("description").getValue(String.class),ds.getKey());
+                            projectIDs.add(ds.child("projectID").getValue(String.class));
                         }
                     }
                     ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
@@ -105,14 +108,44 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
                 }
             };
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             reference.child("companyWorkOrders").child(companyID).addValueEventListener(listener);
 
+            listView.setOnItemClickListener(new DoubleClickListener() {
+                @Override
+                protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
+                    final String order =  orderList.get(parent.getItemAtPosition(position));
+
+                    toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getItemId() == R.id.nav_delete_project) {
+                                FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(order).removeValue();
+                                reference.child(order).removeValue();
+                            }
+                            return true;
+                        }
+                    });
+                }
+
+                @Override
+                protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
+                    String order =  orderList.get(parent.getItemAtPosition(position));
+                    Intent intent = new Intent(MainActivity.this, OrderCreation.class);
+                    intent.putExtra("ORDER_ID",order);
+                    intent.putExtra("COMPANY_ID",companyID);
+                    intent.putExtra("PROJECT_ID",projectIDs.get(position));
+                    intent.putExtra("USER",user);
+                    finish();
+                    startActivity(intent);
+                }
+            });
 
 
 
 
         } else if (user.getPosition().equals(Position.ACCOUNTANT)){
+            finish();
             startActivity(new Intent(MainActivity.this,AccountantActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
         } else {
             /**
@@ -162,6 +195,7 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("PROJECT",project);
                     intent.putExtra("COMPANY_ID",companyID);
                     intent.putExtra("USER",user);
+                    finish();
                     startActivity(intent);
                 }
             });
@@ -238,7 +272,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,ProjectActivity.class).putExtra("COMPANY_ID" ,companyID).putExtra("USER",user));
         }else if (id==R.id.nav_order){
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("projectUID","TO BE OVERWRITTEN").putExtra("USER",user));
+            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("PROJECT_ID","TO BE OVERWRITTEN").putExtra("USER",user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
