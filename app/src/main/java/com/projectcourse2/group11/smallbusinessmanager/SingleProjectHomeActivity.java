@@ -104,7 +104,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         };
         listView.setAdapter(mAdapter);*/
 
-        ValueEventListener listener  = new ValueEventListener(){
+        final ValueEventListener listener  = new ValueEventListener(){
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -154,7 +154,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         listView.setOnItemClickListener(new DoubleClickListener() {
             String selectedOrderId;
             @Override
-            protected void onSingleClick(final AdapterView<?> parent, View v, int position, long id) {
+            protected void onSingleClick(final AdapterView<?> parent, final View v, final int position, long id) {
                 selectedOrderId = orderList.get(parent.getItemAtPosition(position));
 
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -163,7 +163,6 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                         if (item.getItemId() == R.id.nav_delete_project) {
                             FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(selectedOrderId).removeValue();
                             ref.child(selectedOrderId).removeValue();
-                            parent.refreshDrawableState();
                         }
                         return true;
                     }

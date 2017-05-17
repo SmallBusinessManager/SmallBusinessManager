@@ -90,7 +90,12 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
                         description =ds.child("description").getValue(String.class);
                         workerSSN = ds.child("workerSSN").getValue(String.class);
                         descriptionView.setText(description);
-                        tvStartDateIn.setText("Start Date:"+ds.child("startDate").getValue(String.class));
+                        String stDate = ds.child("startDate").getValue(String.class);
+                        if (stDate!=null) {
+                            tvStartDateIn.setText("Start Date:" +stDate);
+                        } else {
+                            tvStartDateIn.setText("Not Started");
+                        }
                         status= ds.child("status").getValue(Status.class);
 
                         break;
@@ -100,6 +105,7 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
                     addListener();
                     if (user.getPosition().equals(Position.WORKER)){
                         descriptionView.setEnabled(false);
+                        workerView.setEnabled(false);
                         if (status.equals(Status.NOT_STARTED)){
                             buttonOK.setText(R.string.Start);
                         }else if (status.equals(Status.STARTED)){
@@ -142,12 +148,19 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
                                 Worker w = new Worker(ssn, firstName, lastName, phoneNumber, email, UID);
                                 if (workerSSN.equals(ssn)){
                                     selectedWorker = w;
+                                    if (user.getPosition().equals(Position.WORKER)) {
+                                        if ((!selectedWorker.getSSN().equals(user.getSSN()))) {
+                                            buttonOK.setEnabled(false);
+                                        } else {
+                                            workerView.setEnabled(false);
+                                        }
+                                    }
                                 }
                                 workerList.add(w);
                             }
                         }
+
                         populateList();
-                        selectedWorker = workerList.get(0);
                         progressDialog.dismiss();
 
                     } catch (Exception e) {
@@ -161,13 +174,8 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
 
                 }
             };
-        if (getIntent().hasExtra("ORDER_ID")){
-            orderID=getIntent().getStringExtra("ORDER_ID");
-            ref.child("companyWorkOrders").child(company).addValueEventListener(orderListener);
-        }else {
-            workerSSN="";
-            ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
-        }
+
+
 
 
 
@@ -192,7 +200,6 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
         workerView = (NumberPicker) findViewById(R.id.workerPicker);
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         tvStartDateIn = (TextView) findViewById(R.id.startDateIn);
-        tvStartDateIn.setOnClickListener(this);
 
         //Number picker with worker names instead of numbers
         NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
@@ -238,6 +245,19 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
         _year = calendar.get(Calendar.YEAR);
         _month = calendar.get(Calendar.MONTH);
         _day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (getIntent().hasExtra("ORDER_ID")){
+            orderID=getIntent().getStringExtra("ORDER_ID");
+            ref.child("companyWorkOrders").child(company).addValueEventListener(orderListener);
+        }else {
+//            if (user.getPosition().equals(Position.WORKER)) {
+                workerSSN = user.getSSN();
+//            } else {
+//                workerSSN = "";
+//            }
+            ref.child("/companyEmployees/").child(company).addValueEventListener(listener);
+            tvStartDateIn.setOnClickListener(this);
+        }
 
     }
 
@@ -288,7 +308,10 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
                 workersNames[i] = workerList.get(i).getFirstName() + " " + workerList.get(i).getLastName();
             }
         } else {workersNames= new String[1];
-            workersNames[0]="---";}
+            workersNames[0]=user.getFirstName()+" "+user.getLastName();
+            selectedWorker=new Worker(user.getSSN(),user.getFirstName(),user.getLastName(),user.getPhoneNumber(),user.getEmail(),FirebaseAuth.getInstance().getCurrentUser().getUid());
+            workerList.add(selectedWorker);
+        }
         workerView.setMinValue(0);
         workerView.setDisplayedValues(workersNames);
         if (workerList.size()>1) {
