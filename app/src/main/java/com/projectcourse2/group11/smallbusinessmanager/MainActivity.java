@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,ProjectActivity.class).putExtra("COMPANY_ID" ,companyID).putExtra("USER",user));
         }else if (id==R.id.nav_order){
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("projectUID","TO BE OVERWRITTEN").putExtra("USER",user));
+            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("PROJECT_ID","TO BE OVERWRITTEN").putExtra("USER",user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
