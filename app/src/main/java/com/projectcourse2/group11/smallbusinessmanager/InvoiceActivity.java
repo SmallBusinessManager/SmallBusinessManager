@@ -3,16 +3,12 @@ package com.projectcourse2.group11.smallbusinessmanager;
 
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,15 +16,9 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.projectcourse2.group11.smallbusinessmanager.ProjectActivity;
-import com.projectcourse2.group11.smallbusinessmanager.R;
 import com.projectcourse2.group11.smallbusinessmanager.model.Invoice;
-import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceFragment;
-
-
-import static android.R.attr.fragment;
-import static android.R.attr.mode;
-import static com.projectcourse2.group11.smallbusinessmanager.R.id.listView;
+import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceAdd;
+import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceMenu;
 
 /**
  * Created by Bjarni on 17/05/2017.
@@ -38,12 +28,13 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference mRef;
     private ListAdapter mAdapter;
     private String companyID;
-
+    private String currentScene="";
+private Button addstuff;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.invoice);
+        setContentView(R.layout.frame_layout);
 
         ListView listView = (ListView) findViewById(R.id.invoice_item);
         DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smallbusinessmanager-ddda6.firebaseio.com/invoice");
@@ -59,16 +50,31 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
                 textview.setText(model.getCustomerId());
             }
 
+
         };
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
     }
 
     protected void addInvoice() {
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.invoice_frame, new InvoiceFragment()).commit();
+        currentScene = "add";
+        fm.beginTransaction().replace(R.id.content_frame, new InvoiceAdd()).commit();
     }
-
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentScene.equals("add")) {
+            FragmentManager fm = getFragmentManager();
+            currentScene="main";
+            fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu());
+        }else if (currentScene.equals("main")){
+            finish();
+            startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+        }
     }
 }
