@@ -6,6 +6,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,7 +41,7 @@ import java.util.List;
  * Creating the order, writing it to the fireBase and reading workers from it.
  */
 
-public class OrderCreation extends Activity  implements View.OnClickListener{
+public class OrderCreation extends AppCompatActivity implements View.OnClickListener{
     private Button buttonOK;
     private Button buttonCancel;
     private List<Worker> workerList;
@@ -72,8 +75,6 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         }
 
         user = (Person) getIntent().getSerializableExtra("USER");
-
-
 
 
         //Reading workOrder from database
@@ -175,6 +176,12 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_order);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarOrder);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 
         //Get new reference to the database, the previous was in /workers/
         ref = FirebaseDatabase.getInstance().getReference();
@@ -186,7 +193,6 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         workerView.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         tvStartDateIn = (TextView) findViewById(R.id.startDateIn);
         tvStartDateIn.setOnClickListener(this);
-
 
         //Number picker with worker names instead of numbers
         NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
@@ -323,5 +329,28 @@ public class OrderCreation extends Activity  implements View.OnClickListener{
         return null;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        try {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    progressDialog.show();
+                    if (selectedWorker == null) {
+                        selectedWorker = workerList.get(0);
+                    }
+
+                    if (createOrder()) {
+                        finish();
+                        ref.child("/companyEmployees/").removeEventListener(listener);
+                        startActivity(new Intent(OrderCreation.this, MainActivity.class).putExtra("COMPANY_ID",company).putExtra("USER",user));
+                        progressDialog.dismiss();
+                    }
+                    break;
+            }
+        } catch (Exception e){
+            //
+        }
+        return true;
+    }
 
 }
