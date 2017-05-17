@@ -18,7 +18,7 @@ import com.projectcourse2.group11.smallbusinessmanager.R;
  * Created by Bjarni on 17/05/2017.
  */
 
-class InvoiceFragment extends Fragment implements View.OnClickListener{
+public class InvoiceFragment extends Fragment implements View.OnClickListener{
     private FirebaseListAdapter<Message> adapter;
     private View view;
     @Nullable

@@ -107,7 +107,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".model.InvoiceActivity"
+            android:name=".InvoiceActivity"
             android:label="@string/Message">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
