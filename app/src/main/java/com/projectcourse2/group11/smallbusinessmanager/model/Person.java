@@ -93,9 +93,6 @@ public abstract class Person implements Serializable{
                 (month < 1 || month > 12) || (day < 0 || day > 31)) ;
     }
 
-    public void printContactInfo() {
-        //to do
-    }
     public Map<String,Object> toHashMap(){
         Map<String, Object> map = new HashMap<>();
         map.put(UID+"/SSN/",SSN);
