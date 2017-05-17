@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llMain"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#f4f4f4"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -14,33 +22,95 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
-    <ExpandableListView
-        android:id="@+id/lvExp"
-        android:layout_width="match_parent"
-        android:layout_height="228dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit" />
+            <TextView
+                android:id="@+id/firstNameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="First Name" />
 
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save" />
+            <EditText
+                android:id="@+id/firstNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/buttonDeleteAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_account" />
+            <TextView
+                android:id="@+id/lastNameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last Name" />
 
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/logout" />
+            <EditText
+                android:id="@+id/lastNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/socialSecurityLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Social Security Number" />
+
+            <EditText
+                android:id="@+id/socialSecurityText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="E-Mail" />
+
+            <EditText
+                android:id="@+id/emailText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/phoneLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone Number" />
+
+            <EditText
+                android:id="@+id/phoneText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save" />
+
+            <Button
+                android:id="@+id/buttonDeleteAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_account" />
+
+            <Button
+                android:id="@+id/buttonLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/logout" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
