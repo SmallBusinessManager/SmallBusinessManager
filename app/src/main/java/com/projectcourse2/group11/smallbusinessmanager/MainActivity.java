@@ -81,11 +81,6 @@ public class MainActivity extends AppCompatActivity
         companyID= getIntent().getStringExtra("COMPANY_ID");
         user=(Person)getIntent().getSerializableExtra("USER");
         listView = (ListView) findViewById(R.id.MainListView);
-        try {
-            Toast.makeText(MainActivity.this, user.getPosition().toString(), Toast.LENGTH_SHORT);
-        }catch (NullPointerException e){
-            Log.d("user.getPosition", "is giving nullpointer");
-        }
 
         View headerView = navigationView.getHeaderView(0);
         emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);

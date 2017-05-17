@@ -357,17 +357,17 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
         try {
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    progressDialog.show();
-                    if (selectedWorker == null) {
-                        selectedWorker = workerList.get(0);
-                    }
-
-                    if (createOrder()) {
-                        finish();
-                        ref.child("/companyEmployees/").removeEventListener(listener);
+//                    progressDialog.show();
+//                    if (selectedWorker == null) {
+//                        selectedWorker = workerList.get(0);
+//                    }
+//
+//                    if (createOrder()) {
+//                        finish();
+//                        ref.child("/companyEmployees/").removeEventListener(listener);
                         startActivity(new Intent(OrderCreation.this, MainActivity.class).putExtra("COMPANY_ID",company).putExtra("USER",user));
                         progressDialog.dismiss();
-                    }
+//                    }
                     break;
             }
         } catch (Exception e){

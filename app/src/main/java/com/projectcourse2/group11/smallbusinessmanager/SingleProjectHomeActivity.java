@@ -47,9 +47,10 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private ListAdapter mAdapter;
     private ListView listView;
     private ProgressDialog progressDialog;
-    private HashMap<String, String> orderList = new HashMap<>();
+    private HashMap<String, String> orderList;
     private Person user;
     private Project project;
+    private ArrayAdapter<String> myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,12 +109,13 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                orderList = new HashMap<>();
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     if (ds.child("projectID").getValue(String.class).equals(projectUID)){
                         orderList.put(ds.child("description").getValue(String.class),ds.getKey());
                     }
                 }
-                ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(SingleProjectHomeActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
+                myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
                 listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                 listView.setAdapter(myAdapter);
                 progressDialog.dismiss();
@@ -156,13 +158,13 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             @Override
             protected void onSingleClick(final AdapterView<?> parent, final View v, final int position, long id) {
                 selectedOrderId = orderList.get(parent.getItemAtPosition(position));
-
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.nav_delete_project) {
                             FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).child(selectedOrderId).removeValue();
                             ref.child(selectedOrderId).removeValue();
+
                         }
                         return true;
                     }
