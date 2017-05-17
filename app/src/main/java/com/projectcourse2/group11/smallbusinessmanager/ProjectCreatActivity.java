@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 import java.util.Calendar;
@@ -82,7 +84,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
 
         if (getIntent().getSerializableExtra("PROJECT") != null) {
             projectUID = project.getId();
-            String projectName = project.getName();
+            final String projectName = project.getName();
             this.setTitle("Edit " + projectName);
 
             listener = new ValueEventListener() {
@@ -100,6 +102,15 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
                     if (project.getDueDate() != null) {
                         tvEndDate.setText("End Date:                            " + project.getDueDate().toString());
                     }
+
+                    if (user.getPosition().equals(Position.WORKER)&&(!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                        etProjectName.setEnabled(false);
+                        etProjectDescription.setEnabled(false);
+                        tvEndDate.setEnabled(false);
+                        tvStartDate.setEnabled(false);
+                        saveBtn.setText(R.string.ok);
+                    }
+
                 }
 
                 @Override
@@ -179,7 +190,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class));
+        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
     }
 
     private void saveToDatabase() {

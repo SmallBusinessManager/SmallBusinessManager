@@ -14,13 +14,16 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
@@ -82,8 +85,12 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.nav_delete_project) {
-                            FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
-                            ref.child(project.getId()).removeValue();
+                            if (user.getPosition().equals(Position.WORKER)&&(!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                                Toast.makeText(ProjectActivity.this, "No.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
+                                ref.child(project.getId()).removeValue();
+                            }
                         }
                         return true;
                     }
