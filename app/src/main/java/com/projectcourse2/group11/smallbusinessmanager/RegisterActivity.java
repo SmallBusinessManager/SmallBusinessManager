@@ -76,7 +76,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         final String newCompanyName = etCompanyName_Register.getText().toString();
         final String firstName = etFirstName_Register.getText().toString();
         final String lastName = etLastName_Register.getText().toString();
-        final String ssn = etSSN_Register.getText().toString();
+        final String SSN = etSSN_Register.getText().toString();
         final String email = email_register.getText().toString().trim();
         String password = password_register.getText().toString().trim();
         String rePassword = password_again_register.getText().toString().trim();
@@ -112,7 +112,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     String uid = user.getUid();
 
                     Company newCompany = new Company(newCompanyName, uid);
-                    Manager owner = new Manager(ssn, firstName, lastName, null, email, uid);
+                    Manager owner = new Manager(SSN, firstName, lastName, null, email, uid);
 
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                     String key = databaseReference.push().getKey();
