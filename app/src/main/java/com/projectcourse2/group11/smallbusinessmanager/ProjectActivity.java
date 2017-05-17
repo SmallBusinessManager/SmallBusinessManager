@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +54,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             companyID = getIntent().getStringExtra("COMPANY_ID");
         }
 
-        //// TODO: 08/05/2017 get company(wait for company register to finish)
+
+
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
         mAdapter = new FirebaseListAdapter<Project>(
                 ProjectActivity.this,

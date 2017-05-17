@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
     private HashMap<String, String> orderList = new HashMap<>();
     private Person user;
+    private TextView emailHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,10 @@ public class MainActivity extends AppCompatActivity
         }catch (NullPointerException e){
             Log.d("user.getPosition", "is giving nullpointer");
         }
+
+        View headerView = navigationView.getHeaderView(0);
+        emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
+        emailHeader.setText(user.getEmail());
 
         /**
          * If the logged in user is a worker or a team leader
