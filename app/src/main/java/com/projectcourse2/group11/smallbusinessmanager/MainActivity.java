@@ -1,14 +1,11 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,10 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceActivity;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
-import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -232,7 +229,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            finish();
+            startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",companyID));
         } else if (id == R.id.nav_account) {
             finish();
             startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",companyID));
