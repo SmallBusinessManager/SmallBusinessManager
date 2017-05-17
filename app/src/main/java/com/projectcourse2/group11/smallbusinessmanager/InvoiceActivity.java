@@ -29,7 +29,6 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     private ListAdapter mAdapter;
     private String companyID;
     private String currentScene="";
-private Button addstuff;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +53,7 @@ private Button addstuff;
         };
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
+        currentScene = "main";
     }
 
     protected void addInvoice() {
@@ -71,10 +71,10 @@ private Button addstuff;
         if (currentScene.equals("add")) {
             FragmentManager fm = getFragmentManager();
             currentScene="main";
-            fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu());
+            fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
         }else if (currentScene.equals("main")){
             finish();
-            startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+            startActivity(new Intent(InvoiceActivity.this, InvoiceActivity.class));
         }
     }
 }
