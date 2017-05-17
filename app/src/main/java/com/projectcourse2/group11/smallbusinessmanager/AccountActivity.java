@@ -12,6 +12,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -48,7 +50,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private Button buttonLogout;
     private Button buttonDeleteAccount;
 
+
     private EditText firstNameText, lastNameText, socialSecurityText, emailText, phoneText;
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(AccountActivity.this, MainActivity.class));
+
+    }
 
     private LinearLayout ll;
     private ProgressDialog progressDialog;
@@ -77,6 +87,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        /*final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }*/
 
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonSave = (Button) findViewById(R.id.buttonSave);
@@ -169,6 +184,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

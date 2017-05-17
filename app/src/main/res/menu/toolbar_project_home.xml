@@ -5,8 +5,9 @@
     <item
         android:id="@+id/nav_search_project"
         android:icon="@drawable/ic_search_white_36dp"
-        android:title="Delete Project"
-        app:showAsAction="ifRoom"/>
+        android:title="Search Project"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
     <item
         android:id="@+id/nav_reorder_project"
         android:icon="@drawable/ic_reorder_white_36dp"

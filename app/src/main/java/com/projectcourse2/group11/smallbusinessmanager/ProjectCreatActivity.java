@@ -41,7 +41,9 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     private static final int DIALOG_ID_END = 1;
 
     private Date startDate, endDate;
-    private String company;
+    private String company, projectUID;
+
+    private ValueEventListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +51,19 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_project_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         saveBtn = (Button) findViewById(R.id.saveButton);
+
+        startDate = new Date(Calendar.getInstance().DAY_OF_MONTH, Calendar.getInstance().MONTH, Calendar.getInstance().YEAR);
+        endDate = new Date(Calendar.getInstance().DAY_OF_MONTH, Calendar.getInstance().MONTH, Calendar.getInstance().YEAR);
+
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        user = (Person)getIntent().getSerializableExtra("USER");
+        user = (Person) getIntent().getSerializableExtra("USER");
         company = getIntent().getStringExtra("COMPANY_ID");
-        if (getIntent().getSerializableExtra("PROJECT")!=null) {
-            project=(Project) getIntent().getSerializableExtra("PROJECT");
+        if (getIntent().getSerializableExtra("PROJECT") != null) {
+            project = (Project) getIntent().getSerializableExtra("PROJECT");
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -72,35 +79,37 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         tvEndDate.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
 
-        if (project!=null){
-            etProjectDescription.setText(project.getDescription());
-            etProjectName.setText(project.getName());
-            etProjectDescription.setText(project.getDescription());
-            tvStartDate.setText("Start Date:                          "+project.getStartDate().toString());
-            tvEndDate.setText("End Date:                            "+project.getDueDate().toString());
-        }
 
-//        if (getIntent().getSerializableExtra("PROJECT")!=null) {
-//            final Project project = (Project) getIntent().getSerializableExtra("PROJECT");
-//            projectUID = project.getId();
-//            String projectName = project.getName();
-//            this.setTitle("Edit "+projectName);
-//
-//            FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    Project project=dataSnapshot.getValue(Project.class);
-//                    etProjectName.setText(project.getName());
-//                    etProjectDescription.setText(project.getDescription());
-//                    tvStartDate.setText("Start Date:                          "+project.getStartDate().toString());
-//                    tvEndDate.setText("End Date:                            "+project.getDueDate().toString());
-//                }
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
+        if (getIntent().getSerializableExtra("PROJECT") != null) {
+            projectUID = project.getId();
+            String projectName = project.getName();
+            this.setTitle("Edit " + projectName);
+
+            listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    project.setStartDate(dataSnapshot.child("startDate").getValue(Date.class));
+                    project.setDueDate(dataSnapshot.child("dueDate").getValue(Date.class));
+                    project.setManager(dataSnapshot.child("manager").getValue(String.class));
+
+                    etProjectName.setText(project.getName());
+                    etProjectDescription.setText(project.getDescription());
+                    if (project.getStartDate() != null) {
+                        tvStartDate.setText("Start Date:                          " + project.getStartDate().toString());
+                    }
+                    if (project.getDueDate() != null) {
+                        tvEndDate.setText("End Date:                            " + project.getDueDate().toString());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).addValueEventListener(listener);
+
+        }
     }
 
     @Override
@@ -111,14 +120,14 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         if (v == tvEndDate) {
             showDialog(DIALOG_ID_END);
         }
-        if (v==saveBtn){
-            if (project!=null){
+        if (v == saveBtn) {
+            if (project != null) {
                 saveEditProject();
-            }else {
+            } else {
                 saveToDatabase();
             }
             finish();
-            startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",company));
+            startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
         }
     }
 
@@ -139,7 +148,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvStartDate.setText("Start Date:                          "+_day + "/" + _month + "/" + _year);
+            tvStartDate.setText("Start Date:                          " + _day + "/" + _month + "/" + _year);
             startDate = new Date(_day, _month, _year);
         }
     };
@@ -149,7 +158,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             _year = year;
             _month = monthOfYear;
             _day = dayOfMonth;
-            tvEndDate.setText("End Date:                            "+_day + "/" + _month + "/" + _year);
+            tvEndDate.setText("End Date:                            " + _day + "/" + _month + "/" + _year);
             endDate = new Date(_day, _month, _year);
         }
     };
@@ -161,10 +170,16 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
                 //NavUtils.navigateUpFromSameTask(this);
                 //return true;
                 finish();
-                startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",company));
+                startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class));
     }
 
     private void saveToDatabase() {
@@ -174,7 +189,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
 
         //get UID and store object under it
         String key = databaseReference.push().getKey();
-        Project project = new Project(key,projectName, projectDescription, FirebaseAuth.getInstance().getCurrentUser().getUid(), startDate, endDate);
+        Project project = new Project(key, projectName, projectDescription, FirebaseAuth.getInstance().getCurrentUser().getUid(), startDate, endDate);
 
         //todo get company
         databaseReference.updateChildren(project.toHashMap());
@@ -183,11 +198,17 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
 //        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("projectOrders");
 //        ref.child(key).setValue("tobe overwritten");
     }
-    private void saveEditProject(){
+
+    private void saveEditProject() {
+        FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).removeEventListener(listener);
         project.setName(etProjectName.getText().toString());
         project.setDescription(etProjectDescription.getText().toString());
-        project.setStartDate(startDate);
-        project.setDueDate(endDate);
+        if (startDate != null) {
+            project.setStartDate(startDate);
+        }
+        if (endDate != null) {
+            project.setDueDate(endDate);
+        }
         FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(project.getId()).setValue(project);
     }
 }
