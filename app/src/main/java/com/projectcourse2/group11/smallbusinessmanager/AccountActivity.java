@@ -45,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
-//    private Button buttonEdit;
     private Button buttonSave;
     private Button buttonLogout;
     private Button buttonDeleteAccount;
@@ -63,18 +62,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private LinearLayout ll;
     private ProgressDialog progressDialog;
 
-//    private ListView listView;
-//    private ListAdapter mAdapter;
-//    private List<String> listDataHeader;
-//    private HashMap<String, List<String>> listDataChild;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference, ref;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String uid = user.getUid();
     private String companyID;
 
     /**
@@ -107,10 +100,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
         buttonDeleteAccount.setOnClickListener(this);
-//        buttonEdit.setOnClickListener(this);
 
         ll = (LinearLayout) findViewById(R.id.llMain);
-        //setEditTextTo(false);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();

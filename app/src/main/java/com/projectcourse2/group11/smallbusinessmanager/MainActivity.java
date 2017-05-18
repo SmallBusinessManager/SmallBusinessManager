@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
                             projectIDs.add(ds.child("projectID").getValue(String.class));
                         }
                     }
-                    ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
+                    ArrayAdapter<String> myAdapter = new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
                     progressDialog.dismiss();
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                     listView.setAdapter(myAdapter);
