@@ -85,7 +85,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
         saveLogin = preferences.getBoolean("saveLogin", false);
-        if (saveLogin = true) {
+
+        if (saveLogin) {
+
             String name = preferences.getString("username", "");
             String pass = preferences.getString("password", "");
             mEmailView.setText(name);
@@ -94,6 +96,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(LoginActivity.this, OpeningActivity.class));
+    }
 
     private void userLogin() {
 
@@ -137,8 +144,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                                 intent.putExtra("USER",manager);
                                                 break;
                                             case TEAM_LEADER:
-                                                TeamLeader tl = d.getValue(TeamLeader.class);
-                                                intent.putExtra("USER",tl);
+                                                TeamLeader teamLeader = d.getValue(TeamLeader.class);
+                                                intent.putExtra("USER",teamLeader);
                                                 break;
                                             case WORKER:
                                                 Worker worker = d.getValue(Worker.class);
@@ -192,7 +199,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 editor.putString("password", mPasswordView.getText().toString());
                 editor.apply();
             } else {
-                Log.d("Removing all Evidence",loginPreferences.getString("username",""));
                 editor.clear();
                 editor.apply();
             }

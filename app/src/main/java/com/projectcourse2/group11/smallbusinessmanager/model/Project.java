@@ -9,7 +9,7 @@ public class Project implements Serializable{
     private String id;
     private String name;
     private String description;
-    private String employeeID;
+    private String manager;
     private Date startDate;
     private Date dueDate;
 
@@ -18,14 +18,14 @@ public class Project implements Serializable{
 
     /**
      * @param name name of the project
-     * @param employeeID employee who can see the project
+     * @param manager employee who can see the project
      */
 
-    public Project(String name, String description, String employeeID, Date startDate, Date dueDate) {
+    public Project(String name, String description, String manager, Date startDate, Date dueDate) {
         this.id = String.valueOf(UUID.randomUUID());
         this.name = name;
         this.description = description;
-        this.employeeID = employeeID;
+        this.manager = manager;
         this.startDate = startDate;
         this.dueDate = dueDate;
     }
@@ -39,7 +39,7 @@ public class Project implements Serializable{
         this.id = id;
         this.name = name;
         this.description = description;
-        this.employeeID = employeeID;
+        this.manager = employeeID;
         this.startDate = startDate;
         this.dueDate = dueDate;
     }
@@ -66,12 +66,12 @@ public class Project implements Serializable{
         this.description = description;
     }
 
-    public String getEmployeeID() {
-        return employeeID;
+    public String getManager() {
+        return manager;
     }
 
-    public void setEmployeeID(String employeeID) {
-        this.employeeID = employeeID;
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 
     public Date getStartDate() {
@@ -95,7 +95,7 @@ public class Project implements Serializable{
         map.put(id + "/id/", getId());
         map.put(id + "/name/", getName());
         map.put(id+ "/description/", getDescription());
-        map.put(id + "/manager/", getEmployeeID());
+        map.put(id + "/manager/", manager);
         map.put(id + "/startDate/", getStartDate());
         map.put(id + "/dueDate/", getDueDate());
         return map;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.database.Query;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
-
-import java.io.Serializable;
-import java.io.StringReader;
-
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +34,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressDialog progressDialog;
     private String companyID;
     private Person user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +44,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        user = (Person) getIntent().getSerializableExtra("USER");
-
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading projects");
@@ -53,9 +52,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-        companyID=getIntent().getStringExtra("COMPANY_ID");
+        if (getIntent() != null) {
+            user = (Person) getIntent().getSerializableExtra("USER");
+            companyID = getIntent().getStringExtra("COMPANY_ID");
+        }
 
-        //// TODO: 08/05/2017 get company(wait for company register to finish)
+
+
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
         mAdapter = new FirebaseListAdapter<Project>(
                 ProjectActivity.this,
@@ -72,7 +75,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
 
-
+        progressDialog.dismiss();
 
         listView.setOnItemClickListener(new DoubleClickListener() {
             @Override
@@ -82,8 +85,12 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.nav_delete_project) {
-                            FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
-                            ref.child(project.getId()).removeValue();
+                            if (user.getPosition().equals(Position.WORKER)&&(!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
+                                Toast.makeText(ProjectActivity.this, "No.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
+                                ref.child(project.getId()).removeValue();
+                            }
                         }
                         return true;
                     }
@@ -93,9 +100,10 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
                 Project project = (Project) parent.getItemAtPosition(position);
-                Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class).putExtra("PROJECT",project);
-                intent.putExtra("COMPANY_ID",companyID);
-                intent.putExtra("USER",user);
+                Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class).putExtra("PROJECT", project);
+                intent.putExtra("COMPANY_ID", companyID);
+                intent.putExtra("USER", user);
+                finish();
                 startActivity(intent);
             }
         });
@@ -104,27 +112,72 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_project_home, menu);
+        MenuItem item=menu.findItem(R.id.nav_search_project);
+        SearchView searchView=(SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Query query = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID).orderByChild("name").startAt(newText);
+                FirebaseListAdapter mnAdapter = new FirebaseListAdapter<Project>(
+                        ProjectActivity.this,
+                        Project.class,
+                        android.R.layout.simple_list_item_single_choice,
+                        query) {
+                    @Override
+                    protected void populateView(View v, Project model, int position) {
+                        TextView textView = (TextView) v.findViewById(android.R.id.text1);
+                        textView.setText(model.getName());
+                    }
+                };
+                listView.setAdapter(mnAdapter);
+                return false;
+            }
+        });
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(ProjectActivity.this, MainActivity.class));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //NavUtils.navigateUpFromSameTask(this);
-                //return true;
                 finish();
-                startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
-                return true;
+                startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+                break;
+            case R.id.nav_reorder_project:
+                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
+                FirebaseListAdapter mnAdapter = new FirebaseListAdapter<Project>(
+                        ProjectActivity.this,
+                        Project.class,
+                        android.R.layout.simple_list_item_single_choice,
+                        ref.orderByChild("name")) {
+                    @Override
+                    protected void populateView(View v, Project model, int position) {
+                        TextView textView = (TextView) v.findViewById(android.R.id.text1);
+                        textView.setText(model.getName());
+                    }
+                };
+                listView.setAdapter(mnAdapter);
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
+            startActivity(new Intent(ProjectActivity.this, ProjectCreatActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         }
     }
 }
