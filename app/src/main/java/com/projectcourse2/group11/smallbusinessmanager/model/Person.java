@@ -1,11 +1,12 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-public abstract class Person {
+public abstract class Person implements Serializable{
     private String SSN; // yyyymmdd-xxxx
     private String firstName;
     private String lastName;

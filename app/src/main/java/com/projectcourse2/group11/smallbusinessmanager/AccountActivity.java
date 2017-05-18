@@ -24,6 +24,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     private String uid = user.getUid();
     private String companyID;
+
+    /**
+     *  person is an person object that was read during loggin.
+     *  It is called user everywhere else in the code
+     */
+    private Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +86,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference = firebaseDatabase.getReference();
         currentUser = firebaseAuth.getCurrentUser();
         companyID=getIntent().getStringExtra("COMPANY_ID");
+        person = (Person)getIntent().getSerializableExtra("USER");
         if (currentUser == null) {
             finish();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("USER",person));
         }
 
         prepareListData();
@@ -216,7 +224,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         if (v == buttonLogout) {
             firebaseAuth.signOut();
             finish();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID",companyID));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",person));
         }
         if (v == buttonSave) {
             saveUserInformation();
@@ -257,7 +265,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                     databaseReference.child(currentUser.getUid()).removeValue();
                                     progressDialog.dismiss();
                                     AccountActivity.this.finish();
-                                    startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID",companyID));
+                                    startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",person));
                                 }
                             }
                         });

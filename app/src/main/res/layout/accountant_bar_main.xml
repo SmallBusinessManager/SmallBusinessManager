@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.projectcourse2.group11.smallbusinessmanager.MainActivity">
+    tools:context="com.projectcourse2.group11.smallbusinessmanager.AccountantActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,8 +20,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"
-        android:id="@+id/include" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/activity_accountant" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -30,11 +31,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
-
-    <ListView
-        android:id="@+id/MainListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp" />
 
 </android.support.design.widget.CoordinatorLayout>

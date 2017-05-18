@@ -26,7 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Order;
-import com.projectcourse2.group11.smallbusinessmanager.model.TestProject;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private ListView listView;
     private ProgressDialog progressDialog;
     private HashMap<String, String> orderList = new HashMap<>();
+    private Person user;
+    private Project project;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +70,11 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            projectUID = bundle.getString("projectUID");
-            projectName = bundle.getString("name");
+            project=(Project) getIntent().getSerializableExtra("PROJECT");
+            projectUID = project.getId();
+            projectName = project.getName();
             companyID = getIntent().getStringExtra("COMPANY_ID");
+            user = (Person)bundle.getSerializable("USER");
             this.setTitle(projectName);
         }
 
@@ -113,9 +118,9 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     }
                 }
                 ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(SingleProjectHomeActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
-                progressDialog.dismiss();
                 listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                 listView.setAdapter(myAdapter);
+                progressDialog.dismiss();
             }
 
             @Override
@@ -175,6 +180,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 intent.putExtra("ORDER_ID", selectedOrderId);
                 intent.putExtra("COMPANY_ID", companyID);
                 intent.putExtra("projectUID",projectUID);
+                intent.putExtra("USER",user);
                 startActivity(intent);
             }
         });
@@ -189,19 +195,23 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+        try {
+            switch (item.getItemId()) {
+                case android.R.id.home:
 
-                finish();
-                startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID",companyID));
-                break;
-            case R.id.nav_edit_project:
-                Intent intent=new Intent(SingleProjectHomeActivity.this,ProjectCreatActivity.class);
-                intent.putExtra("projectUID",projectUID);
-                intent.putExtra("projectName",projectName);
-                intent.putExtra("COMPANY_ID",companyID);
-                finish();
-                startActivity(intent);
+                    finish();
+                    startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+                    break;
+                case R.id.nav_edit_project:
+                    Intent intent = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
+                    intent.putExtra("PROJECT",project);
+                    intent.putExtra("COMPANY_ID", companyID);
+                    intent.putExtra("USER", user);
+                    finish();
+                    startActivity(intent);
+            }
+        } catch (Exception e){
+            //
         }
         return true;
     }
@@ -210,7 +220,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("projectUID",projectUID));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
         }
     }
 
