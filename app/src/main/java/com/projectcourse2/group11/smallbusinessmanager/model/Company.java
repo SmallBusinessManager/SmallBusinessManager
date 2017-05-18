@@ -13,6 +13,8 @@ public class Company {
     public Company(String companyName, String ownerUID){
         this.companyName = companyName;
         this.ownerUID = ownerUID;
+        this.address = "";
+        this.city = "";
     }
 
     public String getCompanyName(){

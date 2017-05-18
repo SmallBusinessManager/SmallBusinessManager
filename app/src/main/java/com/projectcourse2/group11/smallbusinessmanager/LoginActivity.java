@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Accountant;
+import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.TeamLeader;
@@ -117,7 +118,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }
 
 
-        progressDialog.setMessage("Login...");
+        progressDialog.setMessage("Logging In...");
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -167,12 +168,16 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             }
                         }
 
+
+
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             Toast.makeText(LoginActivity.this, "Failed to load the company", Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
                         }
                     });
+
 //                    finish();
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 } else {

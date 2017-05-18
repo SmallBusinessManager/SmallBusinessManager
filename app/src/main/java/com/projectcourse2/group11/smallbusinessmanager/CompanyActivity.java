@@ -6,13 +6,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Accountant;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
+import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
+import com.projectcourse2.group11.smallbusinessmanager.model.TeamLeader;
+import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 /**
  * Created by Phil on 5/18/2017.
@@ -41,7 +50,7 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
 
@@ -61,11 +70,14 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
         currentUser = firebaseAuth.getCurrentUser();
         companyID = getIntent().getStringExtra("COMPANY_ID");
         person = (Person) getIntent().getSerializableExtra("USER");
-        company = (Company) getIntent().getSerializableExtra("COMPANY");
+
         if (currentUser == null) {
             finish();
             startActivity(new Intent(CompanyActivity.this, LoginActivity.class).putExtra("USER", person));
         }
+
+        //TODO Get the company into an object
+        DatabaseReference ref = databaseReference.child("/company/").child(companyID);
 
         nameText.setText(company.getCompanyName());
         addressText.setText(company.getAddress());
@@ -74,18 +86,18 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v){
-        if (v == saveButton){
+    public void onClick(View v) {
+        if (v == saveButton) {
             saveCompanyInfo();
         }
-        if (v == manageButton){
+        if (v == manageButton) {
             //TODO Switch to EmployeeActivity
             finish();
-            
+
         }
     }
 
-    private void saveCompanyInfo(){
+    private void saveCompanyInfo() {
         //TODO Implement saving company information
     }
 }
