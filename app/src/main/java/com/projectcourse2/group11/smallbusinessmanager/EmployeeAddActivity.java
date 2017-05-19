@@ -115,7 +115,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
 
 
                         /** Create new employee account **/
-                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
@@ -126,7 +126,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
                                     Manager owner = new Manager(SSN, firstName, lastName, email, phone, UID);
 
                                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                    databaseReference.child("companyEmployees").child(companyID).child(uid).setValue(owner);
+                                    databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(owner);
 
                                     Toast.makeText(EmployeeAddActivity.this, "Employee Added Successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(EmployeeAddActivity.this, EmployeeActivity.class);
