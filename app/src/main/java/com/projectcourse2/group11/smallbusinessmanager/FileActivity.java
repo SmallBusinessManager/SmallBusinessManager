@@ -12,13 +12,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 public class FileActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
@@ -34,7 +40,9 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
     public static final int REQUEST_CODE = 1234;
 
     private String projectUID;
-    private String fileName;
+    private Project project;
+    private Person user;
+    private String fileName,companyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +56,11 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.d("hehe","toolbar");
         if (getIntent()!=null){
-            projectUID=getIntent().getStringExtra("PROJECT_UID");
-            this.setTitle(getIntent().getStringExtra("PROJECT_NAME"));
+            project=(Project)getIntent().getSerializableExtra("PROJECT");
+            projectUID=project.getId();
+            user=(Person)getIntent().getSerializableExtra("USER");
+            companyID=getIntent().getStringExtra("COMPANY_ID");
+            this.setTitle(project.getName());
         }
 
         Log.d("hehe","getIntent()");
@@ -143,37 +154,18 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private String getImageExt(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
-
-
-    private void showChangeLangDialog() {
-        Log.d("hehe","dialog open");
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.file_name_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
-
-        dialogBuilder.setTitle("File name dialog");
-        dialogBuilder.setMessage("Enter file name");
-        dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                fileName= edt.getText().toString();
-            }
-        });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //pass
-            }
-        });
-        AlertDialog b = dialogBuilder.create();
-        b.show();
-        Log.d("hehe","dialog end");
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(FileActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
+                intent.putExtra("COMPANY_ID", companyID);
+                intent.putExtra("USER", user);
+                finish();
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 
 }

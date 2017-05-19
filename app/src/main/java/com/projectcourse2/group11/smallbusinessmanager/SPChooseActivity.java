@@ -49,8 +49,7 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
         }
         if (v==folder){
             Intent intent=new Intent(SPChooseActivity.this,FileActivity.class);
-            intent.putExtra("PROJECT_UID",projectUID);
-            intent.putExtra("PROJECT_NAME",projectName);
+            intent.putExtra("PROJECT",project);
             finish();
             startActivity(intent);
         }

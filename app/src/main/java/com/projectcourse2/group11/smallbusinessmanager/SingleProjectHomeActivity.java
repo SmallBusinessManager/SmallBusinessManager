@@ -164,9 +164,11 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         try {
             switch (item.getItemId()) {
                 case android.R.id.home:
-
+                    Intent intent = new Intent(SingleProjectHomeActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
+                    intent.putExtra("COMPANY_ID", companyID);
+                    intent.putExtra("USER", user);
                     finish();
-                    startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+                    startActivity(intent);
                     break;
                 case R.id.nav_edit_project:
                     Intent i = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
