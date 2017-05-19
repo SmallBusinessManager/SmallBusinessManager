@@ -1,38 +1,63 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 
 import java.io.File;
+import java.io.IOException;
+
+import static com.projectcourse2.group11.smallbusinessmanager.R.id.imageView;
 
 public class FileActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
     private FloatingActionButton fab;
     private ProgressDialog dialog;
 
+    private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
+    private Uri fileUri;
+
+    public static final String STORAGE_PATH = "file/";
+    public static final String DATABASE_PATH = "file";
+    public static final int REQUEST_CODE = 1234;
+
     private String projectUID;
+    private String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +68,26 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-/*
+
+        Log.d("hehe","toolbar");
         if (getIntent()!=null){
             projectUID=getIntent().getStringExtra("PROJECT_UID");
             this.setTitle(getIntent().getStringExtra("PROJECT_NAME"));
         }
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait loading file...");
-        dialog.show();
 
+        Log.d("hehe","getIntent()");
         listView = (ListView) findViewById(R.id.listViewF);
         fab = (FloatingActionButton) findViewById(R.id.fabF);
-
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("file");
-
         fab.setOnClickListener(this);
+
+        Log.d("hehe","before refs");
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference(DATABASE_PATH);
+
+
+     /*   dialog = new ProgressDialog(this);
+        dialog.setMessage("Please wait loading file...");
+        dialog.show();*/
 
         FirebaseListAdapter<FileUpload> adapter = new FirebaseListAdapter<FileUpload>(
                 FileActivity.this,
@@ -76,7 +106,8 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         listView.setAdapter(adapter);
-        dialog.dismiss();
+        //dialog.dismiss();
+        Log.d("hehe","after setAdapter");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,8 +120,8 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                 if (!rootPath.exists()) {
                     rootPath.mkdirs();
                 } else {
-                    String fileExtensiton = file.getUri().substring(file.getUri().lastIndexOf("."), file.getUri().lastIndexOf("?"));
-                    final File localFile = new File(rootPath, file.getName() + fileExtensiton);
+                    String fileExtension = file.getUri().substring(file.getUri().lastIndexOf("."), file.getUri().lastIndexOf("?"));
+                    final File localFile = new File(rootPath, file.getName() + fileExtension);
 
                     islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -109,15 +140,61 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                     });
                 }
             }
-        });*/
+        });
+        Log.d("hehe","after itemClickListener");
     }
 
 
     @Override
     public void onClick(View v) {
         if (v == fab) {
-          //  startActivity(new Intent(FileActivity.this, AddFileActivity.class));
+            finish();
+            startActivity(new Intent(FileActivity.this,AddFileActivity.class));
         }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            fileUri = data.getData();
+            Log.d("hehe","onActivityResult");
+        }
+    }
+
+    private String getImageExt(Uri uri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+
+    private void showChangeLangDialog() {
+        Log.d("hehe","dialog open");
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.file_name_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+
+        dialogBuilder.setTitle("File name dialog");
+        dialogBuilder.setMessage("Enter file name");
+        dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                fileName= edt.getText().toString();
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+        Log.d("hehe","dialog end");
     }
 
 }
