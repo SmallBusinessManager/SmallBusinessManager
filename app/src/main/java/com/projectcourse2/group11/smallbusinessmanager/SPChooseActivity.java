@@ -74,5 +74,12 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
         }
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(SPChooseActivity.this,ProjectActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
 

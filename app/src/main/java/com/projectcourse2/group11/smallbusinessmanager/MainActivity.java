@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSSN())) {
+                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSsn())) {
                             orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                             projectIDs.add(ds.child("projectID").getValue(String.class));
                         }
@@ -198,7 +198,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-
     }
 
     private Boolean exit = false;

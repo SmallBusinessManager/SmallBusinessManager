@@ -56,7 +56,7 @@ public class Order {
     }
 
     public String getWorkerSSN() {
-        return worker.getSSN();
+        return worker.getSsn();
     }
 
     public  String getDescription(){
@@ -81,7 +81,7 @@ public class Order {
 
     public Map<String,Object> toHashMap(){
         Map<String,Object> map = new HashMap<>();
-        map.put(id+"/workerSSN/",worker.getSSN());
+        map.put(id+"/workerSSN/",worker.getSsn());
         map.put(id+"/status/",status);
         map.put(id+"/description/",description);
         map.put(id+"/projectID/",projectID);

@@ -192,5 +192,12 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(AddFileActivity.this,SPChooseActivity.class);
+        finish();
+        startActivity(intent);
+    }
 
 }

@@ -191,5 +191,12 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(FileActivity.this,SPChooseActivity.class);
+        finish();
+        startActivity(intent);
+    }
 
 }

@@ -73,8 +73,10 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             currentScene="main";
             fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
         }else if (currentScene.equals("main")){
-            finish();
-            startActivity(new Intent(InvoiceActivity.this, InvoiceActivity.class));
+                Intent intent = getIntent();
+                intent.setClass(InvoiceActivity.this,MainActivity.class);
+                finish();
+                startActivity(intent);
         }
     }
 }

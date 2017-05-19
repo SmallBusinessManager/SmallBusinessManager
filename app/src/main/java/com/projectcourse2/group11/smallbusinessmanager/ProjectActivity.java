@@ -143,8 +143,10 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(ProjectActivity.this,MainActivity.class);
         finish();
-        startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+        startActivity(intent);
     }
 
     @Override

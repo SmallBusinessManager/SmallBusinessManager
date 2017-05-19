@@ -41,8 +41,10 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(EmployeeActivity.this,CompanyActivity.class);
         finish();
-        startActivity(new Intent(EmployeeActivity.this, CompanyActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
+        startActivity(intent);
     }
 
     @Override

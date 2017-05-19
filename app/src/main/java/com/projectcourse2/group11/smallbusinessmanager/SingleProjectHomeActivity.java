@@ -223,8 +223,10 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     }
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(SingleProjectHomeActivity.this,SPChooseActivity.class);
         finish();
-        startActivity(new Intent(SingleProjectHomeActivity.this, SPChooseActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID).putExtra("PROJECT", project));
+        startActivity(intent);
     }
 
     @Override

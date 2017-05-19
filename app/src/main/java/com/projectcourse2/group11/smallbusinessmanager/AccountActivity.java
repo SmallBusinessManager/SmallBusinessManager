@@ -54,9 +54,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(AccountActivity.this,MainActivity.class);
         finish();
-        startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
-
+        startActivity(intent);
     }
 
     private LinearLayout ll;
@@ -117,7 +118,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         /** start **/
         firstNameText.setText(person.getFirstName());
         lastNameText.setText(person.getLastName());
-        socialSecurityText.setText(person.getSSN());
+        socialSecurityText.setText(person.getSsn());
         emailText.setText(person.getEmail());
         phoneText.setText(person.getPhoneNumber());
 

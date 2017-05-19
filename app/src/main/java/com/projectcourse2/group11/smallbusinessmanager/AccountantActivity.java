@@ -253,7 +253,10 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent intent = getIntent();
+            intent.setClass(AccountantActivity.this, MainActivity.class);
+            finish();
+            startActivity(intent);
         }
     }
 

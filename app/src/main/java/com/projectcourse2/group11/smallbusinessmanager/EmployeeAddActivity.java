@@ -64,8 +64,10 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(EmployeeAddActivity.this,EmployeeActivity.class);
         finish();
-        startActivity(new Intent(EmployeeAddActivity.this, EmployeeActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
+        startActivity(intent);
     }
 
     @Override
@@ -135,22 +137,22 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
 
                                             switch (pos) {
                                                 case "Worker":
-                                                    Worker worker = new Worker(SSN, firstName, lastName, email, phone, UID);
+                                                    Worker worker = new Worker(SSN,firstName,lastName,phone,email,UID);
                                                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                                                     databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(worker);
                                                     break;
                                                 case "Team Leader":
-                                                    TeamLeader teamLead = new TeamLeader(SSN, firstName, lastName, email, phone, UID);
+                                                    TeamLeader teamLead = new TeamLeader(SSN, firstName, lastName, phone,email, UID);
                                                     databaseReference = FirebaseDatabase.getInstance().getReference();
                                                     databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(teamLead);
                                                     break;
                                                 case "Accountant":
-                                                    Accountant accountant = new Accountant(SSN, firstName, lastName, email, phone, UID, null, 10);
+                                                    Accountant accountant = new Accountant(SSN, firstName, lastName, phone,email, UID, null, 10);
                                                     databaseReference = FirebaseDatabase.getInstance().getReference();
                                                     databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(accountant);
                                                     break;
                                                 case "Manager":
-                                                    Manager manager = new Manager(SSN, firstName, lastName, email, phone, UID);
+                                                    Manager manager = new Manager(SSN, firstName, lastName, phone,email, UID);
                                                     databaseReference = FirebaseDatabase.getInstance().getReference();
                                                     databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(manager);
                                                     break;

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public abstract class Person implements Serializable{
-    private String SSN; // yyyymmdd-xxxx
+    private String ssn; // yyyymmdd-xxxx
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -18,8 +18,8 @@ public abstract class Person implements Serializable{
 
     //TODO Test package-private.
     public Person(){}
-    public Person(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
-        this.SSN = SSN;
+    public Person(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        this.ssn = ssn;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -34,8 +34,8 @@ public abstract class Person implements Serializable{
 
     public Position getPosition(){return position;}
 
-    public String getSSN() {
-        return SSN;
+    public String getSsn() {
+        return ssn;
     }
 
     public String getFirstName() {
@@ -82,7 +82,7 @@ public abstract class Person implements Serializable{
 
     public Map<String,Object> toHashMap(){
         Map<String, Object> map = new HashMap<>();
-        map.put(UID+"/SSN/",SSN);
+        map.put(UID+"/ssn/",ssn);
         map.put(UID+"/firstName/",firstName);
         map.put(UID+"/lastName/",lastName);
         map.put(UID+"/phoneNumber/",phoneNumber);
