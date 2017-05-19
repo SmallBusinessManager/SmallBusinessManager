@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,12 +14,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -42,6 +46,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private Person user;
     private Project project;
     private ArrayAdapter<String> myAdapter;
+    private boolean sorted=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,11 +158,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_single_project, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -178,6 +179,37 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     finish();
                     startActivity(i);
                     break;
+                case R.id.nav_reorder_task:
+                    final ValueEventListener listener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            orderList = new HashMap<>();
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                                    orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                                }
+                            }
+                            myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                            listView.setAdapter(myAdapter);
+                            progressDialog.dismiss();
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
+                        }
+                    };
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                    if (sorted) {
+                        reference.child("companyWorkOrders").child(companyID).orderByChild("description").addValueEventListener(listener);
+                        sorted=false;
+                        break;
+                    }else {
+                        reference.child("companyWorkOrders").child(companyID).orderByChild("status").addValueEventListener(listener);
+                        sorted=true;
+                        break;
+                    }
+
             }
         } catch (Exception e) {
             //
@@ -192,5 +224,49 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user).putExtra("PROJECT", project));
         }
     }
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(SingleProjectHomeActivity.this, SPChooseActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID).putExtra("PROJECT", project));
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_single_project, menu);
+        MenuItem item=menu.findItem(R.id.nav_search_task);
+        SearchView searchView=(SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                final ValueEventListener listener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        orderList = new HashMap<>();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                                orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                            }
+                        }
+                        myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                        listView.setAdapter(myAdapter);
+                        progressDialog.dismiss();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
+                    }
+                };
+                Query reference = FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID).orderByChild("description").startAt(newText);
+                reference.addValueEventListener(listener);
+                return false;
+            }
+        });
+        return true;
+    }
 }

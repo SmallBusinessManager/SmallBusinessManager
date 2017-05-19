@@ -55,7 +55,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(AccountActivity.this, MainActivity.class));
+        startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
 
     }
 
@@ -182,7 +182,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID",companyID));
                 return true;
         }
         return super.onOptionsItemSelected(item);

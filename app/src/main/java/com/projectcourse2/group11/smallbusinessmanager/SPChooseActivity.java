@@ -49,9 +49,16 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
         }
         if (v==folder){
             Intent intent=new Intent(SPChooseActivity.this,FileActivity.class);
+            intent.putExtra("COMPANY_ID", companyID);
             intent.putExtra("PROJECT",project);
+            intent.putExtra("USER", user);
             finish();
             startActivity(intent);
         }
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(SPChooseActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
     }
 }

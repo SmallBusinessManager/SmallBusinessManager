@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 
+import java.io.File;
 import java.io.IOException;
 
 public class AddFileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -137,6 +138,19 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        finish();
+//        startActivity(new Intent(AddFileActivity.this, FileActivity.class).
+//                putExtra("USER", getIntent().getSerializableExtra("USER"))
+//                .putExtra("COMPANY_ID", getIntent().getStringExtra("COMPANY_ID"))
+//                .putExtra("PROJECT", getIntent().getSerializableExtra("PROJECT")));
+        Intent intent = getIntent();
+        intent.setClass(AddFileActivity.this,FileActivity.class);
+        startActivity(intent);
     }
 
 }

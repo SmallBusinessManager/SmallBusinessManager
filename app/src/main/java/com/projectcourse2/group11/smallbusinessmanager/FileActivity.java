@@ -139,7 +139,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(FileActivity.this,AddFileActivity.class));
+            startActivity(new Intent(FileActivity.this,AddFileActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID).putExtra("PROJECT", project));
         }
     }
 
@@ -166,6 +166,12 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(FileActivity.this, SPChooseActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID).putExtra("PROJECT", project));
     }
 
 }
