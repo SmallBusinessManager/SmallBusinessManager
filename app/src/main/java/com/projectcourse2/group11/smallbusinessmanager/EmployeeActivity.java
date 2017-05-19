@@ -50,7 +50,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(EmployeeActivity.this, CompanyActivity.class));
+        startActivity(new Intent(EmployeeActivity.this, CompanyActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
     }
 
     @Override
@@ -74,6 +74,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.setMessage("Loading Employees");
         progressDialog.show();
 
+        //TODO Crashes when attempting to display Workers and only shows one employee
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(companyID);
         mAdapter = new FirebaseListAdapter<Worker>(
                 EmployeeActivity.this,
