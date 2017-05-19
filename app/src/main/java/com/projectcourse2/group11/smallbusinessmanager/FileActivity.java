@@ -1,24 +1,32 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
+<<<<<<< HEAD
 import android.content.DialogInterface;
+=======
+>>>>>>> 9fb1e708514120c5ed76dfed0cebc26c6111bcc7
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+<<<<<<< HEAD
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+=======
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+>>>>>>> 9fb1e708514120c5ed76dfed0cebc26c6111bcc7
 import android.widget.ListView;
-import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +34,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+=======
+import com.google.firebase.database.DatabaseReference;
+>>>>>>> 9fb1e708514120c5ed76dfed0cebc26c6111bcc7
 import com.google.firebase.storage.StorageReference;
 import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
@@ -172,7 +183,22 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("COMPANY_ID", companyID);
             intent.putExtra("USER", user);
             finish();
+<<<<<<< HEAD
             startActivity(intent);
+=======
+            startActivity(new Intent(FileActivity.this,AddFileActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID).putExtra("PROJECT", project));
+        }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            fileUri = data.getData();
+            Log.d("hehe","onActivityResult");
+>>>>>>> 9fb1e708514120c5ed76dfed0cebc26c6111bcc7
         }
     }
 
@@ -188,6 +214,12 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(FileActivity.this, SPChooseActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID).putExtra("PROJECT", project));
     }
 
 }

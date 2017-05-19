@@ -3,10 +3,9 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,26 +13,17 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Company;
-import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
-import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
-import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.User;
-import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 /**
  * Created by Phil on 5/18/2017.
  */
 
-public class EmployeeActivity extends AppCompatActivity {
-    private Button addEmployeeButton;
+public class EmployeeActivity extends AppCompatActivity implements View.OnClickListener {
+    private FloatingActionButton fab;
     private ListView listView;
 
     ListAdapter mAdapter;
@@ -61,7 +51,9 @@ public class EmployeeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_employees);
 
-        //listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -91,5 +83,13 @@ public class EmployeeActivity extends AppCompatActivity {
         };
         progressDialog.dismiss();
         listView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == fab){
+            finish();
+            startActivity(new Intent(EmployeeActivity.this, EmployeeAddActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
+        }
     }
 }

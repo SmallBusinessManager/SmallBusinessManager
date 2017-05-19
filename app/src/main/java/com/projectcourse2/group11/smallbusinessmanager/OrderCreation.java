@@ -375,5 +375,15 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
         }
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        if (project!=null) {
+            finish();
+            startActivity(new Intent(OrderCreation.this, SingleProjectHomeActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company).putExtra("PROJECT",project));
+        }else {
+            finish();
+            startActivity(new Intent(OrderCreation.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
+        }
+    }
 
 }
