@@ -239,7 +239,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
 
             public void onClick(View v) {
                 String editTextString = editText3.getText().toString();
-                String editTextString2 = editText4.getText().toString();
+                int editTextString2 = Integer.parseInt(editText4.getText().toString());
                 ref5.child(editTextString).child("salary").setValue(editTextString2);
             }
         });
