@@ -54,19 +54,14 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
         }
         if (v==folder){
             Intent intent=new Intent(SPChooseActivity.this,FileActivity.class);
-            intent.putExtra("COMPANY_ID", companyID);
             intent.putExtra("PROJECT",project);
-<<<<<<< HEAD
             intent.putExtra("COMPANY_ID", companyID);
-=======
->>>>>>> 9fb1e708514120c5ed76dfed0cebc26c6111bcc7
             intent.putExtra("USER", user);
             finish();
             startActivity(intent);
         }
     }
     @Override
-<<<<<<< HEAD
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -78,10 +73,6 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
         return true;
-=======
-    public void onBackPressed() {
-        finish();
-        startActivity(new Intent(SPChooseActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
->>>>>>> 9fb1e708514120c5ed76dfed0cebc26c6111bcc7
     }
 }
+

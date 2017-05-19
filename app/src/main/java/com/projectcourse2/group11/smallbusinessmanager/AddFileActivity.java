@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +31,6 @@ import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
-import java.io.File;
 import java.io.IOException;
 
 public class AddFileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,7 +43,6 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference mDatabaseRef;
     private Uri fileUri;
 
-    public static final String DATABASE_PATH = "file";
     public static final int REQUEST_CODE = 1234;
 
     private Project project;
@@ -109,7 +106,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                         progressDialog.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(AddFileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -196,21 +193,4 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    @Override
-    public void onBackPressed() {
-
-        finish();
-//        startActivity(new Intent(AddFileActivity.this, FileActivity.class).
-//                putExtra("USER", getIntent().getSerializableExtra("USER"))
-//                .putExtra("COMPANY_ID", getIntent().getStringExtra("COMPANY_ID"))
-//                .putExtra("PROJECT", getIntent().getSerializableExtra("PROJECT")));
-        Intent intent = getIntent();
-        intent.setClass(AddFileActivity.this,FileActivity.class);
-        startActivity(intent);
-    }
-
 }
-
-
-
-
