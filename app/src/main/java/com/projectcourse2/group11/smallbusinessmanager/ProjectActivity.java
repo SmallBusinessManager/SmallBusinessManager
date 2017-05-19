@@ -48,7 +48,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading projects");
         progressDialog.show();
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listViewF);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 

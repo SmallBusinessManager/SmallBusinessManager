@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,12 +27,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Expenses;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class AccountantActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
     private Button button;
@@ -60,7 +57,7 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountant_main);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listViewF);
         listView2 = (ListView) findViewById(R.id.listView2);
         listView3 = (ListView) findViewById(R.id.listView3);
         listView5 = (ListView) findViewById(R.id.listView5);

@@ -32,23 +32,28 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog dialog;
 
     private DatabaseReference mDatabaseRef;
+    private String projectUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarF);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+/*
+        if (getIntent()!=null){
+            projectUID=getIntent().getStringExtra("PROJECT_UID");
+            this.setTitle(getIntent().getStringExtra("PROJECT_NAME"));
+        }
         dialog = new ProgressDialog(this);
         dialog.setMessage("Please wait loading file...");
         dialog.show();
 
-        listView = (ListView) findViewById(R.id.listView);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        listView = (ListView) findViewById(R.id.listViewF);
+        fab = (FloatingActionButton) findViewById(R.id.fabF);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("file");
 
@@ -104,7 +109,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                     });
                 }
             }
-        });
+        });*/
     }
 
 
