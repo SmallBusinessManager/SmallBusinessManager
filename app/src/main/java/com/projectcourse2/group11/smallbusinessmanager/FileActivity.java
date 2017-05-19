@@ -1,48 +1,49 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
+
+import java.io.File;
 
 public class FileActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
     private FloatingActionButton fab;
     private ProgressDialog dialog;
 
-    private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
-    private Uri fileUri;
+    private ListAdapter adapter;
 
-    public static final String STORAGE_PATH = "file/";
-    public static final String DATABASE_PATH = "file";
-    public static final int REQUEST_CODE = 1234;
-
-    private String projectUID;
     private Project project;
     private Person user;
-    private String fileName,companyID;
+    private String companyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,31 +55,25 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Log.d("hehe","toolbar");
-        if (getIntent()!=null){
-            project=(Project)getIntent().getSerializableExtra("PROJECT");
-            projectUID=project.getId();
-            user=(Person)getIntent().getSerializableExtra("USER");
-            companyID=getIntent().getStringExtra("COMPANY_ID");
+        if (getIntent() != null) {
+            project = (Project) getIntent().getSerializableExtra("PROJECT");
+            user = (Person) getIntent().getSerializableExtra("USER");
+            companyID = getIntent().getStringExtra("COMPANY_ID");
             this.setTitle(project.getName());
         }
 
-        Log.d("hehe","getIntent()");
         listView = (ListView) findViewById(R.id.listViewF);
         fab = (FloatingActionButton) findViewById(R.id.fabF);
         fab.setOnClickListener(this);
 
-        /*
-        Log.d("hehe","before refs");
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference(DATABASE_PATH);
 
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("projectFiles").child(project.getId());
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Please wait loading file...");
         dialog.show();
 
-        FirebaseListAdapter<FileUpload> adapter = new FirebaseListAdapter<FileUpload>(
+        adapter = new FirebaseListAdapter<FileUpload>(
                 FileActivity.this,
                 FileUpload.class,
                 R.layout.file_item,
@@ -86,17 +81,47 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         ) {
             @Override
             protected void populateView(View v, FileUpload model, int position) {
-                ImageView imageView = (ImageView) v.findViewById(R.id.image1);
-                TextView textView = (TextView) v.findViewById(R.id.text1);
+                ImageView imageView = (ImageView) v.findViewById(R.id.imageF);
+                TextView textView = (TextView) v.findViewById(R.id.textF);
 
-                Glide.with(FileActivity.this).load(model.getUri()).into(imageView);
                 textView.setText(model.getName());
+                String fileExt = model.getName().substring(model.getName().indexOf("."));
+                switch (fileExt) {
+                    case ".jpeg":
+                    case ".png":
+                    case ".exif":
+                    case ".jpeg 2000":
+                    case ".tiff":
+                    case ".gif":
+                    case ".bmp":
+                    case ".ppm":
+                    case ".pgm":
+                    case ".pbm":
+                    case ".pnm":
+                        Glide.with(FileActivity.this).load(model.getUri()).into(imageView);
+                        break;
+                    case ".docx":
+                        setImageView(R.drawable.ic_docx,imageView);
+                        break;
+                    case ".pdf":
+                        setImageView(R.drawable.ic_pdf,imageView);
+                        break;
+                    case ".txt":
+                        setImageView(R.drawable.ic_txt,imageView);
+                        break;
+                    case ".ppt":
+                        setImageView(R.drawable.ic_ppt,imageView);
+                        break;
+                    default:
+                        setImageView(R.drawable.ic_doc,imageView);
+                        break;
+                }
             }
         };
 
         listView.setAdapter(adapter);
-        //dialog.dismiss();
-        Log.d("hehe","after setAdapter");
+        dialog.dismiss();
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,8 +134,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                 if (!rootPath.exists()) {
                     rootPath.mkdirs();
                 } else {
-                    String fileExtension = file.getUri().substring(file.getUri().lastIndexOf("."), file.getUri().lastIndexOf("?"));
-                    final File localFile = new File(rootPath, file.getName() + fileExtension);
+                    final File localFile = new File(rootPath, file.getName());
 
                     islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -130,27 +154,25 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-        Log.d("hehe","after itemClickListener");
-        */
     }
 
+    private void setImageView(int i,ImageView imageView){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setImageDrawable(getResources().getDrawable(i, getApplicationContext().getTheme()));
+        } else {
+            imageView.setImageDrawable(getResources().getDrawable(i));
+        }
+    }
 
     @Override
     public void onClick(View v) {
         if (v == fab) {
+            Intent intent = new Intent(FileActivity.this, AddFileActivity.class);
+            intent.putExtra("PROJECT", project);
+            intent.putExtra("COMPANY_ID", companyID);
+            intent.putExtra("USER", user);
             finish();
-            startActivity(new Intent(FileActivity.this,AddFileActivity.class));
-        }
-    }
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            fileUri = data.getData();
-            Log.d("hehe","onActivityResult");
+            startActivity(intent);
         }
     }
 

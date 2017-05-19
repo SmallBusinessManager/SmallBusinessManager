@@ -4,6 +4,7 @@ public class FileUpload {
     private String name;
     private String uri;
 
+    public FileUpload(){}
     public FileUpload(String name, String uri) {
         this.name = name;
         this.uri = uri;

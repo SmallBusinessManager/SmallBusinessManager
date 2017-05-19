@@ -62,10 +62,11 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        user = (Person) getIntent().getSerializableExtra("USER");
-        company = getIntent().getStringExtra("COMPANY_ID");
+
         if (getIntent().getSerializableExtra("PROJECT") != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
+            user = (Person) getIntent().getSerializableExtra("USER");
+            company = getIntent().getStringExtra("COMPANY_ID");
         }
 
         Calendar calendar = Calendar.getInstance();
