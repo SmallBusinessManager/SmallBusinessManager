@@ -1,130 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#194d54"
-    android:hapticFeedbackEnabled="false"
-    android:orientation="vertical"
-    android:weightSum="1"
-    tools:context=".MainActivity">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <com.projectcourse2.group11.smallbusinessmanager.myViewFlipper
-        android:id="@+id/viewflipper"
+    <include
+        layout="@layout/app_bar_main"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/menubody_height">
+        android:layout_height="match_parent" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/imageView"
-                android:layout_centerHorizontal="true"
-                android:text="@string/opening_body_text1"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="60dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/logo" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageView3"
-                android:layout_centerHorizontal="true"
-                android:text="@string/opening_body_text2"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_alignEnd="@+id/textView5"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="38dp"
-                android:src="@drawable/sign_in_2" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/sign_in_1" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:layout_below="@+id/imageView2"
-                android:layout_centerHorizontal="true"
-                android:text="@string/opening_body_text3"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-        </RelativeLayout>
-
-
-    </com.projectcourse2.group11.smallbusinessmanager.myViewFlipper>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/button_signUp"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="22dp"
-            android:background="@android:color/holo_blue_dark"
-            android:text="@string/signUp_button_text"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/button_signIn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_alignStart="@+id/button_signUp"
-            android:layout_below="@+id/button_signUp"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/white"
-            android:text="@string/signIn_button_text"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -1,20 +1,28 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.util.ArrayList;
+
 public class TeamLeader extends Person {
-    private Worker[] workers;
-    private Order[] orders;
+    private ArrayList<Worker> workers = new ArrayList<>();
+    private ArrayList<Order> orders = new ArrayList<>();
     private Manager manager;
 
-    public void viewAssignedWorkers(){
-        //to do
+    public TeamLeader(){}
+    public TeamLeader(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(SSN, firstName, lastName, phoneNumber, email, UID);
+        setPosition(Position.TEAM_LEADER);
     }
 
-    public void viewAssignedOrders(){
-        //to do
+    public ArrayList viewAssignedWorkers(){
+        return workers;
     }
 
-    public void placeOrder(){
-        //to do
+    public ArrayList viewAssignedOrders(){
+        return orders;
+    }
+
+    public void placeOrder(Order order){
+        orders.add(order);
     }
 
     public void addExpense(){

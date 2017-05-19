@@ -1,28 +1,31 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 public class Employee extends Person {
-    private String employmentData;
     private int contractID;
-    private String titile;
+    private String title;
+    private String employmentData;
     private String userName;
     private String password;
     private double hourCost;
-    private Project assignment;
 
-    public void printEmploymentDate(){
-        //to do
+    public Employee(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(SSN, firstName, lastName, phoneNumber, email, UID);
     }
 
-    public void printContractID(){
-        //to do
+    public String printEmploymentDate(){
+        return employmentData;
     }
 
-    public void printTitle(){
-        //to do
+    public int printContractID(){
+        return contractID;
     }
 
-    public void calculateSalary(){
-        //to do
+    public String printTitle(){
+        return title;
+    }
+
+    public double calculateSalary(){
+        return (hourCost*8)*30;
     }
 
     public void viewAllInfo(){
