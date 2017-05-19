@@ -202,8 +202,9 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user).putExtra("PROJECT", project));
         }
         if (v == folder) {
-            //pass projectuid
-            //open fileListActivity
+            Intent intent=new Intent(SingleProjectHomeActivity.this,FileActivity.class);
+            intent.putExtra("PROJECT_UID",projectUID);
+            startActivity(intent);
         }
     }
 
