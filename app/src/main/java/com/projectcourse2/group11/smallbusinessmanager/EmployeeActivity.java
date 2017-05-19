@@ -18,19 +18,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
+import com.projectcourse2.group11.smallbusinessmanager.model.User;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
 /**
  * Created by Phil on 5/18/2017.
  */
 
-public class EmployeeActivity extends AppCompatActivity implements View.OnClickListener {
+public class EmployeeActivity extends AppCompatActivity {
     private Button addEmployeeButton;
     private ListView listView;
 
@@ -59,9 +61,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_employees);
 
-        listView = (ListView) findViewById(R.id.listView);
-        addEmployeeButton = (Button) findViewById(R.id.addEmployeeButton);
-        addEmployeeButton.setOnClickListener(this);
+        //listView = (ListView) findViewById(R.id.listView);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -74,15 +74,15 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.setMessage("Loading Employees");
         progressDialog.show();
 
-        //TODO Crashes when attempting to display Workers and only shows one employee
+        //TODO Only shows first employee in the database
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(companyID);
-        mAdapter = new FirebaseListAdapter<Worker>(
+        mAdapter = new FirebaseListAdapter<User>(
                 EmployeeActivity.this,
-                Worker.class,
+                User.class,
                 R.layout.single_employee_item,
                 ref) {
             @Override
-            protected void populateView(View v, Worker model, int position) {
+            protected void populateView(View v, User model, int position) {
                 TextView name = (TextView) v.findViewById(R.id.nameText);
                 TextView employeePosition = (TextView) v.findViewById(R.id.positionText);
                 name.setText(model.getFirstName() + " " + model.getLastName());
@@ -91,25 +91,5 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
         };
         progressDialog.dismiss();
         listView.setAdapter(mAdapter);
-
-        databaseReference.child("companyEmployees").child(companyID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("TAG", "Could Not Retrieve Company Employees.");
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == addEmployeeButton){
-            Intent intent = new Intent(EmployeeActivity.this, EmployeeAddActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID);
-            startActivity(intent);
-            finish();
-        }
     }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/firstNameLabel"
@@ -68,47 +69,39 @@
         android:ems="10"
         android:inputType="textPersonName" />
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:checkedButton="@+id/workerRadio">
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/workerRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Worker" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/teamLeaderRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Team Leader" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
         <RadioButton
-            android:id="@+id/radioButton4"
+            android:id="@+id/accountantRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Accountant" />
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/managerRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Manager" />
-    </LinearLayout>
+    </RadioGroup>
 
     <Button
         android:id="@+id/addButton"
