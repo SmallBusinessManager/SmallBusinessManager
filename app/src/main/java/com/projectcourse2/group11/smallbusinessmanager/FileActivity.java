@@ -64,7 +64,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Log.d("hehe","getIntent()");
-        listView = (ListView) findViewById(R.id.listViewF);
+        listView = (ListView) findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fabF);
         fab.setOnClickListener(this);
 

@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +60,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog.setMessage("Loading orders");
         progressDialog.show();
 
-        listView = (ListView) findViewById(R.id.listViewF);
+        listView = (ListView) findViewById(R.id.listView);
 
         if (getIntent() != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
