@@ -46,7 +46,7 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(CompanyActivity.this, MainActivity.class));
+        startActivity(new Intent(CompanyActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
 
     }
 
