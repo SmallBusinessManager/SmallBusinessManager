@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_company) {
             finish();
-            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("User", user).putExtra("COMPANY_ID", companyID));
+            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_project) {
             finish();
             startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
