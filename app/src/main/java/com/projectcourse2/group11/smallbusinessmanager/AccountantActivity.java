@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,25 +27,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Expenses;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class AccountantActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
+public class AccountantActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button button;
     private Button button2;
     private Button button3;
     private Button button4;
     private Button button5;
+    private Button button6;
     private ListView listView;
     private ListView listView2;
     private ListView listView3;
-    private ListView listView5;
+    private ListView listView4;
     private EditText editText;
     private EditText editText2;
+    private EditText editText3;
+    private EditText editText4;
     private ListAdapter mAdapter;
     private ListAdapter mAdapter2;
     private ListAdapter mAdapter3;
@@ -63,16 +63,19 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
         listView = (ListView) findViewById(R.id.listView);
         listView2 = (ListView) findViewById(R.id.listView2);
         listView3 = (ListView) findViewById(R.id.listView3);
-        listView5 = (ListView) findViewById(R.id.listView5);
+        listView4 = (ListView) findViewById(R.id.listView4);
 
         button = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
         button4 = (Button) findViewById(R.id.button4);
         button5 = (Button) findViewById(R.id.button5);
+        button6 = (Button) findViewById(R.id.button6);
 
         editText = (EditText) findViewById(R.id.editText);
         editText2 = (EditText) findViewById(R.id.editText2);
+        editText3 = (EditText) findViewById(R.id.editText3);
+        editText4 = (EditText) findViewById(R.id.editText4);
 
         user = (Person) getIntent().getSerializableExtra("USER");
         companyID = getIntent().getStringExtra("COMPANY_ID");
@@ -97,8 +100,6 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
 
 
         // list workers
@@ -172,6 +173,7 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
             }
         };
 
+        // Approve Expenses
         button3.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -190,32 +192,29 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
             }
         });
 
-
-
-
-
-
+        // Search for an Employee to return its Salary
         button5.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
 
-                final ValueEventListener listener  = new ValueEventListener(){
+                final ValueEventListener listener = new ValueEventListener() {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         salaryList = new HashMap<>();
                         final String editTextString = editText2.getText().toString();
-                        for(DataSnapshot ds:dataSnapshot.getChildren()){
-                            if (ds.getKey().contains(editTextString)){
-                                salaryList.put(ds.child("salary").getValue().toString(),ds.getKey());
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            if (ds.getKey().contains(editTextString)) {
+                                salaryList.put(ds.child("salary").getValue().toString(), ds.getKey());
                             }
                         }
-                        mAdapter4 = new ArrayAdapter<>(AccountantActivity.this,android.R.layout.simple_list_item_1,new ArrayList<>(salaryList.keySet()));
+                        mAdapter4 = new ArrayAdapter<>(AccountantActivity.this, android.R.layout.simple_list_item_1, new ArrayList<>(salaryList.keySet()));
 
-                        listView5.setAdapter(mAdapter4);
+                        listView4.setAdapter(mAdapter4);
 
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(AccountantActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
@@ -227,8 +226,28 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
             }
         });
 
+        button3.setOnClickListener(new View.OnClickListener() {
 
-    }    @Override
+            public void onClick(View v) {
+                listView3.setAdapter(mAdapter3);
+            }
+        });
+
+        // Set Salary
+        final DatabaseReference ref5 = FirebaseDatabase.getInstance().getReference().child("employeeSalary");
+        button6.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                String editTextString = editText3.getText().toString();
+                String editTextString2 = editText4.getText().toString();
+                ref5.child(editTextString).child("salary").setValue(editTextString2);
+            }
+        });
+
+
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -280,13 +299,13 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
 
         } else if (id == R.id.nav_account) {
             finish();
-            startActivity(new Intent(AccountantActivity.this, AccountActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",companyID));
+            startActivity(new Intent(AccountantActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_project) {
             finish();
-            startActivity(new Intent(AccountantActivity.this,ProjectActivity.class).putExtra("COMPANY_ID" ,companyID).putExtra("USER",user));
-        }else if (id==R.id.nav_order){
+            startActivity(new Intent(AccountantActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+        } else if (id == R.id.nav_order) {
             finish();
-            startActivity(new Intent(AccountantActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("projectUID","TO BE OVERWRITTEN").putExtra("USER",user));
+            startActivity(new Intent(AccountantActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("projectUID", "TO BE OVERWRITTEN").putExtra("USER", user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

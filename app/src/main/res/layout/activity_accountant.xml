@@ -109,12 +109,44 @@
 
 
         <ListView
-            android:id="@+id/listView5"
+            android:id="@+id/listView4"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/button5"
             android:layout_alignParentEnd="true"
             android:layout_alignStart="@+id/editText2" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/button5"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/listView4"
+            android:text="@string/setIncome" />
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/listView4"
+            android:layout_below="@+id/listView4"
+            android:ems="10"
+            android:hint="Employee"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editText4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Amount"
+            android:inputType="number"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/editText3" />
 
     </RelativeLayout>
 </ScrollView>
