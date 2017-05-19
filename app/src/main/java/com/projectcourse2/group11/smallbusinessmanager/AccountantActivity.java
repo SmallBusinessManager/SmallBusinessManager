@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -23,11 +24,15 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Expenses;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AccountantActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
@@ -45,13 +50,14 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
     private ListAdapter mAdapter;
     private ListAdapter mAdapter2;
     private ListAdapter mAdapter3;
-    private ListAdapter mAdapter4;
+    private ArrayAdapter mAdapter4;
+    private HashMap<String, String> salaryList;
 
     private Person user;
     private String companyID;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountant_main);
         listView = (ListView) findViewById(R.id.listView);
@@ -66,7 +72,7 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
         button5 = (Button) findViewById(R.id.button5);
 
         editText = (EditText) findViewById(R.id.editText);
-
+        editText2 = (EditText) findViewById(R.id.editText2);
 
         user = (Person) getIntent().getSerializableExtra("USER");
         companyID = getIntent().getStringExtra("COMPANY_ID");
@@ -188,31 +194,39 @@ public class AccountantActivity extends AppCompatActivity implements  Navigation
 
 
 
-        /*
+
         button5.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
-                final String editTextString = editText2.getText().toString();
-                final DatabaseReference ref4 = FirebaseDatabase.getInstance().getReference().child("companyEmployee").child(editTextString);
-                ListAdapter mAdapter4 = new FirebaseListAdapter<String>(
-                        AccountantActivity.this,
-                        String.class,
-                        android.R.layout.simple_list_item_1,
-                        ref4) {
-                    @Override
-                    protected String parseSnapshot(DataSnapshot snapshot) {
-                        return snapshot.child("firstName").getValue(String.class);
-                    }
+
+
+                final ValueEventListener listener  = new ValueEventListener(){
 
                     @Override
-                    protected void populateView(View v, String model, int position) {
-                        TextView textView = (TextView) v.findViewById(android.R.id.text1);
-                        textView.setText(model);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        salaryList = new HashMap<>();
+                        final String editTextString = editText2.getText().toString();
+                        for(DataSnapshot ds:dataSnapshot.getChildren()){
+                            if (ds.getKey().contains(editTextString)){
+                                salaryList.put(ds.child("salary").getValue().toString(),ds.getKey());
+                            }
+                        }
+                        mAdapter4 = new ArrayAdapter<>(AccountantActivity.this,android.R.layout.simple_list_item_1,new ArrayList<>(salaryList.keySet()));
+
+                        listView5.setAdapter(mAdapter4);
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(AccountantActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
                     }
                 };
-                listView5.setAdapter(mAdapter4);
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                reference.child("employeeSalary").addValueEventListener(listener);
+
             }
         });
-        */
+
 
     }    @Override
     public void onBackPressed() {
