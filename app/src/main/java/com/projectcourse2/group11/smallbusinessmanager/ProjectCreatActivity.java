@@ -63,10 +63,13 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if (getIntent().getSerializableExtra("PROJECT") != null) {
-            project = (Project) getIntent().getSerializableExtra("PROJECT");
+        if (getIntent()!=null){
             user = (Person) getIntent().getSerializableExtra("USER");
             company = getIntent().getStringExtra("COMPANY_ID");
+        }
+        if (getIntent().getSerializableExtra("PROJECT") != null) {
+            project = (Project) getIntent().getSerializableExtra("PROJECT");
+
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -179,20 +182,18 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //NavUtils.navigateUpFromSameTask(this);
-                //return true;
                 finish();
                 startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
-                return true;
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+  /*  @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
-    }
+        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company).putExtra("PROJECT", project));
+    }*/
 
     private void saveToDatabase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company);
