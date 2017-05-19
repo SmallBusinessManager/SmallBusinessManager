@@ -36,10 +36,10 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/listViewF"
             android:layout_marginTop="16dp"
-            android:layout_toStartOf="@+id/listViewF"
-            android:text="@string/viewProjects" />
+            android:text="@string/viewProjects"
+            android:layout_below="@+id/listViewF"
+            android:layout_toStartOf="@+id/listView2" />
 
         <ListView
             android:id="@+id/listView2"
@@ -89,11 +89,11 @@
             android:id="@+id/button5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/button4"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/button4"
             android:layout_marginTop="27dp"
-            android:text="@string/viewIncome" />
+            android:text="@string/viewIncome"
+            android:layout_below="@+id/button4"
+            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/button4" />
 
         <EditText
             android:id="@+id/editText2"
@@ -101,11 +101,10 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/button5"
             android:layout_alignParentEnd="true"
-            android:layout_alignStart="@+id/editText"
-            android:layout_marginStart="13dp"
             android:ems="10"
             android:hint="Employee "
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:layout_alignStart="@+id/editText" />
 
 
         <ListView
@@ -117,7 +116,7 @@
             android:layout_alignStart="@+id/editText2" />
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/button6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/button5"
@@ -130,12 +129,11 @@
             android:id="@+id/editText3"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/listView4"
-            android:layout_below="@+id/listView4"
             android:ems="10"
             android:hint="Employee"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/listView4" />
 
         <EditText
             android:id="@+id/editText4"
