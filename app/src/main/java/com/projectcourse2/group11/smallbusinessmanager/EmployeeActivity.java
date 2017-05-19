@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
+import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -29,7 +30,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
  * Created by Phil on 5/18/2017.
  */
 
-public class EmployeeActivity extends AppCompatActivity {
+public class EmployeeActivity extends AppCompatActivity implements View.OnClickListener {
     private Button addEmployeeButton;
     private ListView listView;
 
@@ -58,8 +59,9 @@ public class EmployeeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_employees);
 
-        addEmployeeButton = (Button) findViewById(R.id.addEmployeeButton);
         listView = (ListView) findViewById(R.id.listView);
+        addEmployeeButton = (Button) findViewById(R.id.addEmployeeButton);
+        addEmployeeButton.setOnClickListener(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -99,5 +101,14 @@ public class EmployeeActivity extends AppCompatActivity {
                 Log.d("TAG", "Could Not Retrieve Company Employees.");
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == addEmployeeButton){
+            Intent intent = new Intent(EmployeeActivity.this, EmployeeAddActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID);
+            startActivity(intent);
+            finish();
+        }
     }
 }
