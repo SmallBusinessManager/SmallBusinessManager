@@ -100,7 +100,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
                 Project project = (Project) parent.getItemAtPosition(position);
-                Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class).putExtra("PROJECT", project);
+                Intent intent = new Intent(ProjectActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
                 intent.putExtra("COMPANY_ID", companyID);
                 intent.putExtra("USER", user);
                 finish();

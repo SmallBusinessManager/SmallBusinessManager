@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -174,13 +175,6 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     i.putExtra("USER", user);
                     finish();
                     startActivity(i);
-                    break;
-                case R.id.openFile:
-                    Intent intent=new Intent(SingleProjectHomeActivity.this,FileActivity.class);
-                    intent.putExtra("PROJECT_UID",projectUID);
-                    intent.putExtra("PROJECT_NAME",projectName);
-                    finish();
-                    startActivity(intent);
                     break;
             }
         } catch (Exception e) {

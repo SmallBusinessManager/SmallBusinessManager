@@ -26,11 +26,5 @@
         android:title="Reorder Task"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/openFile"
-        android:icon="@drawable/ic_add_white_24dp"
-        android:title="Open file"
-        app:showAsAction="ifRoom" />
-
 
 </menu>
