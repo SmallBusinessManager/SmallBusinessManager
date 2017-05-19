@@ -6,39 +6,29 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
-    private ImageView folder;
     //private ListView listView;
     // private ListAdapter mAdapter;
 
@@ -46,7 +36,6 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private String projectName;
     private DatabaseReference ref;
     private String companyID;
-    private ListAdapter mAdapter;
     private ListView listView;
     private ProgressDialog progressDialog;
     private HashMap<String, String> orderList;
@@ -67,9 +56,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog.setMessage("Loading orders");
         progressDialog.show();
 
-        listView = (ListView) findViewById(R.id.listView);
-        folder = (ImageView) findViewById(R.id.folder);
-        folder.setOnClickListener(this);
+        listView = (ListView) findViewById(R.id.listViewF);
 
         if (getIntent() != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
@@ -182,12 +169,13 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     startActivity(new Intent(SingleProjectHomeActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
                     break;
                 case R.id.nav_edit_project:
-                    Intent intent = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
-                    intent.putExtra("PROJECT", project);
-                    intent.putExtra("COMPANY_ID", companyID);
-                    intent.putExtra("USER", user);
+                    Intent i = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
+                    i.putExtra("PROJECT", project);
+                    i.putExtra("COMPANY_ID", companyID);
+                    i.putExtra("USER", user);
                     finish();
-                    startActivity(intent);
+                    startActivity(i);
+                    break;
             }
         } catch (Exception e) {
             //
@@ -200,10 +188,6 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         if (v == fab) {
             finish();
             startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user).putExtra("PROJECT", project));
-        }
-        if (v == folder) {
-            //pass projectuid
-            //open fileListActivity
         }
     }
 
