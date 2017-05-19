@@ -11,7 +11,6 @@
 
         <EditText
 
-            android:id="@+id/editText8"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -21,17 +20,17 @@
             android:textAlignment="center" />
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/invoice_company_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="Company Name"
             android:inputType="textPersonName"
             android:text="insert Name" />
 
         <EditText
 
-            android:id="@+id/editText6"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_weight="1"
@@ -41,13 +40,13 @@
             android:textAlignment="center" />
 
         <EditText
-            android:id="@+id/editText7"
+            android:id="@+id/invoice_amount_add"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="insert amount" />
+            android:hint="Amount"
+            android:inputType="textPersonName" />
 
     </LinearLayout>
 

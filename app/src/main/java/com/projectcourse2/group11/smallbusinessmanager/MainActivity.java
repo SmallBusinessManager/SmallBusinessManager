@@ -79,9 +79,12 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.MainListView);
 
         View headerView = navigationView.getHeaderView(0);
-        emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
-        emailHeader.setText(user.getEmail());
-
+        try {
+            emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
+            emailHeader.setText(user.getEmail());
+        }catch (NullPointerException e){
+            Log.d("WHat is going on ", user.getEmail());
+        }
         /**
          * If the logged in user is a worker or a team leader
          * load all the work orders that this worker has connected to it.

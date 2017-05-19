@@ -30,18 +30,14 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 public class CompanyActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText nameText, addressText, cityText;
     private Button saveButton, manageButton;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
     private String companyID;
-
     private Person person;
     private Company company;
-
     @Override
     public void onBackPressed() {
         finish();

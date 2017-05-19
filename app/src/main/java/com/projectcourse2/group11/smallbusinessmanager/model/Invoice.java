@@ -8,21 +8,30 @@ import java.util.Date;
  */
 
 public class Invoice {
-    private double amount;
+    private String amount;
     private String customerId;
-    private long invoiceTime;
+    private String id;
 
-    public Invoice(double amount, String customerId) {
-        this.amount = amount;
-        this.customerId = customerId;
-        invoiceTime = new Date().getTime();
+    public String getId() {
+        return id;
     }
 
-    public double getAmount() {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Invoice(String id, String amount, String customerId) {
+        this.id=id;
+        this.customerId = customerId;
+        this.amount = amount;
+// invoiceTime = new Date().getTime();
+    }
+
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -32,5 +41,13 @@ public class Invoice {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    public Map<String, Object> toHashMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(id + "/id/", getId());
+        map.put(id + "/customerid/", getCustomerId());
+        map.put(id + "/amount/",getAmount());
+        return map;
     }
 }
