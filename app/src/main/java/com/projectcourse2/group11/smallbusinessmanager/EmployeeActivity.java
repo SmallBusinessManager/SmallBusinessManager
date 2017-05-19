@@ -51,7 +51,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_employees);
 
-        listView = (ListView) findViewById(R.id.listViewF);
+        listView = (ListView) findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 

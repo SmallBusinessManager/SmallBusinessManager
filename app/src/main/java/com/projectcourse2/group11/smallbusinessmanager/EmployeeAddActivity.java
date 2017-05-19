@@ -97,6 +97,8 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
         companyID = getIntent().getStringExtra("COMPANY_ID");
         person = (Person) getIntent().getSerializableExtra("USER");
 
+        pos="Worker";
+
         positionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -111,66 +113,66 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v == addButton) {
-            databaseReference.child("companyEmployees").child(companyID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (firstNameText != null && lastNameText != null && socialText != null && emailText != null && phoneText != null) {
-                        //TODO Assign employee a UID and add to database
-                        final String SSN = socialText.getText().toString();
-                        final String firstName = firstNameText.getText().toString();
-                        final String lastName = lastNameText.getText().toString();
-                        final String email = emailText.getText().toString();
-                        final String phone = phoneText.getText().toString();
-                        final String password = passwordText.getText().toString();
+            //TODO Assign employee a UID and add to database
+            final String SSN = socialText.getText().toString();
+            final String firstName = firstNameText.getText().toString();
+            final String lastName = lastNameText.getText().toString();
+            final String email = emailText.getText().toString();
+            final String phone = phoneText.getText().toString();
+            final String password = passwordText.getText().toString();
 
-
-                        /** Create new employee account **/
-                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(EmployeeAddActivity.this,new OnCompleteListener<AuthResult>() {
+            if (firstNameText != null && lastNameText != null && socialText != null && emailText != null && phoneText != null) {
+                final String token = FirebaseAuth.getInstance().getCurrentUser().getToken(true).toString();
+                /** Create new employee account **/
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
 
-                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    String UID = user.getUid();
+                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                            String UID = user.getUid();
 
-                                    switch (pos) {
-                                        case "Worker":
-                                            Worker worker = new Worker(SSN, firstName, lastName, email, phone, UID);
-                                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(worker);
-                                        case "Team Leader":
-                                            TeamLeader teamLead = new TeamLeader(SSN, firstName, lastName, email, phone, UID);
-                                            databaseReference = FirebaseDatabase.getInstance().getReference();
-                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(teamLead);
-                                        case "Accountant":
-                                            Accountant accountant = new Accountant(SSN, firstName, lastName, email, phone, UID, null, 10);
-                                            databaseReference = FirebaseDatabase.getInstance().getReference();
-                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(accountant);
-                                        case "Manager":
-                                            Manager manager = new Manager(SSN, firstName, lastName, email, phone, UID);
-                                            databaseReference = FirebaseDatabase.getInstance().getReference();
-                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(manager);
+                                            switch (pos) {
+                                                case "Worker":
+                                                    Worker worker = new Worker(SSN, firstName, lastName, email, phone, UID);
+                                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                                    databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(worker);
+                                                    break;
+                                                case "Team Leader":
+                                                    TeamLeader teamLead = new TeamLeader(SSN, firstName, lastName, email, phone, UID);
+                                                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                                                    databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(teamLead);
+                                                    break;
+                                                case "Accountant":
+                                                    Accountant accountant = new Accountant(SSN, firstName, lastName, email, phone, UID, null, 10);
+                                                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                                                    databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(accountant);
+                                                    break;
+                                                case "Manager":
+                                                    Manager manager = new Manager(SSN, firstName, lastName, email, phone, UID);
+                                                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                                                    databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(manager);
+                                                    break;
+                                            }
+                                            FirebaseAuth.getInstance().signInWithCustomToken(token);
+                                            Toast.makeText(EmployeeAddActivity.this, "Employee Added Successfully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = getIntent();
+                                            intent.setClass(EmployeeAddActivity.this,EmployeeActivity.class);
+                                            EmployeeAddActivity.this.startActivity(intent);
+
+
+                                    } else{
+                                        Toast.makeText(EmployeeAddActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     }
 
-                                    Toast.makeText(EmployeeAddActivity.this, "Employee Added Successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(EmployeeAddActivity.this, EmployeeActivity.class);
-                                    EmployeeAddActivity.this.startActivity(intent);
-                                } else {
-                                    Toast.makeText(EmployeeAddActivity.this, "Employee Could Not Be Added", Toast.LENGTH_LONG).show();
                                 }
-                            }
-                        });
+                            });
 
-                    }
-                }
+                        }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.d("TAG", "Could Not Add Employee");
-                }
-            });
+
         }
     }
 
-
-}
