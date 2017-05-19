@@ -19,9 +19,7 @@ public abstract class Person implements Serializable{
     //TODO Test package-private.
     public Person(){}
     public Person(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
-        if (true) {
-            this.SSN = SSN;
-        }
+        this.SSN = SSN;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -80,17 +78,6 @@ public abstract class Person implements Serializable{
 
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    // TODO Fix this method.
-    private boolean isSSNValid(String SSN) {
-        SSN = SSN.trim().replace("-", "");
-        int year = Integer.parseInt(SSN.substring(0, 3));
-        int month = Integer.parseInt(SSN.substring(4, 5));
-        int day = Integer.parseInt(SSN.substring(6, 7));
-
-        return  !(SSN.isEmpty() || (SSN.length() != 12) || year > Calendar.getInstance().get(Calendar.YEAR) ||
-                (month < 1 || month > 12) || (day < 0 || day > 31)) ;
     }
 
     public Map<String,Object> toHashMap(){

@@ -1,15 +1,20 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Phil on 5/6/2017.
  */
 
-public class Company {
+public class Company implements Serializable {
     private String companyName;
     private String address;
     private String city;
     private String ownerUID;
 
+    public Company(){}
     public Company(String companyName, String ownerUID){
         this.companyName = companyName;
         this.ownerUID = ownerUID;
