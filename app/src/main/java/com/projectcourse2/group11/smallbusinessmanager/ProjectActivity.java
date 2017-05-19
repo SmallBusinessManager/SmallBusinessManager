@@ -48,7 +48,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading projects");
         progressDialog.show();
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listViewF);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
@@ -100,7 +100,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
                 Project project = (Project) parent.getItemAtPosition(position);
-                Intent intent = new Intent(ProjectActivity.this, SingleProjectHomeActivity.class).putExtra("PROJECT", project);
+                Intent intent = new Intent(ProjectActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
                 intent.putExtra("COMPANY_ID", companyID);
                 intent.putExtra("USER", user);
                 finish();
@@ -144,7 +144,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(ProjectActivity.this, MainActivity.class));
+        startActivity(new Intent(ProjectActivity.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
     }
 
     @Override

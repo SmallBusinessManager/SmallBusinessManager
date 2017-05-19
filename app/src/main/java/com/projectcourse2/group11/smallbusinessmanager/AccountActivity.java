@@ -45,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
-//    private Button buttonEdit;
     private Button buttonSave;
     private Button buttonLogout;
     private Button buttonDeleteAccount;
@@ -56,17 +55,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(AccountActivity.this, MainActivity.class));
+        startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
 
     }
 
     private LinearLayout ll;
     private ProgressDialog progressDialog;
-
-//    private ListView listView;
-//    private ListAdapter mAdapter;
-//    private List<String> listDataHeader;
-//    private HashMap<String, List<String>> listDataChild;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
@@ -74,7 +68,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference databaseReference, ref;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String uid = user.getUid();
     private String companyID;
 
     /**
@@ -107,10 +100,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
         buttonDeleteAccount.setOnClickListener(this);
-//        buttonEdit.setOnClickListener(this);
 
         ll = (LinearLayout) findViewById(R.id.llMain);
-        //setEditTextTo(false);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -191,7 +182,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID",companyID));
                 return true;
         }
         return super.onOptionsItemSelected(item);

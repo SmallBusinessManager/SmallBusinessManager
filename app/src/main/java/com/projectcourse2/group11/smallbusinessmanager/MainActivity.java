@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        companyID= getIntent().getStringExtra("COMPANY_ID");
-        user=(Person)getIntent().getSerializableExtra("USER");
+        companyID = getIntent().getStringExtra("COMPANY_ID");
+        user = (Person) getIntent().getSerializableExtra("USER");
         listView = (ListView) findViewById(R.id.MainListView);
 
         View headerView = navigationView.getHeaderView(0);
@@ -86,18 +86,18 @@ public class MainActivity extends AppCompatActivity
          * If the logged in user is a worker or a team leader
          * load all the work orders that this worker has connected to it.
          */
-        if (user.getPosition().equals(Position.WORKER)||user.getPosition().equals(Position.TEAM_LEADER)){
+        if (user.getPosition().equals(Position.WORKER) || user.getPosition().equals(Position.TEAM_LEADER)) {
             final ArrayList<String> projectIDs = new ArrayList<>();
-            ValueEventListener listener  = new ValueEventListener(){
+            ValueEventListener listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds:dataSnapshot.getChildren()){
-                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSSN())){
-                            orderList.put(ds.child("description").getValue(String.class),ds.getKey());
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSSN())) {
+                            orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                             projectIDs.add(ds.child("projectID").getValue(String.class));
                         }
                     }
-                    ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
+                    ArrayAdapter<String> myAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
                     progressDialog.dismiss();
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                     listView.setAdapter(myAdapter);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             listView.setOnItemClickListener(new DoubleClickListener() {
                 @Override
                 protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
-                    final String order =  orderList.get(parent.getItemAtPosition(position));
+                    final String order = orderList.get(parent.getItemAtPosition(position));
 
                     toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                         @Override
@@ -130,23 +130,21 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
-                    String order =  orderList.get(parent.getItemAtPosition(position));
+                    String order = orderList.get(parent.getItemAtPosition(position));
                     Intent intent = new Intent(MainActivity.this, OrderCreation.class);
-                    intent.putExtra("ORDER_ID",order);
-                    intent.putExtra("COMPANY_ID",companyID);
-                    intent.putExtra("PROJECT_ID",projectIDs.get(position));
-                    intent.putExtra("USER",user);
+                    intent.putExtra("ORDER_ID", order);
+                    intent.putExtra("COMPANY_ID", companyID);
+                    intent.putExtra("PROJECT_ID", projectIDs.get(position));
+                    intent.putExtra("USER", user);
                     finish();
                     startActivity(intent);
                 }
             });
 
 
-
-
-        } else if (user.getPosition().equals(Position.ACCOUNTANT)){
+        } else if (user.getPosition().equals(Position.ACCOUNTANT)) {
             finish();
-            startActivity(new Intent(MainActivity.this,AccountantActivity.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user));
+            startActivity(new Intent(MainActivity.this, AccountantActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else {
             /**
              *  if logged in user is not a worker or a team leader
@@ -192,9 +190,9 @@ public class MainActivity extends AppCompatActivity
                 protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
                     Project project = (Project) parent.getItemAtPosition(position);
                     Intent intent = new Intent(MainActivity.this, SingleProjectHomeActivity.class);
-                    intent.putExtra("PROJECT",project);
-                    intent.putExtra("COMPANY_ID",companyID);
-                    intent.putExtra("USER",user);
+                    intent.putExtra("PROJECT", project);
+                    intent.putExtra("COMPANY_ID", companyID);
+                    intent.putExtra("USER", user);
                     finish();
                     startActivity(intent);
                 }
@@ -202,14 +200,17 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
     private Boolean exit = false;
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
 
-        } if (exit) {
+        }
+        if (exit) {
             finish(); // finish activity
         } else {
             Toast.makeText(this, "Press Back again to Exit.",
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity
             }, 3 * 1000);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -263,16 +265,19 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             finish();
-            startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",companyID));
+            startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_account) {
             finish();
-            startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER",user).putExtra("COMPANY_ID",companyID));
+            startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+        } else if (id == R.id.nav_company) {
+            finish();
+            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_project) {
             finish();
-            startActivity(new Intent(MainActivity.this,ProjectActivity.class).putExtra("COMPANY_ID" ,companyID).putExtra("USER",user));
-        }else if (id==R.id.nav_order){
+            startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+        } else if (id == R.id.nav_order) {
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID" ,companyID).putExtra("PROJECT_ID","TO BE OVERWRITTEN").putExtra("USER",user));
+            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("PROJECT_ID", "TO BE OVERWRITTEN").putExtra("USER", user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
