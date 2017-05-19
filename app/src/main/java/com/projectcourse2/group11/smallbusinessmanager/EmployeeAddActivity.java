@@ -121,7 +121,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
                                 if (task.isSuccessful()) {
 
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    String UID = user.getUid();
+                                    String UID = user.getUid().toString();
 
                                     Manager owner = new Manager(SSN, firstName, lastName, email, phone, UID);
 
