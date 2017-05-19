@@ -3,6 +3,7 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +33,8 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
  * Created by Phil on 5/18/2017.
  */
 
-public class EmployeeActivity extends AppCompatActivity {
-    private Button addEmployeeButton;
+public class EmployeeActivity extends AppCompatActivity implements View.OnClickListener {
+    private FloatingActionButton fab;
     private ListView listView;
 
     ListAdapter mAdapter;
@@ -61,7 +62,9 @@ public class EmployeeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_employees);
 
-        //listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -91,5 +94,13 @@ public class EmployeeActivity extends AppCompatActivity {
         };
         progressDialog.dismiss();
         listView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == fab){
+            finish();
+            startActivity(new Intent(EmployeeActivity.this, EmployeeAddActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
+        }
     }
 }

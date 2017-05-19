@@ -25,7 +25,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <ListView
-            android:id="@+id/listViewF"
+            android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_alignParentTop="true"
@@ -36,16 +36,16 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/listViewF"
+            android:layout_below="@+id/listView"
             android:layout_marginTop="16dp"
-            android:layout_toStartOf="@+id/listViewF"
+            android:layout_toStartOf="@+id/listView"
             android:text="@string/viewProjects" />
 
         <ListView
             android:id="@+id/listView2"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_alignStart="@+id/listViewF"
+            android:layout_alignStart="@+id/listView"
             android:layout_alignTop="@+id/button2" />
 
         <Button

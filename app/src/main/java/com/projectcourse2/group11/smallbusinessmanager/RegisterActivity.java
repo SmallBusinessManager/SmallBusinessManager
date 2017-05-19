@@ -102,7 +102,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         progressDialog.show();
 
 
-        // Register New Company Account & Owner Account
+        /** Register New Company Account & Owner Account **/
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
