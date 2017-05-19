@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ import java.util.StringTokenizer;
 public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FloatingActionButton fab;
+    private ImageView folder;
     //private ListView listView;
     // private ListAdapter mAdapter;
 
@@ -66,56 +68,34 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog.show();
 
         listView = (ListView) findViewById(R.id.listView);
+        folder = (ImageView) findViewById(R.id.folder);
+        folder.setOnClickListener(this);
 
-
-            project=(Project) getIntent().getSerializableExtra("PROJECT");
+        if (getIntent() != null) {
+            project = (Project) getIntent().getSerializableExtra("PROJECT");
             projectUID = project.getId();
             projectName = project.getName();
             companyID = getIntent().getStringExtra("COMPANY_ID");
-            user = (Person)getIntent().getSerializableExtra("USER");
+            user = (Person) getIntent().getSerializableExtra("USER");
             this.setTitle(projectName);
+        }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
-
-        //// TODO: 08/05/2017 get company(wait for company register to finish)
         ref = FirebaseDatabase.getInstance().getReference();
 
-/*
-        //// TODO: 09/05/2017 listview of tasks
-         //listView = (ListView) findViewById(R.id.listView);
-        mAdapter = new FirebaseListAdapter<String>(
-                this,
-                String.class,
-                android.R.layout.simple_list_item_1,
-                ref) {
-            @Override
-            protected String parseSnapshot(DataSnapshot snapshot) {
-                return snapshot.child("name").getValue(String.class);
-            }
-
-            @Override
-            protected void populateView(View v, String model, final int position) {
-                TextView textView = (TextView) v.findViewById(android.R.id.text1);
-                textView.setText(model);
-                Log.d("TAG",model);
-            }
-
-        };
-        listView.setAdapter(mAdapter);*/
-
-        final ValueEventListener listener  = new ValueEventListener(){
+        final ValueEventListener listener = new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 orderList = new HashMap<>();
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    if (ds.child("projectID").getValue(String.class).equals(projectUID)){
-                        orderList.put(ds.child("description").getValue(String.class),ds.getKey());
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                        orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                     }
                 }
-                myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this,android.R.layout.simple_list_item_single_choice,new ArrayList<>(orderList.keySet()));
+                myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
                 listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                 listView.setAdapter(myAdapter);
                 progressDialog.dismiss();
@@ -134,27 +114,27 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyWorkOrders").child(companyID);
         mAdapter = new FirebaseListAdapter<Order>(
-                SingleProjectHomeActivity.this,
-                Order.class,
-                android.R.layout.simple_list_item_single_choice,
-                ref) {
-            @Override
-            protected void populateView(View v, Order model, int position) {
-                if(model.getProjectID().equals(projectUID)) {
-                    TextView textView = (TextView) v.findViewById(android.R.id.text1);
-                    textView.setText(model.getDescription());
-                } else {
+        SingleProjectHomeActivity.this,
+        Order.class,
+        android.R.layout.simple_list_item_single_choice,
+        ref) {
+        @Override protected void populateView(View v, Order model, int position) {
+        if(model.getProjectID().equals(projectUID)) {
+        TextView textView = (TextView) v.findViewById(android.R.id.text1);
+        textView.setText(model.getDescription());
+        } else {
 
-                }
-            }
+        }
+        }
         };
 
         progressDialog.dismiss();
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setAdapter(mAdapter);
-        */
+         */
         listView.setOnItemClickListener(new DoubleClickListener() {
             String selectedOrderId;
+
             @Override
             protected void onSingleClick(final AdapterView<?> parent, final View v, final int position, long id) {
                 selectedOrderId = orderList.get(parent.getItemAtPosition(position));
@@ -177,13 +157,13 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
                 intent.putExtra("ORDER_ID", selectedOrderId);
                 intent.putExtra("COMPANY_ID", companyID);
-                intent.putExtra("PROJECT",project);
-                intent.putExtra("USER",user);
+                intent.putExtra("PROJECT", project);
+                intent.putExtra("USER", user);
                 finish();
                 startActivity(intent);
             }
         });
-        }
+    }
 
 
     @Override
@@ -203,13 +183,13 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     break;
                 case R.id.nav_edit_project:
                     Intent intent = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
-                    intent.putExtra("PROJECT",project);
+                    intent.putExtra("PROJECT", project);
                     intent.putExtra("COMPANY_ID", companyID);
                     intent.putExtra("USER", user);
                     finish();
                     startActivity(intent);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             //
         }
         return true;
@@ -219,7 +199,11 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         if (v == fab) {
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID",companyID).putExtra("USER",user).putExtra("PROJECT",project));
+            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user).putExtra("PROJECT", project));
+        }
+        if (v == folder) {
+            //pass projectuid
+            //open fileListActivity
         }
     }
 
