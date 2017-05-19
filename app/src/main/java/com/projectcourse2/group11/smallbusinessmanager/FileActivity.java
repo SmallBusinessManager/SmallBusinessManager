@@ -4,12 +4,8 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,30 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
-
-import java.io.File;
-import java.io.IOException;
-
-import static com.projectcourse2.group11.smallbusinessmanager.R.id.imageView;
 
 public class FileActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
@@ -80,14 +57,15 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         fab = (FloatingActionButton) findViewById(R.id.fabF);
         fab.setOnClickListener(this);
 
+        /*
         Log.d("hehe","before refs");
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(DATABASE_PATH);
 
 
-     /*   dialog = new ProgressDialog(this);
+        dialog = new ProgressDialog(this);
         dialog.setMessage("Please wait loading file...");
-        dialog.show();*/
+        dialog.show();
 
         FirebaseListAdapter<FileUpload> adapter = new FirebaseListAdapter<FileUpload>(
                 FileActivity.this,
@@ -142,6 +120,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         Log.d("hehe","after itemClickListener");
+        */
     }
 
 

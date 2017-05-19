@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -49,14 +50,16 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
 
         browse = (Button) findViewById(R.id.browse);
         upload = (Button) findViewById(R.id.upload);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageViewA);
         fileName = (EditText) findViewById(R.id.fileName);
 
+        Log.d("hehe", "findviewbyid");
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(DATABASE_PATH);
 
         browse.setOnClickListener(this);
         upload.setOnClickListener(this);
+        Log.d("hehe", "set onclickListener");
 
     }
 
@@ -68,39 +71,50 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             intent.setType("*/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "select file"), REQUEST_CODE);
+            Log.d("hehe", "browse clicked");
         }
         if (v == upload) {
             if (fileUri != null) {
+                Log.d("hehe", fileUri.toString());
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Uploading file");
                 progressDialog.show();
 
-                StorageReference ref = mStorageRef.child(STORAGE_PATH + System.currentTimeMillis() + "." + getImageExt(fileUri));
+                Log.d("hehe", "dialog shown");
+
+
+                Log.d("hehe", String.valueOf(System.currentTimeMillis()));
+                Log.d("hehe", getFileExt(fileUri));
+                StorageReference ref = mStorageRef.child(STORAGE_PATH+System.currentTimeMillis() + "." + getFileExt(fileUri));
+                Log.d("hehe", "after getImageExt");
                 ref.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressDialog.dismiss();
-                        Toast.makeText(AddFileActivity.this,"File uploaded",Toast.LENGTH_SHORT).show();
-                        FileUpload imageUpload=new FileUpload(fileName.getText().toString(),taskSnapshot.getDownloadUrl().toString());
-                        String uploadID=mDatabaseRef.push().getKey();
-                        mDatabaseRef.child(uploadID).setValue(imageUpload);
+                        Log.d("hehe", "success");
+                        //progressDialog.dismiss();
+                        Toast.makeText(AddFileActivity.this, "File uploaded", Toast.LENGTH_SHORT).show();
+                        FileUpload fileUpload = new FileUpload(fileName.getText().toString(), taskSnapshot.getDownloadUrl().toString());
+                        String uploadID = mDatabaseRef.push().getKey();
+                        mDatabaseRef.child(uploadID).setValue(fileUpload);
+                        Log.d("hehe", "success");
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(AddFileActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                        // progressDialog.dismiss();
+                        Toast.makeText(AddFileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress=(100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                        progressDialog.setMessage("Uploaded"+(int)progress+"%");
+                        Log.d("hehe", "onProgress");
+                        double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressDialog.setMessage("Uploaded" + (int) progress + "%");
                     }
                 });
-            }else {
-                Toast.makeText(AddFileActivity.this,"Please select File",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AddFileActivity.this, "Please select File", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -119,7 +133,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public String getImageExt(Uri uri) {
+    private String getFileExt(Uri uri) {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
