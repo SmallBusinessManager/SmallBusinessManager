@@ -1,27 +1,18 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -64,7 +55,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Log.d("hehe","getIntent()");
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listViewF);
         fab = (FloatingActionButton) findViewById(R.id.fabF);
         fab.setOnClickListener(this);
 
