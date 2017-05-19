@@ -13,10 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,7 +58,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog.setMessage("Loading orders");
         progressDialog.show();
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listViewF);
 
         if (getIntent() != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
