@@ -1,5 +1,6 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.accounts.Account;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,10 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Accountant;
 import com.projectcourse2.group11.smallbusinessmanager.model.Company;
 import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 import com.projectcourse2.group11.smallbusinessmanager.model.Manager;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.TeamLeader;
 import com.projectcourse2.group11.smallbusinessmanager.model.User;
 import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
 
@@ -55,6 +58,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
     private ProgressDialog progressDialog;
 
     private String companyID;
+    private String pos;
 
     private Person person;
 
@@ -65,7 +69,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    protected void onCreate(Bundle savedInstance){
+    protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
 
         setContentView(R.layout.activity_employee_add);
@@ -93,40 +97,60 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
         companyID = getIntent().getStringExtra("COMPANY_ID");
         person = (Person) getIntent().getSerializableExtra("USER");
 
+        positionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = (RadioButton) findViewById(checkedId);
+                pos = checkedRadioButton.getText().toString();
+                Toast.makeText(getApplicationContext(), pos, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        if (v == addButton){
+        if (v == addButton) {
             databaseReference.child("companyEmployees").child(companyID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (firstNameText != null && lastNameText != null && socialText != null && emailText != null && phoneText != null){
+                    if (firstNameText != null && lastNameText != null && socialText != null && emailText != null && phoneText != null) {
                         //TODO Assign employee a UID and add to database
-                        final String SSN = socialText.toString();
-                        final String firstName = firstNameText.toString();
-                        final String lastName = lastNameText.toString();
-                        final String email = emailText.toString();
-                        final String phone = phoneText.toString();
-                        final String password = passwordText.toString();
-
-                        int radioClick = positionGroup.getCheckedRadioButtonId();
-
+                        final String SSN = socialText.getText().toString();
+                        final String firstName = firstNameText.getText().toString();
+                        final String lastName = lastNameText.getText().toString();
+                        final String email = emailText.getText().toString();
+                        final String phone = phoneText.getText().toString();
+                        final String password = passwordText.getText().toString();
 
 
                         /** Create new employee account **/
-                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(EmployeeAddActivity.this,new OnCompleteListener<AuthResult>() {
+                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
 
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    String UID = user.getUid().toString();
+                                    String UID = user.getUid();
 
-                                    Manager owner = new Manager(SSN, firstName, lastName, email, phone, UID);
-
-                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                    databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(owner);
+                                    switch (pos) {
+                                        case "Worker":
+                                            Worker worker = new Worker(SSN, firstName, lastName, email, phone, UID);
+                                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(worker);
+                                        case "Team Leader":
+                                            TeamLeader teamLead = new TeamLeader(SSN, firstName, lastName, email, phone, UID);
+                                            databaseReference = FirebaseDatabase.getInstance().getReference();
+                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(teamLead);
+                                        case "Accountant":
+                                            Accountant accountant = new Accountant(SSN, firstName, lastName, email, phone, UID, null, 10);
+                                            databaseReference = FirebaseDatabase.getInstance().getReference();
+                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(accountant);
+                                        case "Manager":
+                                            Manager manager = new Manager(SSN, firstName, lastName, email, phone, UID);
+                                            databaseReference = FirebaseDatabase.getInstance().getReference();
+                                            databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(manager);
+                                    }
 
                                     Toast.makeText(EmployeeAddActivity.this, "Employee Added Successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(EmployeeAddActivity.this, EmployeeActivity.class);
@@ -134,7 +158,6 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
                                 } else {
                                     Toast.makeText(EmployeeAddActivity.this, "Employee Could Not Be Added", Toast.LENGTH_LONG).show();
                                 }
-                                progressDialog.dismiss();
                             }
                         });
 
