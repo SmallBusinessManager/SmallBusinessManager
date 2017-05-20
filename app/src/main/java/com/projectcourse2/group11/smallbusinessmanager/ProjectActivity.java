@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
+import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -34,6 +36,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressDialog progressDialog;
     private String companyID;
     private Person user;
+    private Project selectedProject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
                 final Project project = (Project) parent.getItemAtPosition(position);
+                selectedProject = project;
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -91,6 +95,21 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                                 FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
                                 ref.child(project.getId()).removeValue();
                             }
+                        }
+                        if (item.getItemId()==R.id.nav_edit_project){
+                            Intent i = new Intent(ProjectActivity.this, ProjectCreatActivity.class);
+                            if (selectedProject!=null) {
+                                i.putExtra("PROJECT", selectedProject);
+                            }else if (mAdapter.getItem(0)!=null) {
+                                selectedProject = (Project) mAdapter.getItem(0);
+                                i.putExtra("PROJECT", selectedProject);
+                            }else {
+                                i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
+                            }
+                            i.putExtra("COMPANY_ID", companyID);
+                            i.putExtra("USER", user);
+                            finish();
+                            startActivity(i);
                         }
                         return true;
                     }
@@ -170,6 +189,22 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 };
                 listView.setAdapter(mnAdapter);
+                break;
+            case R.id.nav_edit_project:
+//                Intent i = new Intent(ProjectActivity.this, ProjectCreatActivity.class);
+//                if (selectedProject!=null) {
+//                    i.putExtra("PROJECT", selectedProject);
+//                }else if (mAdapter.getItem(0)!=null) {
+//                    selectedProject = (Project) mAdapter.getItem(0);
+//                    i.putExtra("PROJECT", selectedProject);
+//                }else {
+//                    i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
+//                }
+//                i.putExtra("COMPANY_ID", companyID);
+//                i.putExtra("USER", user);
+//                finish();
+//                startActivity(i);
+                Toast.makeText(this, "You must select a project!", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;

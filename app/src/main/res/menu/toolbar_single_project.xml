@@ -10,9 +10,9 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
-        android:id="@+id/nav_edit_project"
+        android:id="@+id/nav_edit_task"
         android:icon="@drawable/ic_mode_edit_white_36dp"
-        android:title="Edit Project"
+        android:title="Edit Task"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/nav_reorder_task"

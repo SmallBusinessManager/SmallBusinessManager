@@ -44,7 +44,8 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     private Person user;
     private Project project;
     private ArrayAdapter<String> myAdapter;
-    private boolean sorted=false;
+    private boolean sorted = false;
+    private String selectedOrderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
         listView = (ListView) findViewById(R.id.listViewF);
 
-        if (getIntent().getSerializableExtra("PROJECT")!=null) {
+        if (getIntent().getSerializableExtra("PROJECT") != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
             projectUID = project.getId();
             projectName = project.getName();
@@ -98,7 +99,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             reference.child("companyWorkOrders").child(companyID).addValueEventListener(listener);
 
-        }else {
+        } else {
             companyID = getIntent().getStringExtra("COMPANY_ID");
             user = (Person) getIntent().getSerializableExtra("USER");
             this.setTitle("All tasks");
@@ -112,7 +113,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     orderList = new HashMap<>();
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                        orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                     }
                     myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -153,7 +154,6 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         listView.setAdapter(mAdapter);
          */
         listView.setOnItemClickListener(new DoubleClickListener() {
-            String selectedOrderId;
 
             @Override
             protected void onSingleClick(final AdapterView<?> parent, final View v, final int position, long id) {
@@ -166,6 +166,23 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                             ref.child(selectedOrderId).removeValue();
 
                         }
+                        if (item.getItemId()==R.id.nav_edit_task){
+                            Intent i = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
+                            if (selectedOrderId != null) {
+                                i.putExtra("ORDER_ID", selectedOrderId);
+                            } else if (listView.getItemAtPosition(0) != null) {
+                                selectedOrderId = orderList.get(listView.getItemAtPosition(0));
+                            }
+                            if (project != null) {
+                                i.putExtra("PROJECT", project);
+                            } else {
+                                i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01, 01, 2017), new Date(12, 12, 20017)));
+                            }
+                            i.putExtra("COMPANY_ID", companyID);
+                            i.putExtra("USER", user);
+                            finish();
+                            startActivity(i);
+                        }
                         return true;
                     }
                 });
@@ -173,14 +190,14 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
             @Override
             protected void onDoubleClick(AdapterView<?> parent, View v, int position, long id) {
-                String selectedOrderId = orderList.get(parent.getItemAtPosition(position));
+                String selectedOrder = orderList.get(parent.getItemAtPosition(position));
                 Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
-                intent.putExtra("ORDER_ID", selectedOrderId);
+                intent.putExtra("ORDER_ID", selectedOrder);
                 intent.putExtra("COMPANY_ID", companyID);
-                if (project!=null) {
+                if (project != null) {
                     intent.putExtra("PROJECT", project);
-                }else {
-                    intent.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
+                } else {
+                    intent.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01, 01, 2017), new Date(12, 12, 20017)));
 
                 }
                 intent.putExtra("USER", user);
@@ -191,50 +208,70 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     }
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    if (project!=null) {
+                    if (project != null) {
                         Intent intent = new Intent(SingleProjectHomeActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
                         intent.putExtra("COMPANY_ID", companyID);
                         intent.putExtra("USER", user);
                         finish();
                         startActivity(intent);
                         break;
-                    }else {
+                    } else {
                         Intent intent = getIntent();
-                        intent.setClass(SingleProjectHomeActivity.this,MainActivity.class);
+                        intent.setClass(SingleProjectHomeActivity.this, MainActivity.class);
                         finish();
                         startActivity(intent);
                         break;
                     }
-                case R.id.nav_edit_project:
-                    Intent i = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
-                    i.putExtra("PROJECT", project);
-                    i.putExtra("COMPANY_ID", companyID);
-                    i.putExtra("USER", user);
-                    finish();
-                    startActivity(i);
-                    break;
+                case R.id.nav_edit_task:
+//                    Intent i = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
+//                    if (selectedOrderId != null) {
+//                        i.putExtra("ORDER_ID", selectedOrderId);
+//                    } else if (listView.getItemAtPosition(0) != null) {
+//                        selectedOrderId = orderList.get(listView.getItemAtPosition(0));
+//                    }
+//                    if (project != null) {
+//                        i.putExtra("PROJECT", project);
+//                    } else {
+//                        i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01, 01, 2017), new Date(12, 12, 20017)));
+//                    }
+//                    i.putExtra("COMPANY_ID", companyID);
+//                    i.putExtra("USER", user);
+//                    finish();
+//                    startActivity(i);
+                    Toast.makeText(this, "You must select a task.", Toast.LENGTH_SHORT).show();
+                      break;
                 case R.id.nav_reorder_task:
                     final ValueEventListener listener = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            orderList = new HashMap<>();
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                            if (projectUID != null) {
+                                orderList = new HashMap<>();
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                                        orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                                    }
+                                }
+                                myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                                listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                                listView.setAdapter(myAdapter);
+                                progressDialog.dismiss();
+                            } else {
+                                orderList = new HashMap<>();
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                                 }
+                                myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                                listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                                listView.setAdapter(myAdapter);
+                                progressDialog.dismiss();
                             }
-                            myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
-                            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                            listView.setAdapter(myAdapter);
-                            progressDialog.dismiss();
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
@@ -243,11 +280,11 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                     if (sorted) {
                         reference.child("companyWorkOrders").child(companyID).orderByChild("description").addValueEventListener(listener);
-                        sorted=false;
+                        sorted = false;
                         break;
-                    }else {
+                    } else {
                         reference.child("companyWorkOrders").child(companyID).orderByChild("status").addValueEventListener(listener);
-                        sorted=true;
+                        sorted = true;
                         break;
                     }
 
@@ -261,27 +298,27 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     @Override
     public void onClick(View v) {
         if (v == fab) {
-            Intent intent =new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user);
-            if (project!=null) {
+            Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user);
+            if (project != null) {
                 intent.putExtra("PROJECT", project);
-            }else {
-                intent.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
-
+            } else {
+                intent.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01, 01, 2017), new Date(12, 12, 20017)));
             }
             finish();
             startActivity(intent);
         }
     }
+
     @Override
     public void onBackPressed() {
-        if (project!=null) {
+        if (project != null) {
             Intent intent = getIntent();
             intent.setClass(SingleProjectHomeActivity.this, SPChooseActivity.class);
             finish();
             startActivity(intent);
-        }else {
+        } else {
             Intent intent = getIntent();
-            intent.setClass(SingleProjectHomeActivity.this,MainActivity.class);
+            intent.setClass(SingleProjectHomeActivity.this, MainActivity.class);
             finish();
             startActivity(intent);
         }
@@ -290,8 +327,8 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_single_project, menu);
-        MenuItem item=menu.findItem(R.id.nav_search_task);
-        SearchView searchView=(SearchView) item.getActionView();
+        MenuItem item = menu.findItem(R.id.nav_search_task);
+        SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -304,16 +341,27 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         orderList = new HashMap<>();
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                        if (projectUID != null) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                                    orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                                }
+                            }
+                            myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                            listView.setAdapter(myAdapter);
+                            progressDialog.dismiss();
+                        } else {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                             }
+                            myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                            listView.setAdapter(myAdapter);
+                            progressDialog.dismiss();
                         }
-                        myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
-                        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                        listView.setAdapter(myAdapter);
-                        progressDialog.dismiss();
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();

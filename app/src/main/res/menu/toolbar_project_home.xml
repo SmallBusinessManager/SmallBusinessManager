@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="false">
 
+    <item
+        android:id="@+id/nav_edit_project"
+        android:icon="@drawable/ic_mode_edit_white_36dp"
+        android:title="Edit Project"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/nav_search_project"
         android:icon="@drawable/ic_search_white_36dp"
