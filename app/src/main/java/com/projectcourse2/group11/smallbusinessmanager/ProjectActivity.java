@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +50,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading projects");
         progressDialog.show();
-        listView = (ListView) findViewById(R.id.listViewF);
+        listView = (ListView) findViewById(R.id.listViewSP);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
