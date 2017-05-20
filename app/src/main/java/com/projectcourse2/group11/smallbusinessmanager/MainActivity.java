@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
         emailHeader.setText(user.getEmail());
+        MenuItem orderItem = (MenuItem)findViewById(R.id.nav_order);
 
         /**
          * If the logged in user is a worker or a team leader
@@ -276,7 +277,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else if (id == R.id.nav_order) {
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("PROJECT_ID", "TO BE OVERWRITTEN").putExtra("USER", user));
+            startActivity(new Intent(MainActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

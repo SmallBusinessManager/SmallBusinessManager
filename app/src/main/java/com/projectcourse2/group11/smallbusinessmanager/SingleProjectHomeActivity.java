@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
@@ -57,46 +58,76 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading orders");
         progressDialog.show();
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.listViewF);
 
-        if (getIntent() != null) {
+        if (getIntent().getSerializableExtra("PROJECT")!=null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
             projectUID = project.getId();
             projectName = project.getName();
             companyID = getIntent().getStringExtra("COMPANY_ID");
             user = (Person) getIntent().getSerializableExtra("USER");
             this.setTitle(projectName);
-        }
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(this);
 
-        ref = FirebaseDatabase.getInstance().getReference();
+            ref = FirebaseDatabase.getInstance().getReference();
 
-        final ValueEventListener listener = new ValueEventListener() {
+            final ValueEventListener listener = new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                orderList = new HashMap<>();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
-                        orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    orderList = new HashMap<>();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.child("projectID").getValue(String.class).equals(projectUID)) {
+                            orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                        }
                     }
+                    myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                    listView.setAdapter(myAdapter);
+                    progressDialog.dismiss();
                 }
-                myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
-                listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                listView.setAdapter(myAdapter);
-                progressDialog.dismiss();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
-            }
-        };
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("companyWorkOrders").child(companyID).addValueEventListener(listener);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
+                }
+            };
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            reference.child("companyWorkOrders").child(companyID).addValueEventListener(listener);
+
+        }else {
+            companyID = getIntent().getStringExtra("COMPANY_ID");
+            user = (Person) getIntent().getSerializableExtra("USER");
+            this.setTitle("All tasks");
+
+
+            ref = FirebaseDatabase.getInstance().getReference();
+
+            final ValueEventListener listener = new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    orderList = new HashMap<>();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            orderList.put(ds.child("description").getValue(String.class), ds.getKey());
+                    }
+                    myAdapter = new ArrayAdapter<>(SingleProjectHomeActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
+                    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                    listView.setAdapter(myAdapter);
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(SingleProjectHomeActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
+                }
+            };
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            reference.child("companyWorkOrders").child(companyID).addValueEventListener(listener);
+        }
         /**
          * @deprecated  !!!No longer needed
          * There is no filtering, it creates a row for each order in the database even if its not displayed
@@ -146,7 +177,12 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                 Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
                 intent.putExtra("ORDER_ID", selectedOrderId);
                 intent.putExtra("COMPANY_ID", companyID);
-                intent.putExtra("PROJECT", project);
+                if (project!=null) {
+                    intent.putExtra("PROJECT", project);
+                }else {
+                    intent.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
+
+                }
                 intent.putExtra("USER", user);
                 finish();
                 startActivity(intent);
@@ -162,12 +198,20 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         try {
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    Intent intent = new Intent(SingleProjectHomeActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
-                    intent.putExtra("COMPANY_ID", companyID);
-                    intent.putExtra("USER", user);
-                    finish();
-                    startActivity(intent);
-                    break;
+                    if (project!=null) {
+                        Intent intent = new Intent(SingleProjectHomeActivity.this, SPChooseActivity.class).putExtra("PROJECT", project);
+                        intent.putExtra("COMPANY_ID", companyID);
+                        intent.putExtra("USER", user);
+                        finish();
+                        startActivity(intent);
+                        break;
+                    }else {
+                        Intent intent = getIntent();
+                        intent.setClass(SingleProjectHomeActivity.this,MainActivity.class);
+                        finish();
+                        startActivity(intent);
+                        break;
+                    }
                 case R.id.nav_edit_project:
                     Intent i = new Intent(SingleProjectHomeActivity.this, ProjectCreatActivity.class);
                     i.putExtra("PROJECT", project);
@@ -217,16 +261,30 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     @Override
     public void onClick(View v) {
         if (v == fab) {
+            Intent intent =new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user);
+            if (project!=null) {
+                intent.putExtra("PROJECT", project);
+            }else {
+                intent.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
+
+            }
             finish();
-            startActivity(new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user).putExtra("PROJECT", project));
+            startActivity(intent);
         }
     }
     @Override
     public void onBackPressed() {
-        Intent intent = getIntent();
-        intent.setClass(SingleProjectHomeActivity.this,SPChooseActivity.class);
-        finish();
-        startActivity(intent);
+        if (project!=null) {
+            Intent intent = getIntent();
+            intent.setClass(SingleProjectHomeActivity.this, SPChooseActivity.class);
+            finish();
+            startActivity(intent);
+        }else {
+            Intent intent = getIntent();
+            intent.setClass(SingleProjectHomeActivity.this,MainActivity.class);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
