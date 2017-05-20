@@ -100,6 +100,8 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
         person = (Person) getIntent().getSerializableExtra("USER");
 
         pos = "Worker";
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Registering...");
 
         positionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -124,7 +126,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
             final String password = passwordText.getText().toString();
 
             if (firstNameText != null && lastNameText != null && socialText != null && emailText != null && phoneText != null) {
-                final String token = FirebaseAuth.getInstance().getCurrentUser().getToken(true).toString();
+                progressDialog.show();
                 /** Create new employee account **/
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -157,7 +159,6 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
                                             databaseReference.child("companyEmployees").child(companyID).child(UID).setValue(manager);
                                             break;
                                     }
-                                    FirebaseAuth.getInstance().signInWithCustomToken(token);
                                     Toast.makeText(EmployeeAddActivity.this, "Employee Added Successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = getIntent();
                                     intent.setClass(EmployeeAddActivity.this, EmployeeActivity.class);
@@ -167,6 +168,7 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
                                 } else {
                                     Toast.makeText(EmployeeAddActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
+                                progressDialog.dismiss();
 
                             }
                         });
