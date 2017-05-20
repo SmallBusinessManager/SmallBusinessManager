@@ -58,9 +58,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private CheckBox saveLoginCheckBox;
-    private String  email,password;
+    private String email, password;
     // TODO Change to FirebaseSimpleLogin Object if we have time to ensure authentication
-    SharedPreferences preferences ;
+    SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
 
@@ -135,22 +135,22 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                         company = d.getRef().getParent().getKey();
                                         Position pos = d.child("position").getValue(Position.class);
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        switch (pos){
+                                        switch (pos) {
                                             case ACCOUNTANT:
                                                 Accountant accountant = d.getValue(Accountant.class);
-                                                intent.putExtra("USER",accountant);
+                                                intent.putExtra("USER", accountant);
                                                 break;
                                             case MANAGER:
                                                 Manager manager = d.getValue(Manager.class);
-                                                intent.putExtra("USER",manager);
+                                                intent.putExtra("USER", manager);
                                                 break;
                                             case TEAM_LEADER:
                                                 TeamLeader teamLeader = d.getValue(TeamLeader.class);
-                                                intent.putExtra("USER",teamLeader);
+                                                intent.putExtra("USER", teamLeader);
                                                 break;
                                             case WORKER:
                                                 Worker worker = d.getValue(Worker.class);
-                                                intent.putExtra("USER",worker);
+                                                intent.putExtra("USER", worker);
                                                 break;
                                             default:
                                                 Toast.makeText(LoginActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
@@ -167,8 +167,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 }
                             }
                         }
-
-
 
 
                         @Override
@@ -196,11 +194,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         }
         if (v == mEmailSignInButton) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
             if (saveLoginCheckBox.isChecked()) {
                 editor.putBoolean("saveLogin", true);
-                editor.putString("username",mEmailView.getText().toString() );
+                editor.putString("username", mEmailView.getText().toString());
                 editor.putString("password", mPasswordView.getText().toString());
                 editor.apply();
             } else {
