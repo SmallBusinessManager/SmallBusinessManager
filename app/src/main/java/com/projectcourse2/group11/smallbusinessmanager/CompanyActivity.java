@@ -72,6 +72,12 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
         currentUser = firebaseAuth.getCurrentUser();
         companyID = getIntent().getStringExtra("COMPANY_ID");
         person = (Person) getIntent().getSerializableExtra("USER");
+        if (person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER)){
+            saveButton.setText(R.string.ok);
+            nameText.setEnabled(false);
+            addressText.setEnabled(false);
+            cityText.setEnabled(false);
+        }
 
         databaseReference.child("company").addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,6 +111,10 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v == saveButton) {
             saveCompanyInfo();
+            Intent intent =getIntent();
+            intent.setClass(CompanyActivity.this,MainActivity.class);
+            finish();
+            startActivity(intent);
         }
         if (v == manageButton) {
             Intent intent = new Intent(CompanyActivity.this, EmployeeActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID);
@@ -116,9 +126,13 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
 
     private void saveCompanyInfo() {
         //TODO Save Company Address to correct Document
-        DatabaseReference ref = databaseReference.child("company").child(companyID);
-        ref.child("companyName").setValue(nameText.getText().toString());
-        ref.child("address").setValue(addressText.getText().toString());
-        ref.child("city").setValue(cityText.getText().toString());
+        if (person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER)) {
+            //DO NOTHING
+        }else {
+            DatabaseReference ref = databaseReference.child("company").child(companyID);
+            ref.child("companyName").setValue(nameText.getText().toString());
+            ref.child("address").setValue(addressText.getText().toString());
+            ref.child("city").setValue(cityText.getText().toString());
+        }
     }
 }

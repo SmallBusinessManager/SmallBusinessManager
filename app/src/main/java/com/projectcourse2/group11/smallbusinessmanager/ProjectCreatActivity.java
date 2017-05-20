@@ -198,6 +198,7 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void saveToDatabase() {
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company);
         String projectName = etProjectName.getText().toString();
         String projectDescription = etProjectDescription.getText().toString();
@@ -215,15 +216,18 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void saveEditProject() {
-        FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).removeEventListener(listener);
-        project.setName(etProjectName.getText().toString());
-        project.setDescription(etProjectDescription.getText().toString());
-        if (startDate != null) {
-            project.setStartDate(startDate);
+        if (user.getPosition().equals(Position.WORKER)&&(!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))) {
+            return;
         }
-        if (endDate != null) {
-            project.setDueDate(endDate);
-        }
-        FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(project.getId()).setValue(project);
+            FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).removeEventListener(listener);
+            project.setName(etProjectName.getText().toString());
+            project.setDescription(etProjectDescription.getText().toString());
+            if (startDate != null) {
+                project.setStartDate(startDate);
+            }
+            if (endDate != null) {
+                project.setDueDate(endDate);
+            }
+            FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(project.getId()).setValue(project);
     }
 }

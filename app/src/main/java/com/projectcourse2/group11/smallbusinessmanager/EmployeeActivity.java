@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.User;
 
 /**
@@ -85,6 +86,10 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
         };
         progressDialog.dismiss();
         listView.setAdapter(mAdapter);
+        if (person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER)) {
+            fab.hide();
+            fab.setEnabled(false);
+        }
     }
 
     @Override
