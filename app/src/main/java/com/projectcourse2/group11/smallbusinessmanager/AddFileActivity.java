@@ -92,7 +92,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
                 progressDialog.setTitle("Uploading file");
                 progressDialog.show();
 
-                StorageReference ref = mStorageRef.child("projectFiles").child(project.getId()+System.currentTimeMillis() + "." + getFileExt(fileUri));
+                StorageReference ref = mStorageRef.child("projectFiles").child(project.getId()).child(fileName.getText().toString() + "." + getFileExt(fileUri));
                 ref.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

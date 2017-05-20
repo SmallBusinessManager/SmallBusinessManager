@@ -1,9 +1,11 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
+import com.google.firebase.storage.FirebaseStorage;
 import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
@@ -41,7 +44,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_home);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarP);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,16 +53,14 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading projects");
         progressDialog.show();
-        listView = (ListView) findViewById(R.id.listViewSP);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        listView = (ListView) findViewById(R.id.listViewP);
+        fab = (FloatingActionButton) findViewById(R.id.fabP);
         fab.setOnClickListener(this);
 
         if (getIntent() != null) {
             user = (Person) getIntent().getSerializableExtra("USER");
             companyID = getIntent().getStringExtra("COMPANY_ID");
         }
-
-
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
         mAdapter = new FirebaseListAdapter<Project>(
@@ -88,22 +89,43 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.nav_delete_project) {
-                            if (user.getPosition().equals(Position.WORKER)&&(!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))){
-                                Toast.makeText(ProjectActivity.this, "No.", Toast.LENGTH_SHORT).show();
-                            }else {
-                                FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
-                                ref.child(project.getId()).removeValue();
-                            }
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ProjectActivity.this);
+                            builder.setTitle("Confirmation Required");
+                            builder.setMessage("Are you sure you want to delete " + selectedProject.getName())
+                                    .setCancelable(false)
+                                    .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                            if (user.getPosition().equals(Position.WORKER) && (!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))) {
+                                                Toast.makeText(ProjectActivity.this, "No privilege to delete this project.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                FirebaseDatabase.getInstance().getReference().child("projectOrders").child(project.getId()).removeValue();
+                                                ref.child(project.getId()).removeValue();
+                                                FirebaseDatabase.getInstance().getReference().child("projectFiles").child(project.getId()).removeValue();
+                                                // FirebaseStorage.getInstance().getReference().child("projectFiles").child(project.getId()).delete();
+                                                //// TODO: delete Firebase storage directory
+                                                Toast.makeText(ProjectActivity.this, project.getName() + " deleted successfully.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    })
+                                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+
                         }
-                        if (item.getItemId()==R.id.nav_edit_project){
+                        if (item.getItemId() == R.id.nav_edit_project) {
                             Intent i = new Intent(ProjectActivity.this, ProjectCreatActivity.class);
-                            if (selectedProject!=null) {
+                            if (selectedProject != null) {
                                 i.putExtra("PROJECT", selectedProject);
-                            }else if (mAdapter.getItem(0)!=null) {
+                            } else if (mAdapter.getItem(0) != null) {
                                 selectedProject = (Project) mAdapter.getItem(0);
                                 i.putExtra("PROJECT", selectedProject);
-                            }else {
-                                i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
+                            } else {
+                                i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01, 01, 2017), new Date(12, 12, 20017)));
                             }
                             i.putExtra("COMPANY_ID", companyID);
                             i.putExtra("USER", user);
@@ -130,8 +152,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_project_home, menu);
-        MenuItem item=menu.findItem(R.id.nav_search_project);
-        SearchView searchView=(SearchView) item.getActionView();
+        MenuItem item = menu.findItem(R.id.nav_search_project);
+        SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -162,7 +184,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        intent.setClass(ProjectActivity.this,MainActivity.class);
+        intent.setClass(ProjectActivity.this, MainActivity.class);
         finish();
         startActivity(intent);
     }

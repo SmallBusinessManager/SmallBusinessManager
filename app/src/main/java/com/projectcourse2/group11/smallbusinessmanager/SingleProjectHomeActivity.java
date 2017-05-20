@@ -60,7 +60,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
         progressDialog.setMessage("Loading orders");
         progressDialog.show();
 
-        listView = (ListView) findViewById(R.id.listViewSP);
+        listView = (ListView) findViewById(R.id.listViewP);
 
         if (getIntent().getSerializableExtra("PROJECT") != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
