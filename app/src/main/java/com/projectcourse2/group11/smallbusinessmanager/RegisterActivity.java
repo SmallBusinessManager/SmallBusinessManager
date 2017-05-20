@@ -67,11 +67,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         }
 
     }
+
     @Override
     public void onBackPressed() {
         finish();
         startActivity(new Intent(RegisterActivity.this, OpeningActivity.class));
     }
+
     private void registerUser() {
         final String newCompanyName = etCompanyName_Register.getText().toString();
         final String firstName = etFirstName_Register.getText().toString();
