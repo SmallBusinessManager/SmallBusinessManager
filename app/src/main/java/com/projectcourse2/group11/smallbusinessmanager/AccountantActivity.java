@@ -33,23 +33,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AccountantActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private Button button;
-    private Button button2;
-    private Button button3;
-    private Button button4;
-    private Button button5;
-    private Button button6;
-    private ListView listView;
-    private ListView listView2;
-    private ListView listView3;
-    private ListView listView4;
-    private EditText editText;
-    private EditText editText2;
-    private EditText editText3;
-    private EditText editText4;
-    private ListAdapter mAdapter;
-    private ListAdapter mAdapter2;
-    private ListAdapter mAdapter3;
+    private Button button, button2, button3, button4, button5, button6, button7;
+
+    private ListView listView, listView2, listView3, listView4;
+    private EditText editText, editText2, editText3, editText4;
+    private ListAdapter mAdapter, mAdapter2, mAdapter3;
     private ArrayAdapter mAdapter4;
     private HashMap<String, String> salaryList;
 
@@ -71,6 +59,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         button4 = (Button) findViewById(R.id.button4);
         button5 = (Button) findViewById(R.id.button5);
         button6 = (Button) findViewById(R.id.button6);
+        button7 = (Button) findViewById(R.id.button7) ;
 
         editText = (EditText) findViewById(R.id.editText);
         editText2 = (EditText) findViewById(R.id.editText2);
@@ -226,13 +215,6 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
             }
         });
 
-        button3.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                listView3.setAdapter(mAdapter3);
-            }
-        });
-
         // Set Salary
         final DatabaseReference ref5 = FirebaseDatabase.getInstance().getReference().child("employeeSalary");
         button6.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +225,16 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
                 ref5.child(editTextString).child("salary").setValue(editTextString2);
             }
         });
+
+        button7.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(AccountantActivity.this, AddExpenseActivity.class).putExtra("COMPANY_ID", companyID));
+            }
+        });
+
 
 
     }

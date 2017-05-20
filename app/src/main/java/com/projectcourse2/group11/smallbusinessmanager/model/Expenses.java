@@ -11,7 +11,7 @@ public class Expenses {
     private java.util.Date date;
     private boolean apporoved;
 
-    public Expenses(UUID id, double amount, String details, String description, Date date) {
+    public Expenses(double amount, String details, String description, Date date) {
         this.id = UUID.randomUUID();
         this.amount = amount;
         this.details = details;
