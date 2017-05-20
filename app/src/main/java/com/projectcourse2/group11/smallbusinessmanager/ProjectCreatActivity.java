@@ -62,10 +62,14 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        user = (Person) getIntent().getSerializableExtra("USER");
-        company = getIntent().getStringExtra("COMPANY_ID");
+
+        if (getIntent()!=null){
+            user = (Person) getIntent().getSerializableExtra("USER");
+            company = getIntent().getStringExtra("COMPANY_ID");
+        }
         if (getIntent().getSerializableExtra("PROJECT") != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
+
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -178,22 +182,23 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //NavUtils.navigateUpFromSameTask(this);
-                //return true;
                 finish();
                 startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
-                return true;
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(ProjectCreatActivity.this,ProjectActivity.class);
         finish();
-        startActivity(new Intent(ProjectCreatActivity.this, ProjectActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
+        startActivity(intent);
     }
 
     private void saveToDatabase() {
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company);
         String projectName = etProjectName.getText().toString();
         String projectDescription = etProjectDescription.getText().toString();
@@ -211,15 +216,18 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void saveEditProject() {
-        FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).removeEventListener(listener);
-        project.setName(etProjectName.getText().toString());
-        project.setDescription(etProjectDescription.getText().toString());
-        if (startDate != null) {
-            project.setStartDate(startDate);
+        if (user.getPosition().equals(Position.WORKER)&&(!project.getManager().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))) {
+            return;
         }
-        if (endDate != null) {
-            project.setDueDate(endDate);
-        }
-        FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(project.getId()).setValue(project);
+            FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(projectUID).removeEventListener(listener);
+            project.setName(etProjectName.getText().toString());
+            project.setDescription(etProjectDescription.getText().toString());
+            if (startDate != null) {
+                project.setStartDate(startDate);
+            }
+            if (endDate != null) {
+                project.setDueDate(endDate);
+            }
+            FirebaseDatabase.getInstance().getReference().child("companyProjects").child(company).child(project.getId()).setValue(project);
     }
 }

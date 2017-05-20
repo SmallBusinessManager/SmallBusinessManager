@@ -7,8 +7,8 @@ public class Accountant extends Person {
     private double availableMoney;
 
     public Accountant(){}
-    public Accountant(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID ,Employee[] employees, double availableMoney) {
-        super(SSN, firstName, lastName, phoneNumber, email, UID);
+    public Accountant(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID ,Employee[] employees, double availableMoney) {
+        super(ssn, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.ACCOUNTANT);
         this.employees=employees;
         this.availableMoney=availableMoney;

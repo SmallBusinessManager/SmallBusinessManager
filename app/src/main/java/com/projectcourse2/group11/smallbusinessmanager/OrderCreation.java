@@ -141,7 +141,7 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
                             lastName = ds.child("lastName").getValue(String.class);
                             phoneNumber = ds.child("phoneNumber").getValue(String.class);
                             Position pos = ds.child("position").getValue(Position.class);
-                            ssn = ds.child("SSN").getValue(String.class);
+                            ssn = ds.child("ssn").getValue(String.class);
 
 
                             if (pos.equals(Position.WORKER)) {
@@ -149,7 +149,7 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
                                 if (workerSSN.equals(ssn)){
                                     selectedWorker = w;
                                     if (user.getPosition().equals(Position.WORKER)) {
-                                        if ((!selectedWorker.getSSN().equals(user.getSSN()))) {
+                                        if ((!selectedWorker.getSsn().equals(user.getSsn()))) {
                                             buttonOK.setEnabled(false);
                                         } else {
                                             workerView.setEnabled(false);
@@ -251,7 +251,7 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
             ref.child("companyWorkOrders").child(company).addValueEventListener(orderListener);
         }else {
 //            if (user.getPosition().equals(Position.WORKER)) {
-                workerSSN = user.getSSN();
+                workerSSN = user.getSsn();
 //            } else {
 //                workerSSN = "";
 //            }
@@ -309,7 +309,7 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
             }
         } else {workersNames= new String[1];
             workersNames[0]=user.getFirstName()+" "+user.getLastName();
-            selectedWorker=new Worker(user.getSSN(),user.getFirstName(),user.getLastName(),user.getPhoneNumber(),user.getEmail(),FirebaseAuth.getInstance().getCurrentUser().getUid());
+            selectedWorker=new Worker(user.getSsn(),user.getFirstName(),user.getLastName(),user.getPhoneNumber(),user.getEmail(),FirebaseAuth.getInstance().getCurrentUser().getUid());
             workerList.add(selectedWorker);
         }
         workerView.setMinValue(0);
@@ -374,6 +374,16 @@ public class OrderCreation extends AppCompatActivity implements View.OnClickList
             //
         }
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        if (project!=null) {
+            finish();
+            startActivity(new Intent(OrderCreation.this, SingleProjectHomeActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company).putExtra("PROJECT",project));
+        }else {
+            finish();
+            startActivity(new Intent(OrderCreation.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", company));
+        }
     }
 
 }

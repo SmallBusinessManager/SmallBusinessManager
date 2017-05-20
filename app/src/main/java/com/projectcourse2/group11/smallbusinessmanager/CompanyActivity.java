@@ -3,6 +3,7 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,9 +41,10 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
     private Company company;
     @Override
     public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(CompanyActivity.this,MainActivity.class);
         finish();
-        startActivity(new Intent(CompanyActivity.this, MainActivity.class));
-
+        startActivity(intent);
     }
 
     @Override
@@ -66,34 +68,68 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
         currentUser = firebaseAuth.getCurrentUser();
         companyID = getIntent().getStringExtra("COMPANY_ID");
         person = (Person) getIntent().getSerializableExtra("USER");
+        if (person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER)){
+            saveButton.setText(R.string.ok);
+            nameText.setEnabled(false);
+            addressText.setEnabled(false);
+            cityText.setEnabled(false);
+            manageButton.setText("Employees");
+        }
+
+        databaseReference.child("company").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getKey().equals(companyID)) {
+                        company = ds.getValue(Company.class);
+
+                        nameText.setText(company.getCompanyName());
+                        addressText.setText(company.getAddress());
+                        cityText.setText(company.getCity());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("TAG", "Database did not read.");
+            }
+        });
+
+        //TODO Add another ValueEventListener to get address from correct Document
 
         if (currentUser == null) {
             finish();
             startActivity(new Intent(CompanyActivity.this, LoginActivity.class).putExtra("USER", person));
         }
-
-        //TODO Get the company into an object
-        DatabaseReference ref = databaseReference.child("/company/").child(companyID);
-
-        nameText.setText(company.getCompanyName());
-        addressText.setText(company.getAddress());
-        cityText.setText(company.getCity());
-
     }
 
     @Override
     public void onClick(View v) {
         if (v == saveButton) {
             saveCompanyInfo();
+            Intent intent =getIntent();
+            intent.setClass(CompanyActivity.this,MainActivity.class);
+            finish();
+            startActivity(intent);
         }
         if (v == manageButton) {
-            //TODO Switch to EmployeeActivity
+            Intent intent = new Intent(CompanyActivity.this, EmployeeActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID);
+            startActivity(intent);
             finish();
 
         }
     }
 
     private void saveCompanyInfo() {
-        //TODO Implement saving company information
+        //TODO Save Company Address to correct Document
+        if (person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER)) {
+            //DO NOTHING
+        }else {
+            DatabaseReference ref = databaseReference.child("company").child(companyID);
+            ref.child("companyName").setValue(nameText.getText().toString());
+            ref.child("address").setValue(addressText.getText().toString());
+            ref.child("city").setValue(cityText.getText().toString());
+        }
     }
 }

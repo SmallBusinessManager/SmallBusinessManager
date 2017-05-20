@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSSN())) {
+                        if (ds.child("workerSSN").getValue(String.class).equals(user.getSsn())) {
                             orderList.put(ds.child("description").getValue(String.class), ds.getKey());
                             projectIDs.add(ds.child("projectID").getValue(String.class));
                         }
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("PROJECT_ID", projectIDs.get(position));
                     intent.putExtra("USER", user);
                     finish();
+                    finishAffinity();
                     startActivity(intent);
                 }
             });
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (user.getPosition().equals(Position.ACCOUNTANT)) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, AccountantActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else {
             /**
@@ -197,11 +199,11 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("COMPANY_ID", companyID);
                     intent.putExtra("USER", user);
                     finish();
+                    finishAffinity();
                     startActivity(intent);
                 }
             });
         }
-
     }
 
     private Boolean exit = false;
@@ -268,19 +270,24 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_account) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_company) {
             finish();
-            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("User", user).putExtra("COMPANY_ID", companyID));
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_project) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else if (id == R.id.nav_order) {
             finish();
-            startActivity(new Intent(MainActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("PROJECT_ID", "TO BE OVERWRITTEN").putExtra("USER", user));
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

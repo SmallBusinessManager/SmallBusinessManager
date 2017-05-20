@@ -8,8 +8,8 @@ public class TeamLeader extends Person {
     private Manager manager;
 
     public TeamLeader(){}
-    public TeamLeader(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
-        super(SSN, firstName, lastName, phoneNumber, email, UID);
+    public TeamLeader(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(ssn, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.TEAM_LEADER);
     }
 

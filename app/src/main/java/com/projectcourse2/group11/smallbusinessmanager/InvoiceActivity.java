@@ -63,15 +63,20 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     }
     @Override
     public void onClick(View v) {
+
     }
+
     @Override
     public void onBackPressed() {
         if (currentScene.equals("add")) {
             FragmentManager fm = getFragmentManager();
             currentScene="main";
             fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
-        }else
-            finish();
-            startActivity(new Intent(InvoiceActivity.this, MainActivity.class));
+        }else if (currentScene.equals("main")){
+                Intent intent = getIntent();
+                intent.setClass(InvoiceActivity.this,MainActivity.class);
+                finish();
+                startActivity(intent);
         }
     }
+}

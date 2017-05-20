@@ -9,8 +9,8 @@ public class Manager extends Person {
 
     public Manager(){}
 
-    public Manager(String SSN, String firstName, String lastName, String phoneNumber, String email, String UID) {
-        super(SSN, firstName, lastName, phoneNumber, email, UID);
+    public Manager(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
+        super(ssn, firstName, lastName, phoneNumber, email, UID);
         setPosition(Position.MANAGER);
     }
 

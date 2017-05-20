@@ -1,12 +1,14 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-public abstract class Person implements Serializable{
+/**
+ * Created by Phil on 5/19/2017.
+ */
+
+public class User implements Serializable {
     private String ssn; // yyyymmdd-xxxx
     private String firstName;
     private String lastName;
@@ -17,8 +19,8 @@ public abstract class Person implements Serializable{
     private String UID;
 
     //TODO Test package-private.
-    public Person(){}
-    public Person(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
+    public User(){}
+    public User(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
         this.ssn = ssn;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -34,7 +36,7 @@ public abstract class Person implements Serializable{
 
     public Position getPosition(){return position;}
 
-    public String getSsn() {
+    public String getSSN() {
         return ssn;
     }
 

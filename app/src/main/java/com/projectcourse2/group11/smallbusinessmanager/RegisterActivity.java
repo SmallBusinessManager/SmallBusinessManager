@@ -67,11 +67,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         }
 
     }
+
     @Override
     public void onBackPressed() {
         finish();
         startActivity(new Intent(RegisterActivity.this, OpeningActivity.class));
     }
+
     private void registerUser() {
         final String newCompanyName = etCompanyName_Register.getText().toString();
         final String firstName = etFirstName_Register.getText().toString();
@@ -102,7 +104,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         progressDialog.show();
 
 
-        // Register New Company Account & Owner Account
+        /** Register New Company Account & Owner Account **/
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
