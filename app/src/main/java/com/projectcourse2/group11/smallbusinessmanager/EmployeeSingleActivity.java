@@ -5,4 +5,5 @@ package com.projectcourse2.group11.smallbusinessmanager;
  */
 
 public class EmployeeSingleActivity {
+
 }
