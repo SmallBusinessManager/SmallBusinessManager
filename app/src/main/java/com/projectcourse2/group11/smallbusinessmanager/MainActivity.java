@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
         emailHeader.setText(user.getEmail());
-        MenuItem orderItem = (MenuItem)findViewById(R.id.nav_order);
 
         /**
          * If the logged in user is a worker or a team leader

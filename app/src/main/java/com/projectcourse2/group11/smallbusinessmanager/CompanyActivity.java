@@ -77,6 +77,7 @@ public class CompanyActivity extends AppCompatActivity implements View.OnClickLi
             nameText.setEnabled(false);
             addressText.setEnabled(false);
             cityText.setEnabled(false);
+            manageButton.setText("Employees");
         }
 
         databaseReference.child("company").addValueEventListener(new ValueEventListener() {

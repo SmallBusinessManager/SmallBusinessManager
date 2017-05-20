@@ -103,7 +103,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
 
 
         // list workers
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyEmployees").child("company1");
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(companyID);
         mAdapter = new FirebaseListAdapter<String>(
                 this,
                 String.class,
@@ -129,7 +129,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         });
 
         // view projects
-        final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("companyProjects").child("company1");
+        final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
         mAdapter2 = new FirebaseListAdapter<String>(
                 this,
                 String.class,
@@ -155,7 +155,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         });
 
         // view expenses
-        final DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference().child("expenses").child("company1");
+        final DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference().child("expenses").child(companyID);
         mAdapter3 = new FirebaseListAdapter<String>(
                 this,
                 String.class,
@@ -253,10 +253,8 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = getIntent();
-            intent.setClass(AccountantActivity.this, MainActivity.class);
             finish();
-            startActivity(intent);
+            startActivity(new Intent(AccountantActivity.this,LoginActivity.class));
         }
     }
 
@@ -299,21 +297,24 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            finish();
+            startActivity(new Intent(AccountantActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_account) {
             finish();
             startActivity(new Intent(AccountantActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+        } else if (id == R.id.nav_company) {
+            finish();
+            startActivity(new Intent(AccountantActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_project) {
             finish();
             startActivity(new Intent(AccountantActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else if (id == R.id.nav_order) {
             finish();
-            startActivity(new Intent(AccountantActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("projectUID", "TO BE OVERWRITTEN").putExtra("USER", user));
+            startActivity(new Intent(AccountantActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-
     }
 }
