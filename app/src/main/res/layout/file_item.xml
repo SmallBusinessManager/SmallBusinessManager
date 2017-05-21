@@ -13,10 +13,16 @@
         android:id="@+id/textF"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="35dp"
         android:layout_toEndOf="@+id/imageF" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textF"
+        android:layout_toEndOf="@+id/textF" />
 </RelativeLayout>

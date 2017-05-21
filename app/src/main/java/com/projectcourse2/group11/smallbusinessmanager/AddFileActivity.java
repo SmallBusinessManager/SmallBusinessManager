@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -136,30 +137,30 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             fileUri = data.getData();
             try {
                 switch (getFileExt(fileUri)) {
-                    case ".jpeg":
-                    case ".png":
-                    case ".exif":
-                    case ".jpeg 2000":
-                    case ".tiff":
-                    case ".gif":
-                    case ".bmp":
-                    case ".ppm":
-                    case ".pgm":
-                    case ".pbm":
-                    case ".pnm":
+                    case "jpeg":
+                    case "png":
+                    case "exif":
+                    case "jpeg 2000":
+                    case "tiff":
+                    case "gif":
+                    case "bmp":
+                    case "ppm":
+                    case "pgm":
+                    case "pbm":
+                    case "pnm":
                         Bitmap bm = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
                         imageView.setImageBitmap(bm);
                         break;
-                    case ".docx":
+                    case "docx":
                         setImageView(R.drawable.ic_docx);
                         break;
-                    case ".pdf":
+                    case "pdf":
                         setImageView(R.drawable.ic_pdf);
                         break;
-                    case ".txt":
+                    case "txt":
                         setImageView(R.drawable.ic_txt);
                         break;
-                    case ".ppt":
+                    case "ppt":
                         setImageView(R.drawable.ic_ppt);
                         break;
                     default:

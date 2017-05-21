@@ -88,7 +88,23 @@ public class EmployeeSingleActivity extends AppCompatActivity {
         phoneText.setText(selectedUser.getPhoneNumber());
         positionText.setText(selectedUser.getPosition().toString());
 
+        databaseReference.child("companyEmployees").child(companyID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot d : ds.getChildren()) {
+                        if (d.getValue().equals(selectedUser.getSSN())) {
+                            employeeID = ds.getKey();
+                        }
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
