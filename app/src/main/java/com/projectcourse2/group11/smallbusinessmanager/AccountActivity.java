@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private Button buttonSave;
     private Button buttonLogout;
     private Button buttonDeleteAccount;
+    private Button btResetPass;
 
 
     private EditText firstNameText, lastNameText, socialSecurityText, emailText, phoneText;
@@ -55,7 +57,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        intent.setClass(AccountActivity.this,MainActivity.class);
+        intent.setClass(AccountActivity.this, MainActivity.class);
         finish();
         startActivity(intent);
     }
@@ -90,6 +92,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonDeleteAccount = (Button) findViewById(R.id.buttonDeleteAccount);
+        btResetPass = (Button) findViewById(R.id.bt_resetPass);
 
         firstNameText = (EditText) findViewById(R.id.firstNameText);
         lastNameText = (EditText) findViewById(R.id.lastNameText);
@@ -101,6 +104,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
         buttonDeleteAccount.setOnClickListener(this);
+        btResetPass.setOnClickListener(this);
 
         ll = (LinearLayout) findViewById(R.id.llMain);
 
@@ -127,7 +131,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == buttonLogout) {
-            Intent intent=new Intent(AccountActivity.this,LoginActivity.class);
+            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
             finishAffinity();
             startActivity(intent);
             finish();
@@ -139,6 +143,55 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         }
         if (v == buttonDeleteAccount) {
             deleteAccount();
+        }
+        if (v == btResetPass) {
+            LayoutInflater li = LayoutInflater.from(this);
+            View dialogView = li.inflate(R.layout.password_reset_dialog, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    this);
+            alertDialogBuilder.setTitle("Reset Password");
+            // alertDialogBuilder.setIcon(R.drawable.ic_launcher);
+            alertDialogBuilder.setView(dialogView);
+            final EditText et_oldPass = (EditText) dialogView
+                    .findViewById(R.id.et_oldPass);
+            final EditText passwordD = (EditText) dialogView
+                    .findViewById(R.id.et_resetPasswordD);
+            final EditText passwordAD = (EditText) dialogView
+                    .findViewById(R.id.et_resetPasswordAD);
+            // set dialog message
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    //cannot get password from Firebase, therefor verify current password
+                                    if (passwordD.getText().toString().equals(passwordAD.getText().toString())) {
+                                        FirebaseAuth.getInstance().getCurrentUser().updatePassword(passwordD.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(AccountActivity.this, "Reset password successfully! Pleas login again", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                    startActivity(new Intent(AccountActivity.this, OpeningActivity.class));
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(AccountActivity.this, "You entered two different passwords, please try again", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
@@ -187,7 +240,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID",companyID));
+                startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
                 return true;
         }
         return super.onOptionsItemSelected(item);

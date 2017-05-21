@@ -110,6 +110,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/logout" />
 
+            <Button
+                android:id="@+id/bt_resetPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reset password" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -206,48 +206,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             userLogin();
         }
         if (v == tvForgot) {
-            //// TODO: reset password with email 
-            /*
-            LayoutInflater li = LayoutInflater.from(this);
-            View dialogView = li.inflate(R.layout.password_reset_dialog, null);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                    this);
-            alertDialogBuilder.setTitle("Reset Password");
-            //alertDialogBuilder.setIcon(R.drawable.ic_launcher);
-            alertDialogBuilder.setView(dialogView);
-            final EditText emailD = (EditText) dialogView
-                    .findViewById(R.id.et_emailD);
-            if (email!=null){
-                emailD.setText(email);
-            }
-            final EditText companyNameD = (EditText) dialogView
-                    .findViewById(R.id.et_companyNameD);
-            final EditText passwordD = (EditText) dialogView
-                    .findViewById(R.id.et_resetPasswordD);
-            final EditText passwordAD = (EditText) dialogView
-                    .findViewById(R.id.et_resetPasswordAD);
-            // set dialog message
-            alertDialogBuilder
-                    .setCancelable(false)
-                    .setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int id) {
-
-                                    FirebaseAuth.getInstance().fetchProvidersForEmail(emailD.getText().toString()).
-                                            //.updatePassword(passwordD.getText().toString());
-                                }
-                            })
-                    .setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-            */
+            //// TODO: reset password with email
         }
     }
 }
