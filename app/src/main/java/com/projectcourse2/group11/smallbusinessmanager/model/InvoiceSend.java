@@ -47,9 +47,9 @@ public class InvoiceSend extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 EditText email = (EditText) view.findViewById(R.id.invoice_company_send);
-                String text = name +" : "+amount;
+                String text = "Company : "+ name + "total : "+amount;
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto",email.toString(), null));
+                        "mailto",email.getText().toString(), null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Invoice");
                 emailIntent.putExtra(Intent.EXTRA_TEXT,text );
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
