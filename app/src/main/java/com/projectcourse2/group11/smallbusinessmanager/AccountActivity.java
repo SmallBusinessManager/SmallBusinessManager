@@ -3,6 +3,7 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.accounts.Account;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -18,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,6 +109,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         socialSecurityText.setText(person.getSsn());
         emailText.setText(person.getEmail());
         phoneText.setText(person.getPhoneNumber());
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
     @Override

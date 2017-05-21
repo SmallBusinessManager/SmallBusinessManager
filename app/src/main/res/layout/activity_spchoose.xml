@@ -38,8 +38,7 @@
             android:background="@color/colorPrimary"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -74,10 +73,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/orderList"
-            android:text="                Order list                     Files"
+            android:text="                  Order list                          Files"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -97,8 +95,7 @@
             android:layout_below="@+id/imageView5"
             android:text="               Notebooks"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
