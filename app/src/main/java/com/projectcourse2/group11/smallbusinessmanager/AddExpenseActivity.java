@@ -16,11 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.projectcourse2.group11.smallbusinessmanager.model.Accountant;
 import com.projectcourse2.group11.smallbusinessmanager.model.Expenses;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
@@ -54,6 +56,8 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         editText4 = (EditText) findViewById(R.id.editText4);
         button = (Button) findViewById(R.id.button);
 
+        button.setOnClickListener(this);
+
     }
 
     @Override
@@ -62,12 +66,15 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
             final int amount = Integer.parseInt(editText1.getText().toString().trim());
             final String description = editText2.getText().toString();
             final String details = editText3.getText().toString();
-            final Date date = (Date) editText4.getText();
+            final String date = editText4.getText().toString();
             if (editText1 != null && editText2 != null && editText3 != null && editText4 != null ) {
                 Expenses expense = new Expenses(amount,details, description,date);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                databaseReference.child("expenses").child(companyID).setValue(expense);
+                databaseReference.child("expenses").child(companyID).child(expense.getId()).setValue(expense);
             }
+            Toast.makeText(AddExpenseActivity.this, "Expense Added Successfully", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AddExpenseActivity.this, AccountantActivity.class).putExtra("COMPANY_ID",companyID);
+            AddExpenseActivity.this.startActivity(intent);
         }
 
     }

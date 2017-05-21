@@ -59,7 +59,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         button4 = (Button) findViewById(R.id.button4);
         button5 = (Button) findViewById(R.id.button5);
         button6 = (Button) findViewById(R.id.button6);
-        button7 = (Button) findViewById(R.id.button7) ;
+        button7 = (Button) findViewById(R.id.button7);
 
         editText = (EditText) findViewById(R.id.editText);
         editText2 = (EditText) findViewById(R.id.editText2);
@@ -152,7 +152,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
                 ref3) {
             @Override
             protected String parseSnapshot(DataSnapshot snapshot) {
-                return snapshot.child("description").getValue(String.class) + " " + snapshot.child("amount").getValue(Float.class);
+                return snapshot.child("description").getValue(String.class) + " " + snapshot.child("amount").getValue(Integer.class);
             }
 
             @Override
@@ -177,7 +177,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
             public void onClick(View v) {
                 String editTextString = editText.getText().toString();
 
-                ref3.child(editTextString).child("approved").setValue(true);
+                ref3.child(companyID).child(editTextString).child("approved").setValue(true);
             }
         });
 
@@ -217,6 +217,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
 
         // Set Salary
         final DatabaseReference ref5 = FirebaseDatabase.getInstance().getReference().child("employeeSalary");
+
         button6.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -236,7 +237,6 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
         });
 
 
-
     }
 
     @Override
@@ -246,7 +246,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
             drawer.closeDrawer(GravityCompat.START);
         } else {
             finish();
-            startActivity(new Intent(AccountantActivity.this,LoginActivity.class));
+            startActivity(new Intent(AccountantActivity.this, LoginActivity.class));
         }
     }
 

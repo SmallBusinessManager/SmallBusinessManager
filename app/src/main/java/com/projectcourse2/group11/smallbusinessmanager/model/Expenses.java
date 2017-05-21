@@ -1,35 +1,33 @@
 package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.util.*;
-import java.util.Date;
 
 public class Expenses {
-    private UUID id;
+    private String id = String.valueOf(UUID.randomUUID());
     private double amount;
     private String details;
     private String description;
-    private java.util.Date date;
-    private boolean apporoved;
+    private String date;
+    private boolean approved;
 
-    public Expenses(double amount, String details, String description, Date date) {
-        this.id = UUID.randomUUID();
+    public Expenses(double amount, String details, String description, String date) {
         this.amount = amount;
         this.details = details;
         this.description = description;
         this.date = date;
-        apporoved = false;
+        approved = false;
     }
 
-    public void setApporoved() {
-        apporoved = true;
+    public void setApproved() {
+        approved = true;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public boolean isApporoved() {
-        return apporoved;
+    public boolean isApproved() {
+        return approved;
     }
 
     public double getAmount() {
@@ -44,7 +42,7 @@ public class Expenses {
         return description;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -55,6 +53,7 @@ public class Expenses {
         map.put(id+ "/details/", getDetails());
         map.put(id + "/description/", getDescription());
         map.put(id + "/date/", getDate());
+        map.put(id + "/approved/", isApproved());
 
         return map;
     }
