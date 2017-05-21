@@ -19,22 +19,25 @@ public class User implements Serializable {
     private String UID;
 
     //TODO Test package-private.
-    public User(){}
+    public User() {
+    }
+
     public User(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
         this.ssn = ssn;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        if (email.contains("@")) {
-            this.email = email;
-        }
-        this.UID=UID;
-    }
-    public void setPosition(Position position){
-        this.position=position;
+        this.email = email;
+        this.UID = UID;
     }
 
-    public Position getPosition(){return position;}
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
 
     public String getSSN() {
         return ssn;
@@ -69,9 +72,7 @@ public class User implements Serializable {
     }
 
     public void setEmail(String email) {
-        if (email.contains("@")) {
-            this.email = email;
-        }
+        this.email = email;
     }
 
     public Address getAddress() {
@@ -82,15 +83,15 @@ public class User implements Serializable {
         this.address = address;
     }
 
-    public Map<String,Object> toHashMap(){
+    public Map<String, Object> toHashMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put(UID+"/ssn/",ssn);
-        map.put(UID+"/firstName/",firstName);
-        map.put(UID+"/lastName/",lastName);
-        map.put(UID+"/phoneNumber/",phoneNumber);
-        map.put(UID+"/email/",email);
-        map.put(UID+"/position/",position);
-        if (address!=null) {
+        map.put(UID + "/ssn/", ssn);
+        map.put(UID + "/firstName/", firstName);
+        map.put(UID + "/lastName/", lastName);
+        map.put(UID + "/phoneNumber/", phoneNumber);
+        map.put(UID + "/email/", email);
+        map.put(UID + "/position/", position);
+        if (address != null) {
             map.put("/workerAddress/" + UID + "/city/", address.getCity());
             map.put("/workerAddress/" + UID + "/country/", address.getCountry());
             map.put("/workerAddress/" + UID + "/postalCode/", address.getPostalCode());
