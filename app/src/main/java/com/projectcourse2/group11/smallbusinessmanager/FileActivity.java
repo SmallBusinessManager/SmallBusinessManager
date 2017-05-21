@@ -3,18 +3,16 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -22,21 +20,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
-import java.io.File;
-
 public class FileActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
     private FloatingActionButton fab;
+    private CheckBox checkBox;
     private ProgressDialog dialog;
 
     private DatabaseReference mDatabaseRef;
@@ -84,6 +77,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             protected void populateView(View v, FileUpload model, int position) {
                 ImageView imageView = (ImageView) v.findViewById(R.id.imageF);
                 TextView textView = (TextView) v.findViewById(R.id.textF);
+                checkBox = (CheckBox) v.findViewById(R.id.checkBox);
 
                 textView.setText(model.getName());
                 String fileExt = model.getName().substring(model.getName().indexOf("."));
@@ -102,19 +96,19 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                         Glide.with(FileActivity.this).load(model.getUri()).into(imageView);
                         break;
                     case ".docx":
-                        setImageView(R.drawable.ic_docx,imageView);
+                        setImageView(R.drawable.ic_docx, imageView);
                         break;
                     case ".pdf":
-                        setImageView(R.drawable.ic_pdf,imageView);
+                        setImageView(R.drawable.ic_pdf, imageView);
                         break;
                     case ".txt":
-                        setImageView(R.drawable.ic_txt,imageView);
+                        setImageView(R.drawable.ic_txt, imageView);
                         break;
                     case ".ppt":
-                        setImageView(R.drawable.ic_ppt,imageView);
+                        setImageView(R.drawable.ic_ppt, imageView);
                         break;
                     default:
-                        setImageView(R.drawable.ic_doc,imageView);
+                        setImageView(R.drawable.ic_doc, imageView);
                         break;
                 }
             }
@@ -124,7 +118,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         dialog.dismiss();
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      /*  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final FileUpload file = (FileUpload) parent.getItemAtPosition(position);
@@ -154,10 +148,11 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
                     });
                 }
             }
-        });
+        });*/
+        checkBox.setOnClickListener(this);
     }
 
-    private void setImageView(int i,ImageView imageView){
+    private void setImageView(int i, ImageView imageView) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.setImageDrawable(getResources().getDrawable(i, getApplicationContext().getTheme()));
         } else {
@@ -175,6 +170,17 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             finish();
             startActivity(intent);
         }
+        if (v == checkBox) {
+            if (checkBox.isChecked()) {
+
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_files, menu);
+        return true;
     }
 
     @Override
@@ -190,10 +196,11 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        intent.setClass(FileActivity.this,SPChooseActivity.class);
+        intent.setClass(FileActivity.this, SPChooseActivity.class);
         finish();
         startActivity(intent);
     }

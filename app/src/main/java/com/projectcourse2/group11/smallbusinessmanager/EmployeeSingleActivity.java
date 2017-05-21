@@ -92,7 +92,7 @@ public class EmployeeSingleActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     for (DataSnapshot d : ds.getChildren()) {
-                        if (d.getKey().equals(selectedUser.getSSN())) {
+                        if (d.getValue().equals(selectedUser.getSSN())) {
                             employeeID = ds.getKey();
                         }
                     }
