@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,7 +130,25 @@ public class EmployeeSingleActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
 
-                                FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(companyID).child(employeeID).removeValue();
+                                databaseReference.child("companyEmployees").child(companyID).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                            for (DataSnapshot d : ds.getChildren()) {
+                                                if (d.getKey().equals(selectedUser.getPhoneNumber())) {
+                                                    employeeID = ds.getKey();
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.d("TAG", "Could not fetch employee ID");
+                                    }
+                                });
+
+                                databaseReference.child("companyEmployees").child(companyID).child(employeeID).removeValue();
 
                                 Toast.makeText(EmployeeSingleActivity.this, "Employee Deleted Successfully.", Toast.LENGTH_SHORT).show();
                                 finish();
