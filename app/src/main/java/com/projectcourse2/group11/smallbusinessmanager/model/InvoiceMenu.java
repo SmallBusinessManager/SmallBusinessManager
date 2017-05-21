@@ -45,6 +45,7 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.invoice, null);
+        deleteThisOne = "";
         companyID = getActivity().getIntent().getStringExtra("COMPANY_ID");
         listView = (ListView) view.findViewById(R.id.invoice_item);
         Log.d(companyID, "<<<<<<<<companyId<<<<<<<<<<<<<");
@@ -88,9 +89,10 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.child(deleteThisOne).setValue(null);
-                invoices.remove(position);
-
+                if (!deleteThisOne.equals("")) {
+                    databaseReference.child(deleteThisOne).setValue(null);
+                    invoices.remove(position);
+                }
             }
         } );
         return view;

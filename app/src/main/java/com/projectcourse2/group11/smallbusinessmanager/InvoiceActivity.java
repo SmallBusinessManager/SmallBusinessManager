@@ -19,12 +19,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Invoice;
 import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceAdd;
 import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceMenu;
+import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 
 /**
  * Created by Bjarni on 17/05/2017.
  */
 
 public class InvoiceActivity extends AppCompatActivity implements View.OnClickListener {
+    private Person user;
     private DatabaseReference mRef;
     private ListAdapter mAdapter;
     private String companyID;
@@ -34,7 +36,8 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frame_layout);
-
+        user = (Person) getIntent().getSerializableExtra("USER");
+        companyID = this.getIntent().getStringExtra("COMPANY_ID");
         ListView listView = (ListView) findViewById(R.id.invoice_item);
         DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smallbusinessmanager-ddda6.firebaseio.com/invoice");
         FirebaseListAdapter<Invoice> firebaseListAdapter = new FirebaseListAdapter<Invoice>(
@@ -72,11 +75,10 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
             FragmentManager fm = getFragmentManager();
             currentScene="main";
             fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
-        }else if (currentScene.equals("main")){
-                Intent intent = getIntent();
-                intent.setClass(InvoiceActivity.this,MainActivity.class);
-                finish();
-                startActivity(intent);
+        }else {
+
+            startActivity(new Intent(InvoiceActivity.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+            finish();
         }
     }
 }
