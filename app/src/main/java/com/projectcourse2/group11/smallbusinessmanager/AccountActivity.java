@@ -181,6 +181,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         String phoneNr=phoneText.getText().toString();
 
         user=new User(ssn,firstName,lastName,phoneNr,email,person.getPosition(),currentUser.getUid());
+        person.setFirstName(firstName);
+        person.setFirstName(lastName);
+        person.setFirstName(phoneNr);
+        person.setFirstName(email);
 
         databaseReference.child("companyEmployees").child(companyID).updateChildren(user.toHashMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -194,23 +198,19 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void deleteAccount() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete this account?")
                 .setCancelable(false)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        progressDialog.setMessage("Deleting account");
-                        progressDialog.show();
+                        databaseReference.child("companyEmployees").child(companyID).child(currentUser.getUid()).removeValue();
                         currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    databaseReference.child(currentUser.getUid()).removeValue();
-                                    progressDialog.dismiss();
-                                    //FirebaseAuth.getInstance().signOut();
+                                    Toast.makeText(AccountActivity.this, "Account deleted successfully!", Toast.LENGTH_SHORT).show();
                                     AccountActivity.this.finish();
-                                    startActivity(new Intent(AccountActivity.this, LoginActivity.class));
+                                    startActivity(new Intent(AccountActivity.this, OpeningActivity.class));
                                 }
                             }
                         });
@@ -230,7 +230,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+                startActivity(new Intent(AccountActivity.this, MainActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
                 break;
             case R.id.nav_save_changes:
                 saveUserInformation();
