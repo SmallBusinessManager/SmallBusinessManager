@@ -53,8 +53,12 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        saveBtn = (Button) findViewById(R.id.saveButton);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
+        saveBtn = (Button) findViewById(R.id.saveButton);
 
         Calendar calendar = Calendar.getInstance();
         _year = calendar.get(Calendar.YEAR);
@@ -62,11 +66,6 @@ public class ProjectCreatActivity extends AppCompatActivity implements View.OnCl
         _day = calendar.get(Calendar.DAY_OF_MONTH);
         startDate = new Date(_day, _month + 1, _year);
         endDate = startDate;
-
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         if (getIntent() != null) {
             user = (Person) getIntent().getSerializableExtra("USER");
