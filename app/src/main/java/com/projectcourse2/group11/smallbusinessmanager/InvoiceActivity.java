@@ -20,6 +20,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Invoice;
 import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceAdd;
 import com.projectcourse2.group11.smallbusinessmanager.model.InvoiceMenu;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 
 /**
  * Created by Bjarni on 17/05/2017.
@@ -39,6 +40,7 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         user = (Person) getIntent().getSerializableExtra("USER");
         companyID = this.getIntent().getStringExtra("COMPANY_ID");
         ListView listView = (ListView) findViewById(R.id.invoice_item);
+
         DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl("https://smallbusinessmanager-ddda6.firebaseio.com/invoice");
         FirebaseListAdapter<Invoice> firebaseListAdapter = new FirebaseListAdapter<Invoice>(
                 this,
@@ -57,12 +59,13 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
         currentScene = "main";
+
     }
 
     protected void addInvoice() {
-        FragmentManager fm = getFragmentManager();
-        currentScene = "add";
-        fm.beginTransaction().replace(R.id.content_frame, new InvoiceAdd()).commit();
+            FragmentManager fm = getFragmentManager();
+            currentScene = "add";
+            fm.beginTransaction().replace(R.id.content_frame, new InvoiceAdd()).commit();
     }
     @Override
     public void onClick(View v) {
@@ -72,9 +75,9 @@ public class InvoiceActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         if (currentScene.equals("add")) {
-            FragmentManager fm = getFragmentManager();
-            currentScene="main";
-            fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
+                FragmentManager fm = getFragmentManager();
+                currentScene = "main";
+                fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
         }else {
 
             startActivity(new Intent(InvoiceActivity.this, MainActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));

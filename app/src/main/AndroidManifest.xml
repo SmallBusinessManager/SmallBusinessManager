@@ -100,7 +100,8 @@
         </activity>
         <activity
             android:name=".AccountActivity"
-            android:label="@string/title_accountInfo">
+            android:label="@string/title_accountInfo"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -128,6 +129,16 @@
         <activity
             android:name=".EmployeeActivity"
             android:label="Manage Employees">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".EmployeeSingleActivity"
+            android:label="View Employee"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

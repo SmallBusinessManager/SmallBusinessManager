@@ -121,9 +121,9 @@ public class EmployeeAddActivity extends AppCompatActivity implements View.OnCli
             final String SSN = socialText.getText().toString();
             final String firstName = firstNameText.getText().toString();
             final String lastName = lastNameText.getText().toString();
-            final String email = emailText.getText().toString();
+            final String email = emailText.getText().toString().trim();
             final String phone = phoneText.getText().toString();
-            final String password = passwordText.getText().toString();
+            final String password = passwordText.getText().toString().trim();
 
             if (firstNameText != null && lastNameText != null && socialText != null && emailText != null && phoneText != null) {
                 progressDialog.show();
