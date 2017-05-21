@@ -163,7 +163,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
                             ref.child(selectedOrderId).removeValue();
 
                         }
-                        if (item.getItemId()==R.id.nav_edit_task){
+                        if (item.getItemId() == R.id.nav_edit_task) {
                             Intent i = new Intent(SingleProjectHomeActivity.this, OrderCreation.class);
                             if (selectedOrderId != null) {
                                 i.putExtra("ORDER_ID", selectedOrderId);
@@ -241,7 +241,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 //                    finish();
 //                    startActivity(i);
                     Toast.makeText(this, "You must select a task.", Toast.LENGTH_SHORT).show();
-                      break;
+                    break;
                 case R.id.nav_reorder_task:
                     final ValueEventListener listener = new ValueEventListener() {
                         @Override
