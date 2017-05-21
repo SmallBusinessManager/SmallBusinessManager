@@ -25,7 +25,7 @@ public class Accountant extends Person {
         //to do
     }
     public void approvePayment(Expenses expense){
-        expense.setApporoved();
+        expense.setApproved();
     }
     public void reviewContract(){
         //to do

@@ -61,6 +61,7 @@
     <string name="approveExpense">Approve Expenses</string>
     <string name="viewIncome">View Income</string>
     <string name="setIncome">Set Income</string>
+    <string name="addExpense">Add Expense</string>
 
     <string name="managers">Managers</string>
     <string name="start_date">Start Date</string>

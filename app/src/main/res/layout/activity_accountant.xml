@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="false"
+    android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.projectcourse2.group11.smallbusinessmanager.AccountantActivity"
     tools:showIn="@layout/accountant_bar_main"> <!--IMPORTANT otherwise backgrnd img. will not fill the whole screen -->
@@ -13,7 +13,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="830dp"
         tools:context="com.projectcourse2.group11.smallbusinessmanager.AccountantActivity">
 
         <Button
@@ -119,11 +119,10 @@
             android:id="@+id/button6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/button5"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/listView4"
-            android:text="@string/setIncome" />
+            android:text="@string/setIncome"
+            android:layout_alignEnd="@+id/button5" />
 
         <EditText
             android:id="@+id/editText3"
@@ -132,7 +131,7 @@
             android:ems="10"
             android:hint="Employee"
             android:inputType="textPersonName"
-            android:layout_alignParentBottom="true"
+            android:layout_alignBottom="@+id/button6"
             android:layout_alignStart="@+id/listView4" />
 
         <EditText
@@ -142,9 +141,18 @@
             android:ems="10"
             android:hint="Amount"
             android:inputType="number"
-            android:layout_alignParentBottom="true"
+            android:layout_alignBaseline="@+id/editText3"
+            android:layout_alignBottom="@+id/editText3"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/editText3" />
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/addExpense" />
 
     </RelativeLayout>
 </ScrollView>
