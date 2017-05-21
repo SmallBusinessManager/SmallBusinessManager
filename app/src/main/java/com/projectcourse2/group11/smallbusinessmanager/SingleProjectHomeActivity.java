@@ -3,7 +3,6 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -30,12 +30,9 @@ import java.util.HashMap;
 
 public class SingleProjectHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FloatingActionButton fab;
-    //private ListView listView;
-    // private ListAdapter mAdapter;
+    private TextView addOrderSP;
 
     private String projectUID;
-    private String projectName;
     private DatabaseReference ref;
     private String companyID;
     private ListView listView;
@@ -50,27 +47,27 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_home);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_single_project_home);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSP);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        addOrderSP=(TextView)findViewById(R.id.addOrderSP);
+        addOrderSP.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading orders");
         progressDialog.show();
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(this);
 
-        listView = (ListView) findViewById(R.id.listViewF);
+        listView = (ListView) findViewById(R.id.listViewP);
 
         if (getIntent().getSerializableExtra("PROJECT") != null) {
             project = (Project) getIntent().getSerializableExtra("PROJECT");
             projectUID = project.getId();
-            projectName = project.getName();
             companyID = getIntent().getStringExtra("COMPANY_ID");
             user = (Person) getIntent().getSerializableExtra("USER");
-            this.setTitle(projectName);
+            this.setTitle(project.getName());
 
 
             ref = FirebaseDatabase.getInstance().getReference();
@@ -297,7 +294,7 @@ public class SingleProjectHomeActivity extends AppCompatActivity implements View
 
     @Override
     public void onClick(View v) {
-        if (v == fab) {
+        if (v == addOrderSP) {
             Intent intent = new Intent(SingleProjectHomeActivity.this, OrderCreation.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user);
             if (project != null) {
                 intent.putExtra("PROJECT", project);
