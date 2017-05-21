@@ -5,6 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -212,20 +216,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 listView.setAdapter(mnAdapter);
                 break;
             case R.id.nav_edit_project:
-//                Intent i = new Intent(ProjectActivity.this, ProjectCreatActivity.class);
-//                if (selectedProject!=null) {
-//                    i.putExtra("PROJECT", selectedProject);
-//                }else if (mAdapter.getItem(0)!=null) {
-//                    selectedProject = (Project) mAdapter.getItem(0);
-//                    i.putExtra("PROJECT", selectedProject);
-//                }else {
-//                    i.putExtra("PROJECT", new Project("name", "description", "manager", new Date(01,01,2017), new Date(12,12,20017)));
-//                }
-//                i.putExtra("COMPANY_ID", companyID);
-//                i.putExtra("USER", user);
-//                finish();
-//                startActivity(i);
-                Toast.makeText(this, "You must select a project!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select a project first!", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;

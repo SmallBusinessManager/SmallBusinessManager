@@ -3,6 +3,7 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,12 +11,14 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -52,8 +55,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Button mEmailSignInButton;
     private TextView tvForgot;
     private String company;
-    private SharedPreferences loginPreferences;
-    private SharedPreferences.Editor loginPrefsEditor;
     private boolean saveLogin;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -175,9 +176,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             progressDialog.dismiss();
                         }
                     });
-
-//                    finish();
-//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 } else {
                     Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
@@ -208,9 +206,48 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             userLogin();
         }
         if (v == tvForgot) {
-            //reset password
+            //// TODO: reset password with email 
+            /*
+            LayoutInflater li = LayoutInflater.from(this);
+            View dialogView = li.inflate(R.layout.password_reset_dialog, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    this);
+            alertDialogBuilder.setTitle("Reset Password");
+            //alertDialogBuilder.setIcon(R.drawable.ic_launcher);
+            alertDialogBuilder.setView(dialogView);
+            final EditText emailD = (EditText) dialogView
+                    .findViewById(R.id.et_emailD);
+            if (email!=null){
+                emailD.setText(email);
+            }
+            final EditText companyNameD = (EditText) dialogView
+                    .findViewById(R.id.et_companyNameD);
+            final EditText passwordD = (EditText) dialogView
+                    .findViewById(R.id.et_resetPasswordD);
+            final EditText passwordAD = (EditText) dialogView
+                    .findViewById(R.id.et_resetPasswordAD);
+            // set dialog message
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+
+                                    FirebaseAuth.getInstance().fetchProvidersForEmail(emailD.getText().toString()).
+                                            //.updatePassword(passwordD.getText().toString());
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            */
         }
     }
-
-
 }
