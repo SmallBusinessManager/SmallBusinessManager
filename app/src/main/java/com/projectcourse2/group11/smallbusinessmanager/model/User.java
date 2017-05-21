@@ -22,13 +22,14 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String ssn, String firstName, String lastName, String phoneNumber, String email, String UID) {
+    public User(String ssn, String firstName, String lastName, String phoneNumber, String email,Position position, String UID) {
         this.ssn = ssn;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.UID = UID;
+        this.position=position;
     }
 
     public void setPosition(Position position) {
