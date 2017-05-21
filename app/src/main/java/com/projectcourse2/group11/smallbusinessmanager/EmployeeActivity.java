@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,8 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.projectcourse2.group11.smallbusinessmanager.model.Employee;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
+import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.User;
 
 /**
@@ -36,20 +39,20 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
     private DatabaseReference databaseReference;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String companyID;
-
+    private String companyID, employeeID;
+    private User selectedUser;
     private Person person;
 
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        intent.setClass(EmployeeActivity.this,CompanyActivity.class);
+        intent.setClass(EmployeeActivity.this, CompanyActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID);
         finish();
         startActivity(intent);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstance){
+    protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
 
         setContentView(R.layout.activity_employees);
@@ -84,9 +87,24 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
                 employeePosition.setText(model.getPosition().toString());
             }
         };
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User sUser = (User) parent.getItemAtPosition(position);
+                selectedUser = sUser;
+                Intent intent = new Intent(EmployeeActivity.this, EmployeeSingleActivity.class).putExtra("EMPLOYEE", selectedUser);
+                intent.putExtra("COMPANY_ID", companyID);
+                intent.putExtra("USER", person);
+                finish();
+                startActivity(intent);
+            }
+        });
+
         progressDialog.dismiss();
         listView.setAdapter(mAdapter);
-        if (person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER)) {
+
+        if (person.getPosition().equals(Position.WORKER) || person.getPosition().equals(Position.TEAM_LEADER)) {
             fab.hide();
             fab.setEnabled(false);
         }
@@ -94,7 +112,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if (v == fab){
+        if (v == fab) {
             finish();
             startActivity(new Intent(EmployeeActivity.this, EmployeeAddActivity.class).putExtra("USER", person).putExtra("COMPANY_ID", companyID));
         }
