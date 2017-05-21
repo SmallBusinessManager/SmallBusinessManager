@@ -245,6 +245,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         getMenuInflater().inflate(R.menu.toolbar_account, menu);
         return true;
     }
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.setClass(AccountActivity.this,ProjectActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
 
