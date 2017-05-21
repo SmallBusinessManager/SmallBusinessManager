@@ -39,7 +39,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
     private DatabaseReference databaseReference;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String companyID, employeeID;
+    private String companyID;
     private User selectedUser;
     private Person person;
 
@@ -91,8 +91,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                User sUser = (User) parent.getItemAtPosition(position);
-                selectedUser = sUser;
+                selectedUser = (User) parent.getItemAtPosition(position);
                 Intent intent = new Intent(EmployeeActivity.this, EmployeeSingleActivity.class).putExtra("EMPLOYEE", selectedUser);
                 intent.putExtra("COMPANY_ID", companyID);
                 intent.putExtra("USER", person);

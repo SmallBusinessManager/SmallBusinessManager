@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +23,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.projectcourse2.group11.smallbusinessmanager.model.Date;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 import com.projectcourse2.group11.smallbusinessmanager.model.User;
+import com.projectcourse2.group11.smallbusinessmanager.model.Worker;
+
+import java.util.ArrayList;
 
 /**
  * Created by Phil on 5/19/2017.
@@ -37,10 +42,10 @@ public class EmployeeSingleActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    private String companyID;
+    private String companyID, employeeID;
     private User selectedUser;
     private Person person;
 
@@ -81,6 +86,24 @@ public class EmployeeSingleActivity extends AppCompatActivity {
         emailText.setText(selectedUser.getEmail());
         phoneText.setText(selectedUser.getPhoneNumber());
         positionText.setText(selectedUser.getPosition().toString());
+
+        databaseReference.child("companyEmployees").child(companyID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot d : ds.getChildren()) {
+                        if (d.getKey().equals(selectedUser.getSSN())) {
+                            employeeID = ds.getKey();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -97,29 +120,32 @@ public class EmployeeSingleActivity extends AppCompatActivity {
                 startActivity(new Intent(EmployeeSingleActivity.this, EmployeeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", person));
                 break;
             case R.id.nav_delete_employee:
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeSingleActivity.this);
                 builder.setTitle("Confirmation Required");
                 builder.setMessage("Are you sure you want to remove " + selectedUser.getFirstName() + "" + selectedUser.getLastName() + " from the company?")
                         .setCancelable(false)
                         .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-                                //TODO Get the user's UID and put in child here
-                                FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(null).removeValue();
-                                //TODO Delete Firebase authorization
+
+                                FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(employeeID).removeValue();
+
                                 Toast.makeText(EmployeeSingleActivity.this, "Employee Deleted Successfully.", Toast.LENGTH_SHORT).show();
                                 finish();
                                 startActivity(new Intent(EmployeeSingleActivity.this, EmployeeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", person));
                             }
                         })
+
                         .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
                         });
-                AlertDialog alert = builder.create();
-                alert.show();
+
+
+                Toast.makeText(this, "Could Not Remove Employee", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;

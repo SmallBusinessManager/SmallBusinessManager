@@ -83,6 +83,8 @@ public class User implements Serializable {
         this.address = address;
     }
 
+    public String getUID() { return UID; }
+
     public Map<String, Object> toHashMap() {
         Map<String, Object> map = new HashMap<>();
         map.put(UID + "/ssn/", ssn);
