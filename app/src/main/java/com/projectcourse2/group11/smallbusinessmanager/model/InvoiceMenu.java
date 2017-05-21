@@ -2,6 +2,8 @@ package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -26,6 +28,7 @@ import com.projectcourse2.group11.smallbusinessmanager.R;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import static android.R.attr.key;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -40,11 +43,13 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
     private Button remove;
     private int position;
     private String deleteThisOne;
-
+    private Button send;
+    private  String text;
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.invoice, null);
+        text = "";
         deleteThisOne = "";
         companyID = getActivity().getIntent().getStringExtra("COMPANY_ID");
         listView = (ListView) view.findViewById(R.id.invoice_item);
@@ -60,11 +65,26 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
             @Override
             protected void populateView(View v, Invoice model, int position) {
                 TextView textview = (TextView) v.findViewById(android.R.id.text1);
-                String text = "Company : " + model.getCustomerId() + "\nAmount : " + model.getAmount() + "kr";
+                text = "Company : " + model.getCustomerId() + "\nAmount : " + model.getAmount() + "kr";
                 textview.setText(text);
                 invoices.add(model);
             }
         };
+        send = (Button) view.findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!deleteThisOne.equals("")) {
+                    Fragment fragment = new InvoiceSend();
+                    Bundle args = new Bundle();
+                    args.putString("name", invoices.get(position).getCustomerId());
+                    args.putString("amount", invoices.get(position).getAmount());
+                    fragment.setArguments(args);
+                    FragmentManager fm = getFragmentManager();
+                    fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                }
+            }
+        });
         addstuff = (Button) view.findViewById(R.id.add);
         addstuff.setOnClickListener(new View.OnClickListener() {
             @Override
