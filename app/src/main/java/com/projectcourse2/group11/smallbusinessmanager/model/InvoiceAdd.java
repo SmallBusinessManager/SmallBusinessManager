@@ -13,16 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.projectcourse2.group11.smallbusinessmanager.LoginActivity;
 import com.projectcourse2.group11.smallbusinessmanager.R;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.R.id.input;
+import static android.R.id.progress;
 
 /**
  * Created by Bjarni on 17/05/2017.
@@ -53,8 +58,18 @@ public class InvoiceAdd extends Fragment implements View.OnClickListener{
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveToDatabase();
-                fm.beginTransaction().replace(R.id.content_frame,new InvoiceMenu()).commit();
+                String amount = editTextamount.getText().toString();
+                String companyId = companyName.getText().toString();
+                if (isInteger(amount)) {
+                    if (companyId != null && !companyId.isEmpty()) {
+                        saveToDatabase();
+                        fm.beginTransaction().replace(R.id.content_frame, new InvoiceMenu()).commit();
+                    }else {
+                        Toast.makeText(getActivity(), "company name cannot be empty", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "Please enter a valid amount", Toast.LENGTH_LONG).show();
+                }
             }
         });
         cancel = (Button) view.findViewById(R.id.cancel_invoice);
@@ -66,17 +81,24 @@ public class InvoiceAdd extends Fragment implements View.OnClickListener{
         });
         return view;
     }
-
     @Override
     public void onClick(View v) {
-
     }
     private void saveToDatabase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("invoice").child(company);
         String companyId = companyName.getText().toString();
         String amount = editTextamount.getText().toString();
         String key = databaseReference.push().getKey();
-        Invoice invoice = new Invoice(key, companyId, amount);
+        Invoice invoice = new Invoice(key,companyId, amount);
         databaseReference.updateChildren(invoice.toHashMap());
     }
+    public boolean isInteger( String input ) {
+        try {
+            Integer.parseInt( input );
+            return true;
+        }
+        catch( Exception e ) {
+            return false;
+        }
     }
+}

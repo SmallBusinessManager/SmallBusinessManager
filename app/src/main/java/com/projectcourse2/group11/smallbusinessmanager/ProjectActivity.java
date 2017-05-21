@@ -62,7 +62,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("invoice").child(companyID);
         mAdapter = new FirebaseListAdapter<Project>(
                 ProjectActivity.this,
                 Project.class,
@@ -159,6 +159,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         });
         return true;
     }
+
 
     @Override
     public void onBackPressed() {
