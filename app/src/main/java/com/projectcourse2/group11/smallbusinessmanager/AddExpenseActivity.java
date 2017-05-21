@@ -71,10 +71,11 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                 Expenses expense = new Expenses(amount,details, description,date);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child("expenses").child(companyID).child(expense.getId()).setValue(expense);
+
+                Toast.makeText(AddExpenseActivity.this, "Expense Added Successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AddExpenseActivity.this, AccountantActivity.class).putExtra("COMPANY_ID",companyID);
+                AddExpenseActivity.this.startActivity(intent);
             }
-            Toast.makeText(AddExpenseActivity.this, "Expense Added Successfully", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddExpenseActivity.this, AccountantActivity.class).putExtra("COMPANY_ID",companyID);
-            AddExpenseActivity.this.startActivity(intent);
         }
 
     }
