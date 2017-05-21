@@ -173,7 +173,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
             public void onClick(View v) {
                 String editTextString = editText.getText().toString();
 
-                ref3.child(companyID).child(editTextString).child("approved").setValue(true);
+                ref3.child(editTextString).child("approved").setValue(true);
             }
         });
 
