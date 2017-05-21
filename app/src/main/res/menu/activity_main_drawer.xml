@@ -24,6 +24,10 @@
             android:icon="@drawable/ic_settings_black_48dp"
             android:title="Settings"
             />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Invoice" />
     </group>
 
     <item android:title="Communicate">
@@ -32,10 +36,7 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+
         </menu>
     </item>
 

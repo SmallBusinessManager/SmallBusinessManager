@@ -112,7 +112,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         person = (Person) getIntent().getSerializableExtra("USER");
         if (currentUser == null) {
             finish();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("USER", person));
+            startActivity(new Intent(AccountActivity.this, LoginActivity.class));
         }
 
         /** start **/
@@ -127,9 +127,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == buttonLogout) {
-            firebaseAuth.signOut();
+            Intent intent=new Intent(AccountActivity.this,LoginActivity.class);
+            finishAffinity();
+            startActivity(intent);
             finish();
-            startActivity(new Intent(AccountActivity.this, LoginActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", person));
+            firebaseAuth.signOut();
+
         }
         if (v == buttonSave) {
             saveUserInformation();
@@ -162,6 +165,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                 if (task.isSuccessful()) {
                                     databaseReference.child(currentUser.getUid()).removeValue();
                                     progressDialog.dismiss();
+                                    FirebaseAuth.getInstance().signOut();
                                     AccountActivity.this.finish();
                                     startActivity(new Intent(AccountActivity.this, LoginActivity.class));
                                 }

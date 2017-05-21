@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -14,6 +15,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 public class SPChooseActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ImageView orderList,folder;
+    private TextView projectNameS;
 
     private Project project;
     private String companyID;
@@ -31,6 +33,7 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
 
         orderList=(ImageView)findViewById(R.id.orderList);
         folder=(ImageView)findViewById(R.id.folder);
+        projectNameS=(TextView)findViewById(R.id.projectNameS);
         orderList.setOnClickListener(this);
         folder.setOnClickListener(this);
 
@@ -38,9 +41,8 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
             project = (Project) getIntent().getSerializableExtra("PROJECT");
             companyID = getIntent().getStringExtra("COMPANY_ID");
             user = (Person) getIntent().getSerializableExtra("USER");
-            this.setTitle(project.getName());
+            projectNameS.setText(project.getName());
         }
-
     }
 
     @Override

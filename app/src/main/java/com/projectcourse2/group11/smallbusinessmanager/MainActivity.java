@@ -79,9 +79,12 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.MainListView);
 
         View headerView = navigationView.getHeaderView(0);
-        emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
-        emailHeader.setText(user.getEmail());
-
+        try {
+            emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
+            emailHeader.setText(user.getEmail());
+        }catch (NullPointerException e){
+            Log.d("WHat is going on ", user.getEmail());
+        }
         /**
          * If the logged in user is a worker or a team leader
          * load all the work orders that this worker has connected to it.
@@ -137,6 +140,7 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("PROJECT_ID", projectIDs.get(position));
                     intent.putExtra("USER", user);
                     finish();
+                    finishAffinity();
                     startActivity(intent);
                 }
             });
@@ -144,6 +148,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (user.getPosition().equals(Position.ACCOUNTANT)) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, AccountantActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else {
             /**
@@ -194,6 +199,7 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("COMPANY_ID", companyID);
                     intent.putExtra("USER", user);
                     finish();
+                    finishAffinity();
                     startActivity(intent);
                 }
             });
@@ -264,18 +270,23 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_account) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_company) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_project) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else if (id == R.id.nav_order) {
             finish();
+            finishAffinity();
             startActivity(new Intent(MainActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         }
 

@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="315dp"
+        android:layout_height="136dp"
         android:orientation="vertical">
 
         <EditText
@@ -18,37 +18,17 @@
             android:focusable="false"
             android:ems="10"
             android:inputType="none"
-            android:text="Company Name"
+            android:text="Email Adress"
             android:textAlignment="center"
             tools:editable="false" />
 
         <EditText
-            android:id="@+id/invoice_company_add"
+            android:id="@+id/invoice_company_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.34"
             android:ems="10"
-            android:hint="Company Name"
-            android:inputType="textPersonName" />
-
-        <EditText
-
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="none"
-            android:focusable="false"
-            android:text="Amount"
-            android:textAlignment="center" />
-
-        <EditText
-            android:id="@+id/invoice_amount_add"
-            android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Amount"
+            android:hint="Email"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -59,14 +39,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/add_invoice"
+            android:id="@+id/send_invoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Ok" />
+            android:text="Send" />
 
         <Button
-            android:id="@+id/cancel_invoice"
+            android:id="@+id/cancel_send_invoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

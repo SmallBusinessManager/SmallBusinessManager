@@ -5,7 +5,6 @@ package com.projectcourse2.group11.smallbusinessmanager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -64,7 +63,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             this.setTitle(project.getName());
         }
 
-        listView = (ListView) findViewById(R.id.listViewF);
+        listView = (ListView) findViewById(R.id.listViewP);
         fab = (FloatingActionButton) findViewById(R.id.fabF);
         fab.setOnClickListener(this);
 
