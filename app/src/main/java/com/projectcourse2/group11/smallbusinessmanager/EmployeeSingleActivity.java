@@ -129,7 +129,7 @@ public class EmployeeSingleActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
 
-                                FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(employeeID).removeValue();
+                                FirebaseDatabase.getInstance().getReference().child("companyEmployees").child(companyID).child(employeeID).removeValue();
 
                                 Toast.makeText(EmployeeSingleActivity.this, "Employee Deleted Successfully.", Toast.LENGTH_SHORT).show();
                                 finish();
@@ -143,9 +143,8 @@ public class EmployeeSingleActivity extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         });
-
-
-                Toast.makeText(this, "Could Not Remove Employee", Toast.LENGTH_SHORT).show();
+                AlertDialog alert = builder.create();
+                alert.show();
                 break;
         }
         return true;
