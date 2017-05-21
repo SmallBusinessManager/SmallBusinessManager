@@ -3,36 +3,58 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.projectcourse2.group11.smallbusinessmanager.model.FileUpload;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
+import java.io.File;
+
 public class FileActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
     private FloatingActionButton fab;
-    private CheckBox checkBox;
     private ProgressDialog dialog;
 
     private DatabaseReference mDatabaseRef;
+    private StorageReference mStorageRef;
     private ListAdapter adapter;
 
     private Project project;
@@ -62,6 +84,7 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
 
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("projectFiles").child(project.getId());
+        //mStorageRef=FirebaseStorage.getInstance().getReference().child("projectFiles").child(project.getId());
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Please wait loading file...");
@@ -77,7 +100,6 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             protected void populateView(View v, FileUpload model, int position) {
                 ImageView imageView = (ImageView) v.findViewById(R.id.imageF);
                 TextView textView = (TextView) v.findViewById(R.id.textF);
-                checkBox = (CheckBox) v.findViewById(R.id.checkBox);
 
                 textView.setText(model.getName());
                 String fileExt = model.getName().substring(model.getName().indexOf("."));
@@ -117,39 +139,58 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(adapter);
         dialog.dismiss();
 
-
-      /*  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final FileUpload file = (FileUpload) parent.getItemAtPosition(position);
-                StorageReference islandRef = FirebaseStorage.getInstance().getReferenceFromUrl(file.getUri());
 
-                //file stored at Local storage/Device storage/SBMFile
-                File rootPath = new File(Environment.getExternalStorageDirectory(), "SBMFile");
-                if (!rootPath.exists()) {
-                    rootPath.mkdirs();
-                } else {
-                    final File localFile = new File(rootPath, file.getName());
+                android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(FileActivity.this);
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("Download",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
 
-                    islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(FileActivity.this);
-                            builder.setMessage("File *" + file.getName() + "* downloaded at Device storage/SBMFile")
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
+                                        StorageReference islandRef = FirebaseStorage.getInstance().getReferenceFromUrl(file.getUri());
+
+                                        //file stored at Local storage/Device storage/SBMFile
+                                        File rootPath = new File(Environment.getExternalStorageDirectory(), "SBMFile");
+                                        if (!rootPath.exists()) {
+                                            rootPath.mkdirs();
+                                        } else {
+                                            final File localFile = new File(rootPath, file.getName());
+
+                                            islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(FileActivity.this);
+                                                    builder.setMessage("File *" + file.getName() + "* downloaded at Device storage/SBMFile")
+                                                            .setCancelable(false)
+                                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int id) {
+                                                                    dialog.cancel();
+                                                                }
+                                                            });
+                                                    AlertDialog alert = builder.create();
+                                                    alert.show();
+                                                }
+                                            });
                                         }
-                                    });
-                            AlertDialog alert = builder.create();
-                            alert.show();
-                        }
-                    });
-                }
+                                    }
+                                })
+                        .setNegativeButton("Delete",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        mDatabaseRef.child(file.getUid()).removeValue();
+                                        FirebaseStorage.getInstance().getReferenceFromUrl(file.getUri()).delete();
+                                    }
+                                });
+                android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
-        });*/
-        checkBox.setOnClickListener(this);
+        });
     }
 
     private void setImageView(int i, ImageView imageView) {
@@ -169,11 +210,6 @@ public class FileActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("USER", user);
             finish();
             startActivity(intent);
-        }
-        if (v == checkBox) {
-            if (checkBox.isChecked()) {
-
-            }
         }
     }
 
