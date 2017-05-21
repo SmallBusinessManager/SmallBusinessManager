@@ -202,7 +202,7 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(AccountantActivity.this, "Failed to load orders", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountantActivity.this, "Failed to load salary", Toast.LENGTH_LONG).show();
                     }
                 };
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -228,7 +228,11 @@ public class AccountantActivity extends AppCompatActivity implements NavigationV
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(new Intent(AccountantActivity.this, AddExpenseActivity.class).putExtra("COMPANY_ID", companyID));
+                Intent intent = getIntent();
+                intent.setClass(AccountantActivity.this,AddExpenseActivity.class);
+                startActivity(intent);
+//                finish();
+//                startActivity(new Intent(AccountantActivity.this, AddExpenseActivity.class).putExtra("COMPANY_ID", companyID));
             }
         });
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
