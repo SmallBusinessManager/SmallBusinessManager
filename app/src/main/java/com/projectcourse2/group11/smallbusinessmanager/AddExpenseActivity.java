@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.projectcourse2.group11.smallbusinessmanager.model.Accountant;
 import com.projectcourse2.group11.smallbusinessmanager.model.Expenses;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
+import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 
 import java.util.Date;
 
@@ -40,6 +41,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private ProgressDialog progressDialog;
+    private Person user;
 
 
 
@@ -48,6 +50,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
         companyID = getIntent().getStringExtra("COMPANY_ID");
+        user = (Person) getIntent().getSerializableExtra("USER");
 
 
         editText1 = (EditText) findViewById(R.id.editText1);
@@ -57,6 +60,14 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         button = (Button) findViewById(R.id.button);
 
         button.setOnClickListener(this);
+        if (user.getPosition().equals(Position.WORKER)){
+            Intent intent=getIntent();
+            intent.setClass(AddExpenseActivity.this,MainActivity.class);
+            finish();
+            finishAffinity();
+            startActivity(intent);
+        }
+
 
     }
 

@@ -93,11 +93,13 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 User sUser = (User) parent.getItemAtPosition(position);
                 selectedUser = sUser;
-                Intent intent = new Intent(EmployeeActivity.this, EmployeeSingleActivity.class).putExtra("EMPLOYEE", selectedUser);
-                intent.putExtra("COMPANY_ID", companyID);
-                intent.putExtra("USER", person);
-                finish();
-                startActivity(intent);
+                if (!(person.getPosition().equals(Position.WORKER)||person.getPosition().equals(Position.TEAM_LEADER))) {
+                    Intent intent = new Intent(EmployeeActivity.this, EmployeeSingleActivity.class).putExtra("EMPLOYEE", selectedUser);
+                    intent.putExtra("COMPANY_ID", companyID);
+                    intent.putExtra("USER", person);
+                    finish();
+                    startActivity(intent);
+                }
             }
         });
 

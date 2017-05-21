@@ -45,6 +45,8 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
     private String deleteThisOne;
     private Button send;
     private  String text;
+    private Person user;
+
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
         text = "";
         deleteThisOne = "";
         companyID = getActivity().getIntent().getStringExtra("COMPANY_ID");
+        user=(Person) getActivity().getIntent().getSerializableExtra("USER");
         listView = (ListView) view.findViewById(R.id.invoice_item);
         Log.d(companyID, "<<<<<<<<companyId<<<<<<<<<<<<<");
         final ArrayList<Invoice> invoices = new ArrayList<>();
@@ -115,6 +118,14 @@ public class InvoiceMenu extends Fragment implements View.OnClickListener {
                 }
             }
         } );
+        if (user.getPosition().equals(Position.WORKER)){
+            addstuff.setEnabled(false);
+            remove.setEnabled(false);
+            send.setEnabled(false);
+        }else if (user.getPosition().equals(Position.TEAM_LEADER)){
+            send.setEnabled(false);
+            remove.setEnabled(false);
+        }
         return view;
     }
 
