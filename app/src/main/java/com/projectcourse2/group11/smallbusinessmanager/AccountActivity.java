@@ -55,7 +55,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     private ProgressDialog progressDialog;
 
-    private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -116,7 +115,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             finishAffinity();
             startActivity(intent);
             finish();
-            firebaseAuth.signOut();
+            FirebaseAuth.getInstance().signOut();
 
         }
         if (v == buttonDeleteAccount) {
