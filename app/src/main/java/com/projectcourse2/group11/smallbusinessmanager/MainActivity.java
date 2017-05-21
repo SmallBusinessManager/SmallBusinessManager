@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (user.getPosition().equals(Position.ACCOUNTANT)) {
+            progressDialog.dismiss();
             finish();
             finishAffinity();
             startActivity(new Intent(MainActivity.this, AccountantActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
