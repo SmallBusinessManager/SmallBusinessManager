@@ -102,6 +102,12 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
                         String uploadID = mDatabaseRef.push().getKey();
                         mDatabaseRef.child(uploadID).setValue(fileUpload);
 
+                        Intent intent = new Intent(AddFileActivity.this, FileActivity.class).putExtra("PROJECT", project);
+                        intent.putExtra("COMPANY_ID", companyID);
+                        intent.putExtra("USER", user);
+                        finish();
+                        startActivity(intent);
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -119,6 +125,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 Toast.makeText(AddFileActivity.this, "Please select File", Toast.LENGTH_SHORT).show();
             }
+
         }
     }
 
