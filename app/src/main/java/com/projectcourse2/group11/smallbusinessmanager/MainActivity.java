@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         progressDialog.show();
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -72,12 +71,10 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.MainListView);
 
         View headerView = navigationView.getHeaderView(0);
-        try {
-            emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
-            emailHeader.setText(user.getEmail());
-        }catch (NullPointerException e){
-            Log.d("WHat is going on ", user.getEmail());
-        }
+        emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
+        emailHeader.setText(user.getEmail());
+        Log.e("hehe", user.getEmail());
+
         /**
          * If the logged in user is a worker or a team leader
          * load all the work orders that this worker has connected to it.
