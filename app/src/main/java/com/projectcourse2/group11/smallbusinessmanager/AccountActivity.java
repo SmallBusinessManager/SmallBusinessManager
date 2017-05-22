@@ -252,7 +252,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        intent.setClass(AccountActivity.this,ProjectActivity.class);
+        intent.setClass(AccountActivity.this,MainActivity.class);
         startActivity(intent);
         finish();
     }
