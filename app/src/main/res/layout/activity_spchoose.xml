@@ -93,9 +93,17 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/imageView5"
-            android:text="               Notebooks"
+            android:text="               Notebooks                      Invoices"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/invoiceList"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_above="@+id/textView13"
+            android:layout_toEndOf="@+id/orderList"
+            app:srcCompat="@drawable/bill_512" />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

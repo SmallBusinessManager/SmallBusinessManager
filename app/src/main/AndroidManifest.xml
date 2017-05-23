@@ -110,7 +110,18 @@
         </activity>
         <activity
             android:name=".InvoiceActivity"
-            android:label="@string/Message">
+            android:label="All Invoices"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".InvoiceAddActivity"
+            android:label="Add Invoice"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
