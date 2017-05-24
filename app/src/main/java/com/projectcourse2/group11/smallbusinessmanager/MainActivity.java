@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-            Toast.makeText(this,"contact developer Danfeng for details",Toast.LENGTH_SHORT).show();
-           // finish();
-           // finishAffinity();
-           // startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+            Toast.makeText(this, "contact developer Danfeng for details", Toast.LENGTH_SHORT).show();
+            // finish();
+            // finishAffinity();
+            // startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
         } else if (id == R.id.nav_account) {
             finish();
             finishAffinity();
@@ -171,6 +171,10 @@ public class MainActivity extends AppCompatActivity
             finish();
             finishAffinity();
             startActivity(new Intent(MainActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+        } else if (id == R.id.nav_finances) {
+            finish();
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, AccountantActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -178,7 +182,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void initializeView(){
+    private void initializeView() {
         listView = (ListView) findViewById(R.id.MainListView);
         /**
          * If the logged in user is a worker or a team leader
@@ -260,7 +264,7 @@ public class MainActivity extends AppCompatActivity
                 protected void populateView(View v, Project model, int position) {
                     TextView textView = (TextView) v.findViewById(android.R.id.text1);
                     textView.setText(model.getName());
-                    Log.e("hehe",model.getName());
+                    Log.e("hehe", model.getName());
                 }
             };
             listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
