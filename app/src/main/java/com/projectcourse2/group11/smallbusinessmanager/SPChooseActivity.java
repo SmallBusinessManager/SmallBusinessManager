@@ -14,7 +14,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 public class SPChooseActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private ImageView orderList,folder;
+    private ImageView orderList,folder,invoiceList;
     private TextView projectNameS;
 
     private Project project;
@@ -33,6 +33,8 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
 
         orderList=(ImageView)findViewById(R.id.orderList);
         folder=(ImageView)findViewById(R.id.folder);
+        invoiceList=(ImageView)findViewById(R.id.invoiceList);
+        invoiceList.setOnClickListener(this);
         projectNameS=(TextView)findViewById(R.id.projectNameS);
         orderList.setOnClickListener(this);
         folder.setOnClickListener(this);
@@ -56,6 +58,14 @@ public class SPChooseActivity extends AppCompatActivity implements View.OnClickL
         }
         if (v==folder){
             Intent intent=new Intent(SPChooseActivity.this,FileActivity.class);
+            intent.putExtra("PROJECT",project);
+            intent.putExtra("COMPANY_ID", companyID);
+            intent.putExtra("USER", user);
+            finish();
+            startActivity(intent);
+        }
+        if (v==invoiceList){
+            Intent intent=new Intent(SPChooseActivity.this,InvoiceActivity.class);
             intent.putExtra("PROJECT",project);
             intent.putExtra("COMPANY_ID", companyID);
             intent.putExtra("USER", user);

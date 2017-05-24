@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/imageF"
@@ -17,12 +18,6 @@
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/imageF" />
+        android:layout_alignParentEnd="true" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textF"
-        android:layout_toEndOf="@+id/textF" />
 </RelativeLayout>

@@ -108,7 +108,7 @@ public class EmployeeActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.dismiss();
         listView.setAdapter(mAdapter);
 
-        if (person.getPosition().equals(Position.WORKER) || person.getPosition().equals(Position.TEAM_LEADER)) {
+        if (person.getPosition().equals(Position.WORKER) || person.getPosition().equals(Position.TEAM_LEADER)||person.getPosition().equals(Position.ACCOUNTANT)) {
             fab.hide();
             fab.setEnabled(false);
         }

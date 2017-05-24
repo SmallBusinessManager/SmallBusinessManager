@@ -159,6 +159,7 @@
             android:layout_marginTop="20dp"
             android:background="@color/colorButton"
             android:text="@string/signUp_button_text"
+            android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -172,8 +173,10 @@
             android:layout_marginTop="16dp"
             android:background="@android:color/white"
             android:text="@string/signIn_button_text"
+            android:textAlignment="center"
             android:textColor="@color/colorButton"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </LinearLayout>

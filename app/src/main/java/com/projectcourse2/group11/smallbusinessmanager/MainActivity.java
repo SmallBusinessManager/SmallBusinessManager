@@ -1,11 +1,10 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,6 +21,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.projectcourse2.group11.smallbusinessmanager.model.Order;
 import com.projectcourse2.group11.smallbusinessmanager.model.Person;
 import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
@@ -39,25 +38,28 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private String companyID;
+
     private ListView listView;
     private ListAdapter mAdapter;
-    private ProgressDialog progressDialog;
     private HashMap<String, String> orderList = new HashMap<>();
-    private Person user;
     private TextView emailHeader;
+    private ViewFlipper viewFlipperMain;
+    private Toolbar toolbar;
+
+    private String companyID;
+    private Person user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading dashboard");
-        progressDialog.show();
 
-
+        if (getIntent() != null) {
+            companyID = getIntent().getStringExtra("COMPANY_ID");
+            user = (Person) getIntent().getSerializableExtra("USER");
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -67,17 +69,117 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        companyID = getIntent().getStringExtra("COMPANY_ID");
-        user = (Person) getIntent().getSerializableExtra("USER");
-        listView = (ListView) findViewById(R.id.MainListView);
+
+        viewFlipperMain = (ViewFlipper) findViewById(R.id.viewFlipperMain);
+        viewFlipperMain.setFlipInterval(0);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_bottom);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_schedule:
+                        Toast.makeText(MainActivity.this, "schedule selected", Toast.LENGTH_SHORT).show();
+                        viewFlipperMain.setDisplayedChild(0);
+                        break;
+                    case R.id.nav_local_activity:
+                        Toast.makeText(MainActivity.this, "activity selected", Toast.LENGTH_SHORT).show();
+                        viewFlipperMain.setDisplayedChild(1);
+                        initializeView();
+                        break;
+
+                }
+
+                return true;
+            }
+
+        });
 
         View headerView = navigationView.getHeaderView(0);
-        try {
-            emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
-            emailHeader.setText(user.getEmail());
-        }catch (NullPointerException e){
-            Log.d("WHat is going on ", user.getEmail());
+        emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
+        emailHeader.setText(user.getEmail());
+    }
+
+    private Boolean exit = false;
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+
         }
+        if (exit) {
+            finish();
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+            Toast.makeText(this,"contact developer Danfeng for details",Toast.LENGTH_SHORT).show();
+           // finish();
+           // finishAffinity();
+           // startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+        } else if (id == R.id.nav_account) {
+            finish();
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+        } else if (id == R.id.nav_company) {
+            finish();
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
+        } else if (id == R.id.nav_project) {
+            finish();
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+        } else if (id == R.id.nav_order) {
+            finish();
+            finishAffinity();
+            startActivity(new Intent(MainActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void initializeView(){
+        listView = (ListView) findViewById(R.id.MainListView);
         /**
          * If the logged in user is a worker or a team leader
          * load all the work orders that this worker has connected to it.
@@ -94,7 +196,6 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                     ArrayAdapter<String> myAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_single_choice, new ArrayList<>(orderList.keySet()));
-                    progressDialog.dismiss();
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                     listView.setAdapter(myAdapter);
                 }
@@ -140,14 +241,13 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (user.getPosition().equals(Position.ACCOUNTANT)) {
-            progressDialog.dismiss();
             finish();
             finishAffinity();
             startActivity(new Intent(MainActivity.this, AccountantActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
         } else {
             /**
              *  if logged in user is not a worker or a team leader
-             *  that is if the user is accountant, manager,
+             *  that is if the user is manager,
              *  load all the projects for the company
              */
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("companyProjects").child(companyID);
@@ -160,15 +260,13 @@ public class MainActivity extends AppCompatActivity
                 protected void populateView(View v, Project model, int position) {
                     TextView textView = (TextView) v.findViewById(android.R.id.text1);
                     textView.setText(model.getName());
-                    progressDialog.dismiss();
+                    Log.e("hehe",model.getName());
                 }
             };
             listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             listView.setAdapter(mAdapter);
 
-            progressDialog.dismiss();
-
-            listView.setOnItemClickListener(new DoubleClickListener() {
+           /* listView.setOnItemClickListener(new DoubleClickListener() {
                 @Override
                 protected void onSingleClick(AdapterView<?> parent, View v, int position, long id) {
                     final Project project = (Project) parent.getItemAtPosition(position);
@@ -196,94 +294,7 @@ public class MainActivity extends AppCompatActivity
                     finishAffinity();
                     startActivity(intent);
                 }
-            });
+            });*/
         }
-    }
-
-    private Boolean exit = false;
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-
-        }
-        if (exit) {
-            finish(); // finish activity
-        } else {
-            Toast.makeText(this, "Press Back again to Exit.",
-                    Toast.LENGTH_SHORT).show();
-            exit = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    exit = false;
-                }
-            }, 3 * 1000);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-            finish();
-            finishAffinity();
-            startActivity(new Intent(MainActivity.this, InvoiceActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
-        } else if (id == R.id.nav_account) {
-            finish();
-            finishAffinity();
-            startActivity(new Intent(MainActivity.this, AccountActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
-        } else if (id == R.id.nav_company) {
-            finish();
-            finishAffinity();
-            startActivity(new Intent(MainActivity.this, CompanyActivity.class).putExtra("USER", user).putExtra("COMPANY_ID", companyID));
-        } else if (id == R.id.nav_project) {
-            finish();
-            finishAffinity();
-            startActivity(new Intent(MainActivity.this, ProjectActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
-        } else if (id == R.id.nav_order) {
-            finish();
-            finishAffinity();
-            startActivity(new Intent(MainActivity.this, SingleProjectHomeActivity.class).putExtra("COMPANY_ID", companyID).putExtra("USER", user));
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

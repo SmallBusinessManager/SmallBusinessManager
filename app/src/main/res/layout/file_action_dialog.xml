@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/file_action_dialog"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tv_download_file"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@drawable/back"
+        android:text="Downlaod File"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_delete_file"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@drawable/back"
+        android:text="Delete File"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+
+
+</LinearLayout>

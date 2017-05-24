@@ -99,8 +99,8 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         progressDialog.dismiss();
                         Toast.makeText(AddFileActivity.this, "File uploaded", Toast.LENGTH_SHORT).show();
-                        FileUpload fileUpload = new FileUpload(fileName.getText().toString()+"."+getFileExt(fileUri), taskSnapshot.getDownloadUrl().toString());
                         String uploadID = mDatabaseRef.push().getKey();
+                        FileUpload fileUpload = new FileUpload(uploadID,fileName.getText().toString()+"."+getFileExt(fileUri), taskSnapshot.getDownloadUrl().toString());
                         mDatabaseRef.child(uploadID).setValue(fileUpload);
 
                         Intent intent = new Intent(AddFileActivity.this, FileActivity.class).putExtra("PROJECT", project);
