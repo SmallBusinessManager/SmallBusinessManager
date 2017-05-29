@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +36,7 @@ import com.projectcourse2.group11.smallbusinessmanager.model.Position;
 import com.projectcourse2.group11.smallbusinessmanager.model.Project;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity
                     case R.id.nav_local_activity:
                         Toast.makeText(MainActivity.this, "activity selected", Toast.LENGTH_SHORT).show();
                         viewFlipperMain.setDisplayedChild(1);
-                        initializeView();
+                        activityViewHandling();
                         break;
 
                 }
@@ -98,6 +101,20 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         emailHeader = (TextView) headerView.findViewById(R.id.emailHeader);
         emailHeader.setText(user.getEmail());
+
+        CalendarView calendarView=(CalendarView)findViewById(R.id.calendarView);
+        calendarView.setFirstDayOfWeek(Calendar.SUNDAY);
+        final TextView tv_date=(TextView)findViewById(R.id.tv_date);
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                tv_date.setText(year+"/"+(month+1)+"/"+dayOfMonth);
+                FirebaseDatabase.getInstance().getReference().child("employeeSchedules").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(year+"-"+(month+1)+"-"+dayOfMonth).setValue("hehehehe");
+
+
+            }
+        });
     }
 
     private Boolean exit = false;
@@ -178,7 +195,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void initializeView(){
+    private void activityViewHandling(){
         listView = (ListView) findViewById(R.id.MainListView);
         /**
          * If the logged in user is a worker or a team leader
