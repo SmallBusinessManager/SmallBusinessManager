@@ -36,43 +36,39 @@
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
 
                 <ImageView
                     android:id="@+id/prevMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/calendar_left_arrow_selector"/>
+                    app:srcCompat="@drawable/arrow_89_32" />
 
                 <Button
                     android:id="@+id/currentMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
-                    android:background="@drawable/calendar_bar"
+                    android:background="@android:color/transparent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/nextMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/calendar_right_arrow_selector"/>
+                    app:srcCompat="@drawable/arrow_25_32" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
-
-                <ImageView
-                    android:id="@+id/calendarheader"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/blue_bg_with_text" />
-            </LinearLayout>
-
+                android:text="   SUN       MON       TUS       WED       THU         FRI        SAT"
+                android:textSize="14sp" />
 
             <GridView
                 android:id="@+id/calendar"
