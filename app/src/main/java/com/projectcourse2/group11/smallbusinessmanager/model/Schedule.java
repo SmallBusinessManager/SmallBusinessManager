@@ -1,4 +1,4 @@
-package com.projectcourse2.group11.smallbusinessmanager.calendar;
+package com.projectcourse2.group11.smallbusinessmanager.model;
 
 import java.io.Serializable;
 
