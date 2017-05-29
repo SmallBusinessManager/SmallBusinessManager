@@ -4,25 +4,28 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account_black_48dp"
+            android:title="My Account"/>
+        <item
             android:id="@+id/nav_project"
             android:icon="@drawable/ic_project_black_48dp"
-            android:title="Project" />
+            android:title="Projects" />
         <item
             android:id="@+id/nav_order"
             android:icon="@drawable/ic_task_black_48dp"
-            android:title="Order"/>
-        <item
-            android:id="@+id/nav_account"
-            android:icon="@drawable/ic_account_black_48dp"
-            android:title="Account"/>
+            android:title="Work Orders"/>
         <item
             android:id="@+id/nav_company"
             android:icon="@drawable/ic_account_black_48dp"
             android:title="Company Management" />
         <item
-            android:id="@+id/nav_send"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Invoice" />
+            android:id="@+id/nav_finances"
+            android:title="Finances" />
+        <!--<item-->
+            <!--android:id="@+id/nav_send"-->
+            <!--android:icon="@drawable/ic_menu_send"-->
+            <!--android:title="Invoice" />-->
     </group>
 
     <item android:title="Communicate">
