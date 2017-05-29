@@ -23,10 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.projectcourse2.group11.smallbusinessmanager.R;
 
 import java.text.SimpleDateFormat;
@@ -34,13 +31,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
-public class SimpleCalendarViewActivity extends Activity implements OnClickListener {
-    private static final String tag = "MainActivity";
+public class CalendarViewActivity extends Activity implements OnClickListener {
 
     private Button selectedDayMonthYearButton;
     private Button currentMonth;

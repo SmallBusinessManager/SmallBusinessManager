@@ -23,39 +23,90 @@
     <ViewFlipper
         android:id="@+id/viewFlipperMain"
         android:layout_width="match_parent"
-        android:layout_height="401dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="55dp">
 
-        <RelativeLayout
-            android:id="@+id/layout_schedule"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
 
-            <CalendarView
-                android:id="@+id/calendarView"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true" />
 
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="match_parent"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:textAlignment="center"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
 
-            <ToggleButton
-                android:id="@+id/toggleButton"
+                <ImageView
+                    android:id="@+id/prevMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calendar_left_arrow_selector"/>
+
+                <Button
+                    android:id="@+id/currentMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:background="@drawable/calendar_bar"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"/>
+
+                <ImageView
+                    android:id="@+id/nextMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calendar_right_arrow_selector"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/calendarheader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/blue_bg_with_text" />
+            </LinearLayout>
+
+
+            <GridView
+                android:id="@+id/calendar"
                 android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                android:numColumns="7" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="182dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/calendarView"
-                android:textOn="Work day"
-                android:textOff="Off day"/>
-        </RelativeLayout>
+                android:text="MarkAsWorkingDay" />
+
+            <EditText
+                android:id="@+id/et_startTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_endTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/buttonSaveTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/layout_activity"
