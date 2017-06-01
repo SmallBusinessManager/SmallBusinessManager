@@ -1,6 +1,8 @@
 package com.projectcourse2.group11.smallbusinessmanager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,8 +86,7 @@ public class MainActivity extends AppCompatActivity
     private static final String dateTemplate = "MMMM yyyy";
 
     CheckBox checkBox;
-    EditText et_startTime, et_endTime;
-    Button buttonSaveTime;
+    TextView tv_showSchedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,13 +159,9 @@ public class MainActivity extends AppCompatActivity
         calendarView.setAdapter(adapter);
 
         checkBox = (CheckBox) findViewById(R.id.checkBox);
-        et_startTime = (EditText) findViewById(R.id.et_startTime);
-        et_endTime = (EditText) findViewById(R.id.et_endTime);
-        buttonSaveTime = (Button) findViewById(R.id.buttonSaveTime);
+        tv_showSchedule=(TextView)findViewById(R.id.tv_showSchedule);
 
-        et_startTime.setVisibility(View.INVISIBLE);
-        et_endTime.setVisibility(View.INVISIBLE);
-        buttonSaveTime.setVisibility(View.INVISIBLE);
+        tv_showSchedule.setText("");
     }
 
     private Boolean exit = false;
@@ -284,7 +282,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void activityViewHandling(){
+    private void activityViewHandling() {
         listView = (ListView) findViewById(R.id.MainListView);
         /**
          * If the logged in user is a worker or a team leader
@@ -405,24 +403,21 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private class GridCellAdapter extends BaseAdapter implements View.OnClickListener {
         private final Context _context;
 
         private final List<String> list;
-        private static final int DAY_OFFSET = 1;
         private final String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         private final int month, year;
-        private final HashMap eventsPerMonthMap;
+        private HashSet<String> scheduledDates;
         private int daysInMonth;
         private int currentDayOfMonth;
         private int currentWeekDay;
         private Button gridcell;
-        private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+        private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
         // Days in Current Month
         public GridCellAdapter(Context context, int textViewResourceId, int month, int year) {
@@ -437,8 +432,21 @@ public class MainActivity extends AppCompatActivity
             setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
 
             printMonth(month, year);
-            eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
 
+            scheduledDates = new HashSet<>();
+            FirebaseDatabase.getInstance().getReference().child("employeeSchedules").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot scheduleSnapshot : dataSnapshot.getChildren()) {
+                        scheduledDates.add(scheduleSnapshot.getKey());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
         private String getMonthAsString(int i) {
@@ -463,8 +471,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         /**
-         * Prints Month
-         *
          * @param mm
          * @param yy
          */
@@ -511,7 +517,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             for (int i = 0; i < trailingSpaces; i++) {
-                list.add(String.valueOf((daysInPrevMonth - trailingSpaces + DAY_OFFSET) + i) + "-GREY" + "-" + getMonthAsString(prevMonth) + "-" + prevYear);
+                list.add(String.valueOf((daysInPrevMonth - trailingSpaces + 1) + i) + "-GREY" + "-" + getMonthAsString(prevMonth) + "-" + prevYear);
             }
 
             for (int i = 1; i <= daysInMonth; i++) {
@@ -526,34 +532,7 @@ public class MainActivity extends AppCompatActivity
                 list.add(String.valueOf(i + 1) + "-GREY" + "-" + getMonthAsString(nextMonth) + "-" + nextYear);
             }
         }
-        /**
-         * NOTE: YOU NEED TO IMPLEMENT THIS PART Given the YEAR, MONTH, retrieve
-         * ALL entries from a SQLite database for that month. Iterate over the
-         * List of All entries, and get the dateCreated, which is converted into
-         * day.
-         *
-         * @param year
-         * @param month
-         * @return
-         */
-        private HashMap findNumberOfEventsPerMonth(int year, int month)
-        {
-            HashMap map = new HashMap<String, Integer>();
-            // DateFormat dateFormatter2 = new DateFormat();
-            //
-            // String day = dateFormatter2.format("dd", dateCreated).toString();
-            //
-            // if (map.containsKey(day))
-            // {
-            // Integer val = (Integer) map.get(day) + 1;
-            // map.put(day, val);
-            // }
-            // else
-            // {
-            // map.put(day, 1);
-            // }
-            return map;
-        }
+
         @Override
         public long getItemId(int position) {
             return position;
@@ -585,13 +564,10 @@ public class MainActivity extends AppCompatActivity
                 gridcell.setTextColor(getResources().getColor(R.color.colorAccent));
             }
 
-            if ((!eventsPerMonthMap.isEmpty()) && (eventsPerMonthMap != null))
-            {
-                if (eventsPerMonthMap.containsKey(theday))
-                {
+            if (!scheduledDates.isEmpty()) {
+                if (scheduledDates.contains(theday + "-" + themonth + "-" + theyear)) {
                     num_events_per_day = (TextView) row.findViewById(R.id.num_events_per_day);
-                    Integer numEvents = (Integer) eventsPerMonthMap.get(theday);
-                    num_events_per_day.setText(numEvents.toString());
+                    num_events_per_day.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 }
             }
 
@@ -603,45 +579,74 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onClick(View view) {
-            checkBox.setChecked(false);
-            et_startTime.setVisibility(View.INVISIBLE);
-            et_endTime.setVisibility(View.INVISIBLE);
-            buttonSaveTime.setVisibility(View.INVISIBLE);
+
             final String date_month_year = (String) view.getTag();
             final Button background = (Button) view.findViewById(R.id.calendar_day_gridcell);
-            background.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
+            if (scheduledDates.contains(date_month_year)) {
+                checkBox.setChecked(true);
+                tv_showSchedule.setVisibility(View.VISIBLE);
+                FirebaseDatabase.getInstance().getReference().child("employeeSchedules").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date_month_year).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Schedule scheduleFrom=dataSnapshot.getValue(Schedule.class);
+                        tv_showSchedule.setText(scheduleFrom.getStartTime()+" - "+scheduleFrom.getEndTime());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }else {
+                background.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                checkBox.setChecked(false);
+                tv_showSchedule.setText("");
+            }
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (checkBox.isChecked()) {
-                        et_startTime.setVisibility(View.VISIBLE);
-                        et_endTime.setVisibility(View.VISIBLE);
-                        buttonSaveTime.setVisibility(View.VISIBLE);
-                        background.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
-                    } else {
-                        et_startTime.setVisibility(View.INVISIBLE);
-                        et_endTime.setVisibility(View.INVISIBLE);
-                        buttonSaveTime.setVisibility(View.INVISIBLE);
-                        background.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+                        View dialogView = li.inflate(R.layout.schedule_set_dialog, null);
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                        alertDialogBuilder.setTitle("Set Time " + date_month_year);
+                        alertDialogBuilder.setView(dialogView);
+                        final EditText et_startTime = (EditText) dialogView.findViewById(R.id.et_startTime);
+                        final EditText et_endTime = (EditText) dialogView.findViewById(R.id.et_endTime);
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton("SAVE",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int id) {
+                                                Schedule scheduleTo = new Schedule(et_startTime.getText().toString(), et_endTime.getText().toString());
+                                                FirebaseDatabase.getInstance().getReference().child("employeeSchedules").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date_month_year).setValue(scheduleTo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(getApplicationContext(), "Schedule added successfully!", Toast.LENGTH_SHORT).show();
+                                                            background.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                                                        }
+                                                    }
+                                                });
+
+                                            }
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int id) {
+                                                background.setBackground(getResources().getDrawable(R.drawable.my_button_bg));
+                                                checkBox.setChecked(false);
+                                                dialog.cancel();
+                                            }
+                                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }else {
+                        background.setBackground(getResources().getDrawable(R.drawable.my_button_bg));
                     }
-
-
-                }
-            });
-
-            buttonSaveTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Schedule scheduleTo = new Schedule(et_startTime.getText().toString(), et_endTime.getText().toString());
-                    FirebaseDatabase.getInstance().getReference().child("employeeSchedules").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(date_month_year).setValue(scheduleTo).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "schedule added successfully!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
                 }
             });
         }

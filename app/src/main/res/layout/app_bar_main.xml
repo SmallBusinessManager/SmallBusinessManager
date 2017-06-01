@@ -76,31 +76,26 @@
                 android:layout_height="300dp"
                 android:numColumns="7" />
 
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="182dp"
-                android:layout_height="wrap_content"
-                android:text="MarkAsWorkingDay" />
-
-            <EditText
-                android:id="@+id/et_startTime"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textSize="14sp" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/et_endTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textSize="14sp" />
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="133dp"
+                    android:layout_height="wrap_content"
+                    android:text="WorkingDay"
+                    android:textAlignment="viewStart"
+                    android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/buttonSaveTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save" />
+                <TextView
+                    android:id="@+id/tv_showSchedule"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
