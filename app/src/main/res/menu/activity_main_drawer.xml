@@ -21,6 +21,7 @@
             android:title="Company Management" />
         <item
             android:id="@+id/nav_finances"
+            android:icon="@drawable/ic_account_balance_black_48dp"
             android:title="Finances" />
         <!--<item-->
             <!--android:id="@+id/nav_send"-->
